@@ -12,6 +12,8 @@ namespace EvolutionSandbox
         static void Main(string[] args)
         {
             Grid.Init(10, 20);
+            Grid.DrawGrid();
+            Grid.SpawnAgent(5, 10);
         }
     }
 }
