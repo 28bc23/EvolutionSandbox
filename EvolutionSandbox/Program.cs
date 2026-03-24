@@ -17,23 +17,28 @@ namespace EvolutionSandbox
         //Game Start
         static void Main(string[] args)
         {
-            Grid.Init(10, 20);
+            Grid.Init(10, 20); // Inicialize size of grid
             
             
-            Loop();
+            Loop(); // Start Gmae loop
         }
 
         //Game Loop
         static void Loop()
         {
             Stopwatch stopwatch = new Stopwatch();
-            int targetFrameTime = 1000 / FPScap;
+            int targetFrameTime = 1000 / FPScap; //How much one frame should take in ms
             while (true)
             {
                 stopwatch.Restart();
+
+
                 Grid.DrawGrid();
+
+
                 stopwatch.Stop();
 
+                //FPScap to sleepTime calculation and sleep
                 int elapsedMs = (int)stopwatch.ElapsedMilliseconds;
                 int sleepTime = targetFrameTime - elapsedMs;
 
@@ -42,8 +47,9 @@ namespace EvolutionSandbox
                     Thread.Sleep(sleepTime);
                 }
 
-                double totalFrameTimeMs = elapsedMs + (sleepTime > 0 ? sleepTime : 0);
-                DeltaTime = totalFrameTimeMs / 1000.0;
+                //DeltaTime claculation
+                double totalFrameTimeMs = elapsedMs + (sleepTime > 0 ? sleepTime : 0); // DeltaTime is equal to time elapsed from last frame
+                DeltaTime = totalFrameTimeMs / 1000.0; // Conversion from ms to s
             }
         }
     }

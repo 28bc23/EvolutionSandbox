@@ -42,9 +42,7 @@ namespace EvolutionSandbox
                 grid += '\n';
             }
 
-            Console.Write(grid);
-
-            if (!grid.Equals(LastGrid))
+            if (!grid.Equals(LastGrid)) //Revrites grit if there was change
             {
                 Console.SetCursorPosition(0, 0);
                 Console.Write(grid);
