@@ -1,29 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace EvolutionSandbox
 {
-    internal class Agent
+    internal class Agent : GameObject
     {
-
-        public Agent()
+        static Random rnd;
+        public Agent(Vector2Int spawnPos) : base(spawnPos)
         {
-            Start();
+            rnd = new Random();
         }
 
-        void Start()
+        public override  void Update() //All actions in here will be made in one frame. Need to find way to work with it.
         {
-
-            Loop();
-        }
-
-        void Loop()
-        {
-            
+            //Movement test
+            MovementType randomMove = (MovementType)rnd.Next(0, 8);
+            Grid.MoveAgent(Pos, randomMove);
         }
 
     }
