@@ -42,12 +42,14 @@ namespace EvolutionSandbox
                 grid += '\n';
             }
 
+            Console.Write(grid);
+
             if (!grid.Equals(LastGrid))
             {
-                Console.Clear();
+                Console.SetCursorPosition(0, 0);
                 Console.Write(grid);
                 LastGrid = grid;
-            }            
+            }
         }
 
         public static void SpawnAgent(int y, int x)
