@@ -9,11 +9,22 @@ namespace EvolutionSandbox
 {
     internal class Program
     {
+        //Start
         static void Main(string[] args)
         {
             Grid.Init(10, 20);
-            Grid.DrawGrid();
-            Grid.SpawnAgent(5, 10);
+            
+            
+            Loop();
+        }
+
+        //Loop
+        static void Loop()
+        {
+            while (true)
+            {
+                Grid.DrawGrid();
+            }
         }
     }
 }
