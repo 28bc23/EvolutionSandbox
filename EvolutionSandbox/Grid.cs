@@ -33,12 +33,16 @@ namespace EvolutionSandbox
 
             Console.Clear();
 
+            string grid = "";
+
             for(int i = 0; i < GridY; i++){
                 for (int j = 0; j < GridX; j++){
-                    Console.Write($"[{Cells[i,j]}]");
+                    grid += $"[{Cells[i,j]}]";
                 }
-                Console.Write('\n');
+                grid += '\n';
             }
+
+            Console.Write(grid);
         }
 
         public static void SpawnAgent(int y, int x)
