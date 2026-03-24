@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+    
+
 
 namespace EvolutionSandbox
 {
     internal class Program
     {
-        static int FPScap = 20;
+        static int FPScap = 100;
         static double DeltaTime;
+
 
         //Game Start
         static void Main(string[] args)
@@ -32,8 +36,7 @@ namespace EvolutionSandbox
             {
                 stopwatch.Restart();
 
-
-                Grid.DrawGrid();
+                //Grid.DrawGrid();
 
 
                 stopwatch.Stop();
