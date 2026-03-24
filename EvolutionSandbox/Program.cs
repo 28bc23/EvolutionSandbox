@@ -9,7 +9,7 @@ namespace EvolutionSandbox
 {
     internal class Program
     {
-        //Start
+        //Game Start
         static void Main(string[] args)
         {
             Grid.Init(10, 20);
@@ -18,7 +18,7 @@ namespace EvolutionSandbox
             Loop();
         }
 
-        //Loop
+        //Game Loop
         static void Loop()
         {
             while (true)

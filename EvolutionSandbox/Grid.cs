@@ -8,6 +8,8 @@ namespace EvolutionSandbox
         static int GridX;
         static char[,] Cells;
 
+        static string LastGrid = "";
+
         public static void Init(int gridY, int gridX){
             GridY = gridY;
             GridX = gridX;
@@ -31,8 +33,6 @@ namespace EvolutionSandbox
             if(!bInicialised)
                 return;
 
-            Console.Clear();
-
             string grid = "";
 
             for(int i = 0; i < GridY; i++){
@@ -42,7 +42,12 @@ namespace EvolutionSandbox
                 grid += '\n';
             }
 
-            Console.Write(grid);
+            if (!grid.Equals(LastGrid))
+            {
+                Console.Clear();
+                Console.Write(grid);
+                LastGrid = grid;
+            }            
         }
 
         public static void SpawnAgent(int y, int x)
