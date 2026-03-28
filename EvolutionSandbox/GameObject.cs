@@ -7,7 +7,7 @@ namespace EvolutionSandbox
     {
         Vector2Int Pos;
 
-        List<Action> actions;
+        Queue<Action> actions;
 
         Guid ID;
 
@@ -21,7 +21,7 @@ namespace EvolutionSandbox
 
         public virtual void MakeAction(Action action)
         {
-            actions.Add(action);
+            actions.Enqueue(action);
         }
 
         public virtual void ClearActions()
@@ -44,9 +44,9 @@ namespace EvolutionSandbox
             get { return ID;  }
         }
 
-        public List<Action> GActions
+        public Queue<Action> GActions
         {
-            get { return new List<Action>(actions); }
+            get { return new Queue<Action>(actions); }
         }
     }
 }

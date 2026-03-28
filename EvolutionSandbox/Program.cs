@@ -8,12 +8,11 @@ namespace EvolutionSandbox
 {
     internal class Program
     {
-        static int FPScap = 100;
-        static double DeltaTime;
+        static int FPScap = 10;
 
         static List<GameObject> GameObjects = new List<GameObject>();
 
-        static Dictionary<Guid, List<Action>> Actions = new Dictionary<Guid, List<Action>>();
+        static Dictionary<Guid, Queue<Action>> Actions = new Dictionary<Guid, Queue<Action>>();
 
         //Game Start
         static void Main(string[] args)
@@ -31,55 +30,52 @@ namespace EvolutionSandbox
 
         static void GameLoop()
         {
-            Stopwatch stopwatch = new Stopwatch();
-            int targetFrameTime = 1000 / FPScap; //How much one frame should take in ms
+            DateTime time = DateTime.Now;
+            int targetFrameTime = 1000 / FPScap; // How often should be showed new frame in ms
             while (true)
             {
-                stopwatch.Restart();
-
-                foreach (GameObject obj in GameObjects) // TODO: Insted of making action instantly take only information of the action gameObject wants to make and after we have all information execute all at one to make it fair fore every gameObject
+                // Update and get actions form gameobjects
+                foreach (GameObject gObj in GameObjects)
                 {
-                    obj.Update();
+                    gObj.Update();
+                    Actions.Add(gObj.GID, gObj.GActions);
+                }
 
-                    if (Actions.ContainsKey(obj.GID))
+
+                Dictionary<Guid, Queue<MoveAction>> moveActions = new Dictionary<Guid, Queue<MoveAction>>();
+
+                foreach(KeyValuePair<Guid, Queue<Action>> gmActionsKVP in Actions)
+                {
+                    while (gmActionsKVP.Value.Count > 0)
                     {
-                        if (Actions[obj.GID].Count == 0)
+                        Action gmAction = gmActionsKVP.Value.Dequeue();
+
+                        switch (gmAction)
                         {
-                            Actions[obj.GID] = obj.GActions;
-                            obj.ClearActions();
+                            case MoveAction moveAction:
+                                if(!moveActions.ContainsKey(gmActionsKVP.Key))
+                                    moveActions.Add(gmActionsKVP.Key, new Queue<MoveAction>());
+                                moveActions[gmActionsKVP.Key].Enqueue(moveAction);
+                                break;
+                            default:
+                                break;
                         }
                     }
-                    else
-                    {
-                        Actions.Add(obj.GID, obj.GActions);
-                        obj.ClearActions();
-                    }
                 }
 
-                Grid.DrawGrid();
-
-                stopwatch.Stop();
-
-                //FPScap to sleepTime calculation and sleep
-                int elapsedMs = (int)stopwatch.ElapsedMilliseconds;
-                int sleepTime = targetFrameTime - elapsedMs;
-
-                if (sleepTime > 0)
+                if(time == DateTime.Now.AddMilliseconds(targetFrameTime))
                 {
-                    Thread.Sleep(sleepTime);
+                    Grid.DrawGrid();
+                    time = DateTime.Now;
                 }
+                
 
-                //DeltaTime claculation
-                double totalFrameTimeMs = elapsedMs + (sleepTime > 0 ? sleepTime : 0); // DeltaTime is equal to time elapsed from last frame
-                DeltaTime = totalFrameTimeMs / 1000.0; // Conversion from ms to s
+
+                Actions.Clear();
             }
         }
 
         /* Getters and setters */
-        public double GDeltaTime
-        {
-            get { return DeltaTime; }
-        }
 
     }
 

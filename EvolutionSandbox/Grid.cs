@@ -14,6 +14,7 @@ namespace EvolutionSandbox
             Cells = new char[GridSize.Y, GridSize.X];
             bInicialised = true;
             ClearGrid();
+            DrawGrid();
         }
 
         public static void ClearGrid(){
