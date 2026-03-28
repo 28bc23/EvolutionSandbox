@@ -10,6 +10,7 @@ namespace EvolutionSandbox
     {
         Enum ActionType;
         Vector2Int CurrentPos;
+        GameObject Initiator;
 
         /* Getters and Setters */
         public Enum GSActionType
@@ -23,14 +24,21 @@ namespace EvolutionSandbox
             get { return CurrentPos; }
             protected set { CurrentPos = value; }
         }
+
+        public GameObject GSInitiator
+        {
+            get { return Initiator; }
+            protected set { Initiator = value; }
+        }
     }
 
     internal class MoveAction : Action
     {
-        public MoveAction(MovementType movementType, Vector2Int startingPos)
+        public MoveAction(MovementType movementType, Vector2Int startingPos, GameObject initiator)
         {
             GSActionType = movementType;
             GSCurrentPos = startingPos;
+            GSInitiator = initiator;
         }
     }
 
@@ -45,6 +53,10 @@ namespace EvolutionSandbox
         DownRight,
         DownLeft,
         UpLeft,
-        NoMove
+        NoMove,
+        JumpUp,
+        JumpDown,
+        JumpLeft,
+        JumpRight
     }
 }

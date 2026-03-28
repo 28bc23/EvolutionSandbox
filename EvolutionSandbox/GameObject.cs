@@ -7,15 +7,21 @@ namespace EvolutionSandbox
     {
         Vector2Int Pos;
 
-        Queue<Action> actions;
+        Queue<Action> actions = new Queue<Action>();
 
         Guid ID;
 
-        public GameObject(Vector2Int spawnPos, Guid id)
+        char Character;
+
+        GameObjectType GameObjectType;
+
+        public GameObject(Vector2Int spawnPos, Guid id, char character, GameObjectType gameObjectType)
         {
             Pos = spawnPos;
-            Grid.SpawnAgent(Pos);
+            Grid.SpawnGameObject(this, Pos);
             ID = id;
+            Character = character;
+            GameObjectType = gameObjectType;
         }
         public abstract void Update();
 
@@ -29,6 +35,16 @@ namespace EvolutionSandbox
             actions.Clear();
         }
 
+        public virtual void OnCollisionEnter(CollisionType collision)
+        {
+            return;
+        }
+
+        public virtual void OnCollisionEnter(CollisionType collision, GameObject collidedGameObject)
+        {
+            return;
+        }
+
 
 
 
@@ -36,7 +52,7 @@ namespace EvolutionSandbox
         public Vector2Int GSPos
         {
             get { return Pos; }
-            protected set { Pos = value; }
+            set { Pos = value; }
         }
 
         public Guid GID
@@ -48,5 +64,21 @@ namespace EvolutionSandbox
         {
             get { return new Queue<Action>(actions); }
         }
+
+        public char GCharacter
+        {
+            get { return Character; }
+        }
+
+        public GameObjectType GGameObjectType
+        {
+            get { return GameObjectType; }
+        }
+    }
+
+    internal enum GameObjectType
+    {
+        Agent,
+        Food
     }
 }

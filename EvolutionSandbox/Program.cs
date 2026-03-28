@@ -38,32 +38,35 @@ namespace EvolutionSandbox
                 foreach (GameObject gObj in GameObjects)
                 {
                     gObj.Update();
-                    Actions.Add(gObj.GID, gObj.GActions);
+                    Actions[gObj.GID] = gObj.GActions;
+                    gObj.ClearActions();
                 }
 
 
-                Dictionary<Guid, Queue<MoveAction>> moveActions = new Dictionary<Guid, Queue<MoveAction>>();
+                Dictionary<Guid, Queue<MoveAction>> goMoveActions = new Dictionary<Guid, Queue<MoveAction>>();
 
-                foreach(KeyValuePair<Guid, Queue<Action>> gmActionsKVP in Actions)
+                foreach(KeyValuePair<Guid, Queue<Action>> goActionsKVP in Actions)
                 {
-                    while (gmActionsKVP.Value.Count > 0)
+                    while (goActionsKVP.Value.Count > 0)
                     {
-                        Action gmAction = gmActionsKVP.Value.Dequeue();
+                        Action gmAction = goActionsKVP.Value.Dequeue();
 
                         switch (gmAction)
                         {
                             case MoveAction moveAction:
-                                if(!moveActions.ContainsKey(gmActionsKVP.Key))
-                                    moveActions.Add(gmActionsKVP.Key, new Queue<MoveAction>());
-                                moveActions[gmActionsKVP.Key].Enqueue(moveAction);
+                                if(!goMoveActions.ContainsKey(goActionsKVP.Key))
+                                    goMoveActions.Add(goActionsKVP.Key, new Queue<MoveAction>());
+                                goMoveActions[goActionsKVP.Key].Enqueue(moveAction);
                                 break;
                             default:
                                 break;
                         }
                     }
                 }
+                if(goMoveActions.Count > 0)
+                    Grid.MoveObjects(goMoveActions);
 
-                if(time == DateTime.Now.AddMilliseconds(targetFrameTime))
+                if((DateTime.Now - time).TotalMilliseconds >= targetFrameTime)
                 {
                     Grid.DrawGrid();
                     time = DateTime.Now;

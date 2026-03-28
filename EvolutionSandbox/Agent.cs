@@ -4,17 +4,16 @@ namespace EvolutionSandbox
 {
     internal class Agent : GameObject
     {
-        Random rnd;
-        public Agent(Vector2Int spawnPos, Guid id) : base(spawnPos, id)
+        static Random rnd = new Random();
+        public Agent(Vector2Int spawnPos, Guid id) : base(spawnPos, id, '*', GameObjectType.Agent)
         {
-            rnd = new Random();
         }
 
-        public override void Update() //All actions in here will be made in one frame. Need to find way to work with it. but i will propably be doing one action most of the time. Else I cloud use maybe corutine and timeDelta time.
+        public override void Update() //TODO: Add timer for some actions ex.: if(currTime >= actionTime) {actionTime = currTime + 10}
         {
             //Movement test
-            MovementType randomMove = (MovementType)rnd.Next(0, 8);
-            MakeAction(new MoveAction(randomMove, GSPos));
+            MovementType randomMove = (MovementType)rnd.Next(0, 12);
+            MakeAction(new MoveAction(randomMove, GSPos, this));
         }
 
     }
