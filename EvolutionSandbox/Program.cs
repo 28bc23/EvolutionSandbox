@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 
 namespace EvolutionSandbox
@@ -12,13 +13,15 @@ namespace EvolutionSandbox
 
         static List<GameObject> GameObjects = new List<GameObject>();
 
+        static Dictionary<Guid, List<Action>> Actions = new Dictionary<Guid, List<Action>>();
+
         //Game Start
         static void Main(string[] args)
         {
             Grid.Init(new Vector2Int(20, 10)); // Inicialize size of grid
 
-            Agent agent = new Agent(new Vector2Int(10, 5));
-            Agent agent2 = new Agent(new Vector2Int(5, 6));
+            Agent agent = new Agent(new Vector2Int(10, 5), Guid.NewGuid());
+            Agent agent2 = new Agent(new Vector2Int(5, 6), Guid.NewGuid());
 
             GameObjects.Add(agent);
             GameObjects.Add(agent2);
@@ -37,6 +40,20 @@ namespace EvolutionSandbox
                 foreach (GameObject obj in GameObjects) // TODO: Insted of making action instantly take only information of the action gameObject wants to make and after we have all information execute all at one to make it fair fore every gameObject
                 {
                     obj.Update();
+
+                    if (Actions.ContainsKey(obj.GID))
+                    {
+                        if (Actions[obj.GID].Count == 0)
+                        {
+                            Actions[obj.GID] = obj.GActions;
+                            obj.ClearActions();
+                        }
+                    }
+                    else
+                    {
+                        Actions.Add(obj.GID, obj.GActions);
+                        obj.ClearActions();
+                    }
                 }
 
                 Grid.DrawGrid();
@@ -57,6 +74,13 @@ namespace EvolutionSandbox
                 DeltaTime = totalFrameTimeMs / 1000.0; // Conversion from ms to s
             }
         }
+
+        /* Getters and setters */
+        public double GDeltaTime
+        {
+            get { return DeltaTime; }
+        }
+
     }
 
     internal class Vector2Int

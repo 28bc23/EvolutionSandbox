@@ -123,10 +123,11 @@ namespace EvolutionSandbox
                     if (newX < 0 || newY >= GridSize.Y)
                         return MoveResult.CollisionWWall;
                     break;
+                case MovementType.NoMove:
+                    return MoveResult.NoMove;
 
                 default:
                     return MoveResult.InvalidMovementType;
-                    break;
             }
 
             Cells[pos.Y, pos.X] = ' ';
@@ -147,18 +148,7 @@ namespace EvolutionSandbox
         CollisionWWall,
         TriedToMoveEmptySpaceOrFood,
         GridNotInicialized,
-        InvalidMovementType
-    }
-
-    internal enum MovementType
-    {
-        Up,
-        Down,
-        Right,
-        Left,
-        UpRight,
-        DownRight,
-        DownLeft,
-        UpLeft
+        InvalidMovementType,
+        NoMove
     }
 }
