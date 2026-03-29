@@ -1,19 +1,24 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 namespace EvolutionSandbox
 {
     internal static class Grid
     {
         static bool bInicialised = false;
         static Vector2Int GridSize;
-        static char[,] Cells;
+        static List<GameObject>[,] Cells;
 
         static string LastGrid = "";
 
+        static bool DrawIndicator = false;
+
         public static void Init(Vector2Int gridSize){
             GridSize = gridSize;
-            Cells = new char[GridSize.Y, GridSize.X];
+            Cells = new List<GameObject>[GridSize.Y, GridSize.X];
             bInicialised = true;
             ClearGrid();
+            DrawGrid();
         }
 
         public static void ClearGrid(){
@@ -22,7 +27,7 @@ namespace EvolutionSandbox
 
             for(int i = 0; i < GridSize.Y; i++){
                 for (int j = 0; j < GridSize.X; j++){
-                    Cells[i,j] = ' ';
+                    Cells[i,j] = new List<GameObject>();
                 }
             }
         }
@@ -35,7 +40,10 @@ namespace EvolutionSandbox
 
             for(int i = 0; i < GridSize.Y; i++){
                 for (int j = 0; j < GridSize.X; j++){
-                    grid += $"[{Cells[i,j]}]";
+                    if (Cells[i, j].Count == 0)
+                        grid += "[ ]";
+                    else
+                        grid += $"[{Cells[i, j][0].GCharacter}]";
                 }
                 grid += '\n';
             }
@@ -44,121 +52,214 @@ namespace EvolutionSandbox
             {
                 Console.SetCursorPosition(0, 0);
                 Console.Write(grid);
+
+                if (DrawIndicator)
+                {
+                    Console.WriteLine("0");
+                    DrawIndicator = false;
+                }else
+                    DrawIndicator = true;
+
                 LastGrid = grid;
             }
         }
 
-        public static void SpawnAgent(Vector2Int pos)
+        public static bool SpawnGameObject(GameObject gameObject, Vector2Int pos, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
         {
             if (!bInicialised)
-                return;
+                return false;
 
             if (pos.Y < 0 || pos.Y >= GridSize.Y || pos.X < 0 || pos.X >= GridSize.X)
-                return;
-
-            Cells[pos.Y, pos.X] = '*';
+                return false;
+            if(!doNotSpawnWhenColliding)
+            {
+                if (!ignoreCollisions)
+                {
+                    if (Cells[pos.Y, pos.X].Count > 0)
+                    {
+                        foreach (GameObject go in Cells[pos.Y, pos.X])
+                        {
+                            go.OnCollisionEnter(CollisionType.CollisionGameObject, gameObject); // Notify already spawned go
+                            gameObject.OnCollisionEnter(CollisionType.CollisionGameObject, go); // Notify new go
+                        }
+                    }
+                }
+                Cells[pos.Y, pos.X].Add(gameObject);
+            }
+            else
+            {
+                if (Cells[pos.Y, pos.X].Count > 0)
+                    return false;
+                Cells[pos.Y, pos.X].Add(gameObject);
+            }
+            return true;
         }
 
-        public static MoveResult MoveAgent(Vector2Int pos, MovementType type)
+        public static GridResult MoveObjects(Dictionary<Guid, Queue<MoveAction>> goMoveActions)
         {
             if (!bInicialised)
-                return MoveResult.GridNotInicialized;
+                return GridResult.GridNotInicialized;
 
-            if (Cells[pos.Y, pos.X] != '*')
-                return MoveResult.TriedToMoveEmptySpaceOrFood;
-
-            int newX = pos.X;
-            int newY = pos.Y;
-
-            switch (type)
+            while (goMoveActions.Count > 0)
             {
-                case MovementType.Up:
-                    newY = pos.Y + 1;
-                    if (newY >= GridSize.Y)
-                        return MoveResult.CollisionWWall;
-                    break;
+                foreach (Guid key in goMoveActions.Keys.ToList())
+                {
+                    if (goMoveActions[key].Count == 0)
+                    {
+                        goMoveActions.Remove(key);
+                        continue;
+                    }
 
-                case MovementType.Down:
-                    newY = pos.Y-1;
-                    if (newY < 0)
-                        return MoveResult.CollisionWWall;
-                    break;
+                    MoveAction moveAction = goMoveActions[key].Dequeue();
 
-                case MovementType.Right:
-                    newX = pos.X+1;
-                    if (newX >= GridSize.X)
-                        return MoveResult.CollisionWWall;
-                    break;
+                    Vector2Int pos = moveAction.GSInitiator.GSPos;
+                    int newX = pos.X;
+                    int newY = pos.Y;
+                    switch (moveAction.GSActionType)
+                    {
+                        case MovementType.Up:
+                            newY = pos.Y + 1;
+                            if (newY >= GridSize.Y){
+                                moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionWall);
+                                continue;
+                            }
+                            break;
 
-                case MovementType.Left:
-                    newX = pos.X-1;
-                    if (newX < 0)
-                        return MoveResult.CollisionWWall;
-                    break;
+                        case MovementType.Down:
+                            newY = pos.Y - 1;
+                            if (newY < 0){
+                                moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionWall);
+                                continue;
+                            }
+                            break;
 
-                case MovementType.UpRight:
-                    newY = pos.Y+1;
-                    newX = pos.X+1;
-                    if (newX >= GridSize.X || newY >= GridSize.Y)
-                        return MoveResult.CollisionWWall;
-                    break;
+                        case MovementType.Right:
+                            newX = pos.X + 1;
+                            if (newX >= GridSize.X){
+                                moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionWall);
+                                continue;
+                            }
+                            break;
 
-                case MovementType.DownRight:
-                    newY = pos.Y-1;
-                    newX = pos.X+1;
-                    if (newX >= GridSize.X || newY < 0)
-                        return MoveResult.CollisionWWall;
-                    break;
+                        case MovementType.Left:
+                            newX = pos.X - 1;
+                            if (newX < 0){
+                                moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionWall);
+                                continue;
+                            }
+                            break;
 
-                case MovementType.DownLeft:
-                    newY = pos.Y-1;
-                    newX = pos.X-1;
-                    if (newX < 0 || newY < 0)
-                        return MoveResult.CollisionWWall;
-                    break;
+                        case MovementType.JumpUp:
+                            newY = pos.Y + 2;
+                            if (newY >= GridSize.Y)
+                            {
+                                moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionWall);
+                                newY = GridSize.Y - 1;
+                            }
+                            break;
 
-                case MovementType.UpLeft:
-                    newY = pos.Y+1;
-                    newX = pos.X-1;
-                    if (newX < 0 || newY >= GridSize.Y)
-                        return MoveResult.CollisionWWall;
-                    break;
+                        case MovementType.JumpDown:
+                            newY = pos.Y - 2;
+                            if (newY < 0)
+                            {
+                                moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionWall);
+                                newY = 0;
+                            }
+                            break;
 
-                default:
-                    return MoveResult.InvalidMovementType;
-                    break;
+                        case MovementType.JumpRight:
+                            newX = pos.X + 2;
+                            if (newX >= GridSize.X)
+                            {
+                                moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionWall);
+                                newX = GridSize.X-1;
+                            }
+                            break;
+
+                        case MovementType.JumpLeft:
+                            newX = pos.X - 2;
+                            if (newX < 0)
+                            {
+                                moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionWall);
+                                newX = 0;
+                            }
+                            break;
+
+                        case MovementType.UpRight:
+                            newY = pos.Y + 1;
+                            newX = pos.X + 1;
+                            if (newX >= GridSize.X || newY >= GridSize.Y){
+                                moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionWall);
+                                continue;
+                            }
+                            break;
+
+                        case MovementType.DownRight:
+                            newY = pos.Y - 1;
+                            newX = pos.X + 1;
+                            if (newX >= GridSize.X || newY < 0){
+                                moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionWall);
+                                continue;
+                            }
+                            break;
+
+                        case MovementType.DownLeft:
+                            newY = pos.Y - 1;
+                            newX = pos.X - 1;
+                            if (newX < 0 || newY < 0){
+                                moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionWall);
+                                continue;
+                            }
+                            break;
+
+                        case MovementType.UpLeft:
+                            newY = pos.Y + 1;
+                            newX = pos.X - 1;
+                            if (newX < 0 || newY >= GridSize.Y){
+                                moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionWall);
+                                continue;
+                            }
+                            break;
+                        default:
+                            return GridResult.InvalidMovementType;
+                    }
+                    Cells[pos.Y, pos.X].Remove(moveAction.GSInitiator);
+
+                    moveAction.GSInitiator.GSPos.X = newX;
+                    moveAction.GSInitiator.GSPos.Y = newY;
+
+                    if (Cells[newY, newX].Count > 0)
+                    {
+                        foreach(GameObject go in Cells[newY, newX])
+                        {
+                            moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionGameObject, go);
+                            go.OnCollisionEnter(CollisionType.CollisionGameObject, moveAction.GSInitiator);
+                        }
+                    }
+                    Cells[newY, newX].Add(moveAction.GSInitiator);
+
+                    
+
+                    if (goMoveActions[key].Count == 0)
+                        goMoveActions.Remove(key);
+                }
             }
 
-            Cells[pos.Y, pos.X] = ' ';
-            Cells[newY, newX] = '*';
-
-            pos.X = newX;
-            pos.Y = newY;
-
-            return MoveResult.Moved;
+            return GridResult.Success;
         }
     }
 
-    internal enum MoveResult
+    internal enum GridResult
     {
-        Moved,
-        CollisionWAgent,
-        CollisionWFood,
-        CollisionWWall,
+        Success,
         TriedToMoveEmptySpaceOrFood,
         GridNotInicialized,
-        InvalidMovementType
+        InvalidMovementType,
     }
 
-    internal enum MovementType
+    internal enum CollisionType
     {
-        Up,
-        Down,
-        Right,
-        Left,
-        UpRight,
-        DownRight,
-        DownLeft,
-        UpLeft
+        CollisionGameObject,
+        CollisionWall,
     }
 }

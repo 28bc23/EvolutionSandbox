@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 
 namespace EvolutionSandbox
 {
     internal class Program
     {
-        static int FPScap = 100;
-        static double DeltaTime;
+        static int FPScap = 10;
 
         static List<GameObject> GameObjects = new List<GameObject>();
+
+        static Dictionary<Guid, Queue<Action>> Actions = new Dictionary<Guid, Queue<Action>>();
 
         //Game Start
         static void Main(string[] args)
         {
             Grid.Init(new Vector2Int(20, 10)); // Inicialize size of grid
 
-            Agent agent = new Agent(new Vector2Int(10, 5));
-            Agent agent2 = new Agent(new Vector2Int(5, 6));
+            Agent agent = new Agent(new Vector2Int(10, 5), Guid.NewGuid());
+            Agent agent2 = new Agent(new Vector2Int(5, 6), Guid.NewGuid());
 
             GameObjects.Add(agent);
             GameObjects.Add(agent2);
@@ -28,35 +30,56 @@ namespace EvolutionSandbox
 
         static void GameLoop()
         {
-            Stopwatch stopwatch = new Stopwatch();
-            int targetFrameTime = 1000 / FPScap; //How much one frame should take in ms
+            DateTime time = DateTime.Now;
+            int targetFrameTime = 1000 / FPScap; // How often should be showed new frame in ms
             while (true)
             {
-                stopwatch.Restart();
-
-                foreach (GameObject obj in GameObjects) // TODO: Insted of making action instantly take only information of the action gameObject wants to make and after we have all information execute all at one to make it fair fore every gameObject
+                // Update and get actions form gameobjects
+                foreach (GameObject gObj in GameObjects)
                 {
-                    obj.Update();
+                    gObj.Update();
+                    Actions[gObj.GID] = gObj.GActions;
+                    gObj.ClearActions();
                 }
 
-                Grid.DrawGrid();
 
-                stopwatch.Stop();
+                Dictionary<Guid, Queue<MoveAction>> goMoveActions = new Dictionary<Guid, Queue<MoveAction>>();
 
-                //FPScap to sleepTime calculation and sleep
-                int elapsedMs = (int)stopwatch.ElapsedMilliseconds;
-                int sleepTime = targetFrameTime - elapsedMs;
-
-                if (sleepTime > 0)
+                foreach(KeyValuePair<Guid, Queue<Action>> goActionsKVP in Actions)
                 {
-                    Thread.Sleep(sleepTime);
-                }
+                    while (goActionsKVP.Value.Count > 0)
+                    {
+                        Action gmAction = goActionsKVP.Value.Dequeue();
 
-                //DeltaTime claculation
-                double totalFrameTimeMs = elapsedMs + (sleepTime > 0 ? sleepTime : 0); // DeltaTime is equal to time elapsed from last frame
-                DeltaTime = totalFrameTimeMs / 1000.0; // Conversion from ms to s
+                        switch (gmAction)
+                        {
+                            case MoveAction moveAction:
+                                if(!goMoveActions.ContainsKey(goActionsKVP.Key))
+                                    goMoveActions.Add(goActionsKVP.Key, new Queue<MoveAction>());
+                                goMoveActions[goActionsKVP.Key].Enqueue(moveAction);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                if(goMoveActions.Count > 0)
+                    Grid.MoveObjects(goMoveActions);
+
+                if((DateTime.Now - time).TotalMilliseconds >= targetFrameTime)
+                {
+                    Grid.DrawGrid();
+                    time = DateTime.Now;
+                }
+                
+
+
+                Actions.Clear();
             }
         }
+
+        /* Getters and setters */
+
     }
 
     internal class Vector2Int
