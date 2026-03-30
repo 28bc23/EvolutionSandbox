@@ -9,7 +9,7 @@ namespace EvolutionSandbox
         {
         }
 
-        public override void Update() //TODO: Add timer for some actions ex.: if(currTime >= actionTime) {actionTime = currTime + 10}
+        public override void Update()
         {
             //Movement test
             MovementType randomMove = (MovementType)rnd.Next(0, 12);
