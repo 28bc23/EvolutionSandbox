@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -9,6 +10,7 @@ namespace EvolutionSandbox
     internal class Program
     {
         static int FPScap = 10;
+        public static int APS = 20; // Actions per second
 
         static List<GameObject> GameObjects = new List<GameObject>();
 
