@@ -14,6 +14,8 @@ namespace EvolutionSandbox
         char Character;
 
         GameObjectType GameObjectType;
+        double TimePerAction; // How long one action takes in ms
+        DateTime nextActionTime;
 
         public GameObject(Vector2Int spawnPos, Guid id, char character, GameObjectType gameObjectType)
         {
@@ -22,12 +24,18 @@ namespace EvolutionSandbox
             ID = id;
             Character = character;
             GameObjectType = gameObjectType;
+            TimePerAction = 1000 / Program.APS;
+            nextActionTime = DateTime.Now.AddMilliseconds(TimePerAction);
         }
         public abstract void Update();
 
         public virtual void MakeAction(Action action)
         {
+            if(DateTime.Now < nextActionTime)
+                return;
+
             actions.Enqueue(action);
+            nextActionTime = DateTime.Now.AddMilliseconds(TimePerAction);
         }
 
         public virtual void ClearActions()
