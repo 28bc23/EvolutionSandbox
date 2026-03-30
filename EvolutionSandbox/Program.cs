@@ -23,9 +23,6 @@ namespace EvolutionSandbox
 
             Agent agent = new Agent(new Vector2Int(10, 5), Guid.NewGuid());
             Food food = new Food(new Vector2Int(5, 5), Guid.NewGuid());
-
-            GameObjects.Add(agent);
-            GameObjects.Add(food);
             
             GameLoop(); // Start Gmae loop
         }
@@ -78,6 +75,16 @@ namespace EvolutionSandbox
 
                 Actions.Clear();
             }
+        }
+
+        public static bool SpawnGameObject(GameObject gameObject, Vector2Int pos, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
+        {
+            GameObjects.Add(gameObject);
+
+            if(gameObject.GGameObjectType == GameObjectType.Manager)
+                return true;
+
+            return Grid.SpawnGameObject(gameObject, pos, doNotSpawnWhenColliding, ignoreCollisions);
         }
 
         /* Getters and setters */

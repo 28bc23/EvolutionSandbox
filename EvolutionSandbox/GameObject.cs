@@ -20,7 +20,7 @@ namespace EvolutionSandbox
         public GameObject(Vector2Int spawnPos, Guid id, char character, GameObjectType gameObjectType)
         {
             Pos = spawnPos;
-            Grid.SpawnGameObject(this, Pos);
+            Program.SpawnGameObject(this, Pos);
             ID = id;
             Character = character;
             GameObjectType = gameObjectType;
