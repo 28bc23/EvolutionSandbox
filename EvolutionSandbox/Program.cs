@@ -22,8 +22,10 @@ namespace EvolutionSandbox
             Grid.Init(new Vector2Int(20, 10)); // Inicialize size of grid
 
             Agent agent = new Agent(new Vector2Int(10, 5), Guid.NewGuid());
+            Food food = new Food(new Vector2Int(5, 5), Guid.NewGuid());
 
             GameObjects.Add(agent);
+            GameObjects.Add(food);
             
             GameLoop(); // Start Gmae loop
         }
