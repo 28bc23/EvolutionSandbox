@@ -22,10 +22,8 @@ namespace EvolutionSandbox
             Grid.Init(new Vector2Int(20, 10)); // Inicialize size of grid
 
             Agent agent = new Agent(new Vector2Int(10, 5), Guid.NewGuid());
-            Agent agent2 = new Agent(new Vector2Int(5, 6), Guid.NewGuid());
 
             GameObjects.Add(agent);
-            GameObjects.Add(agent2);
             
             GameLoop(); // Start Gmae loop
         }
