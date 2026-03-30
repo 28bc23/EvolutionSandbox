@@ -87,6 +87,7 @@ namespace EvolutionSandbox
     internal enum GameObjectType
     {
         Agent,
-        Food
+        Food,
+        Manager
     }
 }
