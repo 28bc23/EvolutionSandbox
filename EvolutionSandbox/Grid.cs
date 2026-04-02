@@ -95,6 +95,11 @@ namespace EvolutionSandbox
             return true;
         }
 
+        public static bool RemoveGameObject(GameObject gameObject)
+        {
+            return Cells[gameObject.GSPos.Y, gameObject.GSPos.X].Remove(gameObject);
+        }
+
         public static GridResult MoveObjects(Dictionary<Guid, Queue<MoveAction>> goMoveActions)
         {
             if (!bInicialised)
@@ -225,12 +230,11 @@ namespace EvolutionSandbox
                     }
                     Cells[pos.Y, pos.X].Remove(moveAction.GSInitiator);
 
-                    moveAction.GSInitiator.GSPos.X = newX;
-                    moveAction.GSInitiator.GSPos.Y = newY;
+                    moveAction.GSInitiator.GSPos = new Vector2Int(newX, newY);
 
                     if (Cells[newY, newX].Count > 0)
                     {
-                        foreach(GameObject go in Cells[newY, newX])
+                        foreach(GameObject go in Cells[newY, newX].ToArray())
                         {
                             moveAction.GSInitiator.OnCollisionEnter(CollisionType.CollisionGameObject, go);
                             go.OnCollisionEnter(CollisionType.CollisionGameObject, moveAction.GSInitiator);
@@ -246,6 +250,12 @@ namespace EvolutionSandbox
             }
 
             return GridResult.Success;
+        }
+
+        /* Getters ans Setters */
+        public static Vector2Int GGridSize
+        {
+            get {  return GridSize; }
         }
     }
 

@@ -14,20 +14,34 @@ namespace EvolutionSandbox
         char Character;
 
         GameObjectType GameObjectType;
+        double TimePerAction; // How long one action takes in ms
+        DateTime nextActionTime;
 
-        public GameObject(Vector2Int spawnPos, Guid id, char character, GameObjectType gameObjectType)
+        double Energy = 10;
+
+        public GameObject(Vector2Int spawnPos, Guid id, char character, GameObjectType gameObjectType, float energy = 0)
         {
             Pos = spawnPos;
-            Grid.SpawnGameObject(this, Pos);
             ID = id;
             Character = character;
             GameObjectType = gameObjectType;
+            TimePerAction = 1000 / Program.APS;
+            nextActionTime = DateTime.Now.AddMilliseconds(TimePerAction);
+            Energy = energy;
+            Program.SpawnGameObject(this, Pos);
         }
-        public abstract void Update();
+        public abstract void Update(double deltaTime);
 
         public virtual void MakeAction(Action action)
         {
+            if(DateTime.Now < nextActionTime)
+                return;
+
+            if(GameObjectType == GameObjectType.Agent)
+                Energy -= action.GSEnergyCost;
+
             actions.Enqueue(action);
+            nextActionTime = DateTime.Now.AddMilliseconds(TimePerAction);
         }
 
         public virtual void ClearActions()
@@ -74,11 +88,18 @@ namespace EvolutionSandbox
         {
             get { return GameObjectType; }
         }
+
+        public double GSEnergy
+        {
+            get { return Energy; }
+            protected set { Energy = value; }
+        }
     }
 
     internal enum GameObjectType
     {
         Agent,
-        Food
+        Food,
+        Manager
     }
 }
