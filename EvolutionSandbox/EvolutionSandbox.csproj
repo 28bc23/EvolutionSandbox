@@ -46,8 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionSystem.cs" />
-    <Compile Include="GameObjects/Agent.cs" />
-    <Compile Include="GameObjects/Food.cs" />
+    <Compile Include="GameObjects\Agent.cs" />
+    <Compile Include="GameObjects\Food.cs" />
+    <Compile Include="GameObjects\FoodManager.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Grid.cs" />
