@@ -27,7 +27,7 @@ namespace EvolutionSandbox
             nextActionTime = DateTime.Now.AddMilliseconds(TimePerAction);
             Program.SpawnGameObject(this, Pos);
         }
-        public abstract void Update();
+        public abstract void Update(double deltaTime);
 
         public virtual void MakeAction(Action action)
         {

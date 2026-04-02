@@ -10,7 +10,7 @@ namespace EvolutionSandbox
         {
         }
 
-        public override void Update()
+        public override void Update(double deltaTime)
         {
             if (foods.Count < MaxFood)
             {
