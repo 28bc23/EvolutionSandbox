@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace EvolutionSandbox
 {
@@ -14,10 +15,25 @@ namespace EvolutionSandbox
         {
             //Desrease energy
             Energy -= EnergyDecreaseRate * deltaTime;
+            Console.WriteLine(Energy);
 
             //Movement test
             MovementType randomMove = (MovementType)Program.GRND.Next(0, 12);
             MakeAction(new MoveAction(randomMove, GSPos, this));
+        }
+
+        public override void OnCollisionEnter(CollisionType collision, GameObject collidedGameObject)
+        {
+            if (collision != CollisionType.CollisionGameObject)
+                return;
+
+            if (collidedGameObject.GGameObjectType != GameObjectType.Food)
+                return;
+
+            Food food = (Food)collidedGameObject; //  Should always parse
+            Energy += food.GEnergy;
+
+            Program.DestroyGameObject(food);
         }
 
     }
