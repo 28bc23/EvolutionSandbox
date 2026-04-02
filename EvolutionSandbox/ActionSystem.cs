@@ -11,6 +11,7 @@ namespace EvolutionSandbox
         Enum ActionType;
         Vector2Int CurrentPos;
         GameObject Initiator;
+        float EnergyCost = 0;
 
         /* Getters and Setters */
         public Enum GSActionType
@@ -30,6 +31,12 @@ namespace EvolutionSandbox
             get { return Initiator; }
             protected set { Initiator = value; }
         }
+
+        public float GSEnergyCost
+        {
+            get { return EnergyCost; }
+            protected set { EnergyCost = value; }
+        }
     }
 
     internal class MoveAction : Action
@@ -39,6 +46,7 @@ namespace EvolutionSandbox
             GSActionType = movementType;
             GSCurrentPos = startingPos;
             GSInitiator = initiator;
+            GSEnergyCost = 5;
         }
     }
 

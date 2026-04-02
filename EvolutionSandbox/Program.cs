@@ -31,15 +31,21 @@ namespace EvolutionSandbox
 
         static void GameLoop()
         {
-            DateTime time = DateTime.Now;
+            DateTime lastTimeFPS = DateTime.Now; // Last time for FPS limiter
+            DateTime lastGameLoopTime = DateTime.Now; // Last time of game loop
             int targetFrameTime = 1000 / FPScap; // How often should be showed new frame in ms
             while (true)
             {
+                /* calculat delta time */
+                DateTime now = DateTime.Now;
+                double deltaTime = (now - lastGameLoopTime).TotalSeconds; // Get deltatime (time from last game loop) in seconds
+                lastGameLoopTime = now;
+
                 // Update and get actions form gameobjects
                 GameObject[] gameObjects = GameObjects.ToArray();
                 foreach (GameObject gObj in gameObjects)
                 {
-                    gObj.Update();
+                    gObj.Update(deltaTime);
                     Actions[gObj.GID] = gObj.GActions;
                     gObj.ClearActions();
                 }
@@ -68,10 +74,10 @@ namespace EvolutionSandbox
                 if(goMoveActions.Count > 0)
                     Grid.MoveObjects(goMoveActions);
 
-                if((DateTime.Now - time).TotalMilliseconds >= targetFrameTime)
+                if((DateTime.Now - lastTimeFPS).TotalMilliseconds >= targetFrameTime)
                 {
                     Grid.DrawGrid();
-                    time = DateTime.Now;
+                    lastTimeFPS = DateTime.Now;
                 }
                 
 
@@ -88,6 +94,13 @@ namespace EvolutionSandbox
                 return true;
 
             return Grid.SpawnGameObject(gameObject, pos, doNotSpawnWhenColliding, ignoreCollisions);
+        }
+
+        public static bool DestroyGameObject(GameObject gameObject)
+        {
+            if(Grid.RemoveGameObject(gameObject))
+                return GameObjects.Remove(gameObject);
+            return false;
         }
 
         /* Getters and setters */
