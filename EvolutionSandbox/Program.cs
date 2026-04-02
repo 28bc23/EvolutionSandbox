@@ -16,16 +16,15 @@ namespace EvolutionSandbox
 
         static Dictionary<Guid, Queue<Action>> Actions = new Dictionary<Guid, Queue<Action>>();
 
+        static Random RND = new Random();
+
         //Game Start
         static void Main(string[] args)
         {
             Grid.Init(new Vector2Int(20, 10)); // Inicialize size of grid
 
             Agent agent = new Agent(new Vector2Int(10, 5), Guid.NewGuid());
-            Agent agent2 = new Agent(new Vector2Int(5, 6), Guid.NewGuid());
-
-            GameObjects.Add(agent);
-            GameObjects.Add(agent2);
+            FoodManager foodManager = new FoodManager(Guid.NewGuid());
             
             GameLoop(); // Start Gmae loop
         }
@@ -37,7 +36,8 @@ namespace EvolutionSandbox
             while (true)
             {
                 // Update and get actions form gameobjects
-                foreach (GameObject gObj in GameObjects)
+                GameObject[] gameObjects = GameObjects.ToArray();
+                foreach (GameObject gObj in gameObjects)
                 {
                     gObj.Update();
                     Actions[gObj.GID] = gObj.GActions;
@@ -80,11 +80,23 @@ namespace EvolutionSandbox
             }
         }
 
-        /* Getters and setters */
+        public static bool SpawnGameObject(GameObject gameObject, Vector2Int pos, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
+        {
+            GameObjects.Add(gameObject);
 
+            if(gameObject.GGameObjectType == GameObjectType.Manager)
+                return true;
+
+            return Grid.SpawnGameObject(gameObject, pos, doNotSpawnWhenColliding, ignoreCollisions);
+        }
+
+        /* Getters and setters */
+        public static Random GRND{
+            get { return RND; }
+        }
     }
 
-    internal class Vector2Int
+    internal struct Vector2Int
     {
         public int X;
         public int Y;

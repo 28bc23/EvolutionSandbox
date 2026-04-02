@@ -225,8 +225,7 @@ namespace EvolutionSandbox
                     }
                     Cells[pos.Y, pos.X].Remove(moveAction.GSInitiator);
 
-                    moveAction.GSInitiator.GSPos.X = newX;
-                    moveAction.GSInitiator.GSPos.Y = newY;
+                    moveAction.GSInitiator.GSPos = new Vector2Int(newX, newY);
 
                     if (Cells[newY, newX].Count > 0)
                     {
@@ -246,6 +245,12 @@ namespace EvolutionSandbox
             }
 
             return GridResult.Success;
+        }
+
+        /* Getters ans Setters */
+        public static Vector2Int GGridSize
+        {
+            get {  return GridSize; }
         }
     }
 
