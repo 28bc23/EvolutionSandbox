@@ -95,6 +95,11 @@ namespace EvolutionSandbox
             return true;
         }
 
+        public static bool RemoveGameObject(GameObject gameObject)
+        {
+            return Cells[gameObject.GSPos.Y, gameObject.GSPos.X].Remove(gameObject);
+        }
+
         public static GridResult MoveObjects(Dictionary<Guid, Queue<MoveAction>> goMoveActions)
         {
             if (!bInicialised)

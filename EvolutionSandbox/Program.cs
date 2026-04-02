@@ -96,6 +96,13 @@ namespace EvolutionSandbox
             return Grid.SpawnGameObject(gameObject, pos, doNotSpawnWhenColliding, ignoreCollisions);
         }
 
+        public static bool DestroyGameObject(GameObject gameObject)
+        {
+            if(Grid.RemoveGameObject(gameObject))
+                return GameObjects.Remove(gameObject);
+            return false;
+        }
+
         /* Getters and setters */
         public static Random GRND{
             get { return RND; }
