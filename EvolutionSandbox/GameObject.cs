@@ -89,9 +89,10 @@ namespace EvolutionSandbox
             get { return GameObjectType; }
         }
 
-        public float GEnergy
+        public double GSEnergy
         {
             get { return Energy; }
+            protected set { Energy = value; }
         }
     }
 

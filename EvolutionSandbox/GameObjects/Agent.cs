@@ -13,9 +13,8 @@ namespace EvolutionSandbox
         public override void Update(double deltaTime)
         {
             //Desrease energy
-            Energy -= EnergyDecreaseRate * deltaTime;
-            Console.WriteLine(Energy);
-            if (Energy <= 0)
+            GSEnergy -= EnergyDecreaseRate * deltaTime;
+            if (GSEnergy <= 0)
             {
                 Program.DestroyGameObject(this);
             }
@@ -33,9 +32,9 @@ namespace EvolutionSandbox
             if (collidedGameObject.GGameObjectType != GameObjectType.Food)
                 return;
 
-            Energy += collidedGameObject.GEnergy; // collidedGameObject should be food thanks to if statement above
+            GSEnergy += collidedGameObject.GSEnergy; // collidedGameObject should be food thanks to if statement above
 
-            Program.DestroyGameObject(food);
+            Program.DestroyGameObject(collidedGameObject);
         }
 
     }
