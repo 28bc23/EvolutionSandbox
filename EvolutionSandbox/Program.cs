@@ -18,6 +18,8 @@ namespace EvolutionSandbox
 
         static Random RND = new Random();
 
+        static double DeltaTime;
+
         //Game Start
         static void Main(string[] args)
         {
@@ -38,14 +40,14 @@ namespace EvolutionSandbox
             {
                 /* calculat delta time */
                 DateTime now = DateTime.Now;
-                double deltaTime = (now - lastGameLoopTime).TotalSeconds; // Get deltatime (time from last game loop) in seconds
+                DeltaTime = (now - lastGameLoopTime).TotalSeconds; // Get deltatime (time from last game loop) in seconds
                 lastGameLoopTime = now;
 
                 // Update and get actions form gameobjects
                 GameObject[] gameObjects = GameObjects.ToArray();
                 foreach (GameObject gObj in gameObjects)
                 {
-                    gObj.Update(deltaTime);
+                    gObj.Update();
                     Actions[gObj.GID] = gObj.GActions;
                     gObj.ClearActions();
                 }
@@ -106,6 +108,11 @@ namespace EvolutionSandbox
         /* Getters and setters */
         public static Random GRND{
             get { return RND; }
+        }
+
+        public static double GDeltaTime
+        {
+            get { return DeltaTime; }
         }
     }
 

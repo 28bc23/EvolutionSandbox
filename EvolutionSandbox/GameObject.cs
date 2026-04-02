@@ -30,7 +30,7 @@ namespace EvolutionSandbox
             Energy = energy;
             Program.SpawnGameObject(this, Pos);
         }
-        public abstract void Update(double deltaTime);
+        public abstract void Update();
 
         public virtual void MakeAction(Action action)
         {

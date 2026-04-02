@@ -10,10 +10,10 @@ namespace EvolutionSandbox
         {
         }
 
-        public override void Update(double deltaTime)
+        public override void Update()
         {
             //Desrease energy
-            GSEnergy -= EnergyDecreaseRate * deltaTime;
+            GSEnergy -= EnergyDecreaseRate * Program.GDeltaTime;
             if (GSEnergy <= 0)
             {
                 Program.DestroyGameObject(this);
