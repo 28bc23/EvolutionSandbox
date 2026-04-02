@@ -5,9 +5,8 @@ namespace EvolutionSandbox
 {
     internal class Agent : GameObject
     {
-        double Energy = 100;
         float EnergyDecreaseRate = 1;
-        public Agent(Vector2Int spawnPos, Guid id) : base(spawnPos, id, '*', GameObjectType.Agent)
+        public Agent(Vector2Int spawnPos, Guid id) : base(spawnPos, id, '*', GameObjectType.Agent, 100)
         {
         }
 
@@ -34,8 +33,7 @@ namespace EvolutionSandbox
             if (collidedGameObject.GGameObjectType != GameObjectType.Food)
                 return;
 
-            Food food = (Food)collidedGameObject; //  Should always parse
-            Energy += food.GEnergy;
+            Energy += collidedGameObject.GEnergy; // collidedGameObject should be food thanks to if statement above
 
             Program.DestroyGameObject(food);
         }
