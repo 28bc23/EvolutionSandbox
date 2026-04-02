@@ -20,12 +20,12 @@ namespace EvolutionSandbox
         public GameObject(Vector2Int spawnPos, Guid id, char character, GameObjectType gameObjectType)
         {
             Pos = spawnPos;
-            Program.SpawnGameObject(this, Pos);
             ID = id;
             Character = character;
             GameObjectType = gameObjectType;
             TimePerAction = 1000 / Program.APS;
             nextActionTime = DateTime.Now.AddMilliseconds(TimePerAction);
+            Program.SpawnGameObject(this, Pos);
         }
         public abstract void Update();
 
