@@ -16,6 +16,10 @@ namespace EvolutionSandbox
             //Desrease energy
             Energy -= EnergyDecreaseRate * deltaTime;
             Console.WriteLine(Energy);
+            if (Energy <= 0)
+            {
+                Program.DestroyGameObject(this);
+            }
 
             //Movement test
             MovementType randomMove = (MovementType)Program.GRND.Next(0, 12);
