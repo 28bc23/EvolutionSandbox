@@ -11,6 +11,11 @@ namespace EvolutionSandbox.NeuralNetwork
         public double Value;
         public double Bias;
 
-        public NNConnection[] OutConns;
+        public List<NNConnection> OutConns = new List<NNConnection>();
+
+        public NNNode(double bias)
+        {
+            Bias = bias;
+        }
     }
 }
