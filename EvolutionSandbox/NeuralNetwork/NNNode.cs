@@ -8,7 +8,9 @@ namespace EvolutionSandbox.NeuralNetwork
 {
     internal class NNNode
     {
-        public double value;
-        public double bias;
+        public double Value;
+        public double Bias;
+
+        public NNConnection[] OutConns;
     }
 }
