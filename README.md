@@ -11,3 +11,21 @@ After some time Sandbox evaluates agents and spawn new generation.
 - Different types of food
 - Different types of agents
 - different obstacles than wall (end of grid)
+
+
+## Currently done
+- grid where can agents move
+- food and food spawner
+- that agents can eat food and get energy for it
+- that agent dies when he has no energy
+- gradually reducing energy over time
+- energy cost for actions
+- NN - forward pass (not tested)
+
+## TODO
+- generation evaluation
+- mutations of NN
+- crossbreeding
+- add more actions for agents
+- more type of agents
+- more type of food
