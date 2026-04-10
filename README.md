@@ -28,3 +28,4 @@ A console application in C# (.NET Framework) simulating the evolution of agents 
 - Aggressive interactions (agents can attack each other).
 - Increased environment variability (multiple food types, different agent types with distinct properties).
 - More complex obstacles within the grid (not just border walls).
+- Implementation of a combination of evolutionary learning and backpropagation
