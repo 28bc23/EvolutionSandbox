@@ -16,18 +16,23 @@ namespace EvolutionSandbox.NeuralNetwork
         List<NNNode[]> Layers = new List<NNNode[]>();
         List<NNConnection> Connections = new List<NNConnection>();
 
-        public NN()
+        public NN(int inputLayerSize, int outputLayerSize)
         {
-            Layers.Add(new NNNode[5]);
-            Layers.Add(new NNNode[13]);
+            Layers.Add(new NNNode[inputLayerSize]);
+            Layers.Add(new NNNode[outputLayerSize]);
+
+            for (int j = 0; j < Layers[0].Length; j++)
+            {
+                Layers[0][j] = new NNNode(Program.GRND.NextDouble() * 2 - 1);
+            }
 
             for (int i = 0; i < Layers[1].Length; i++)
             {
-                Layers[1][i].Bias = Program.GRND.NextDouble();
+                Layers[1][i] = new NNNode(Program.GRND.NextDouble() * 2 - 1);
                 for (int j = 0; j < Layers[0].Length; j++)
                 {
-                    Connections.Add(new NNConnection(Layers[1][i], Program.GRND.NextDouble()));
-                    Layers[0][j].OutConns.Add(Connections.Last());
+                    Connections.Add(new NNConnection(Layers[1][i], Program.GRND.NextDouble() * 2 - 1));
+                    Layers[0][j].OutConns.Add(Connections[Connections.Count - 1]);
                 }
             }
         }
@@ -64,6 +69,17 @@ namespace EvolutionSandbox.NeuralNetwork
                 }
             }
             return (MovementType)idx;
+        }
+
+        /* getters */
+        public int GInputSize
+        {
+            get { return Layers[0].Length; }
+        }
+
+        public int GOutputSize
+        {
+            get { return Layers[Layers.Count - 1].Length; }
         }
     }
 }
