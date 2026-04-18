@@ -1,7 +1,7 @@
 # EvolutionSandbox - Project Checkpoint
 
 > [!Warning]
-> This checkpoint is for commit `cc17032` - *merge main to NN - LICENCE and checkpoint readme*
+> This checkpoint is for commit `cc17032` - *merge main to NN - LICENCE and checkpoint readme* on main branch
 
 A console application in C# (.NET Framework) simulating the evolution of agents in a 2D grid. Agents survive by finding and consuming food, which replenishes their energy. If an agent's energy drops to zero, it dies. The goal is to evolve agents capable of efficient survival using evolutionary algorithms and neural networks.
 
