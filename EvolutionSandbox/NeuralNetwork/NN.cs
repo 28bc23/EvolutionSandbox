@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection.Emit;
 
 namespace EvolutionSandbox.NeuralNetwork
 {
@@ -10,14 +11,27 @@ namespace EvolutionSandbox.NeuralNetwork
         List<NNNode[]> Layers = new List<NNNode[]>();
         List<NNConnection> Connections = new List<NNConnection>();
 
+        //Mutation chances - percentages in float form
+        float WeightMutationChance = 0.95f;
+        float BiasMutationChance = 0.75f;
+        float SplitMutationChance = 0.2f;
+        float NewConnectionMutationChance = 0.1f;
+        float NewNodeMutationChance = 0.01f;
+
+        // Mutation size
+        float WeightMutationSizeMin = -1.0f;
+        float WeightMutationSizeMax = 1.0f;
+        float BiasMutationSizeMin = -0.5f;
+        float BiasMutationSizeMax = 0.5f;
+
         public NN(int inputLayerSize, int outputLayerSize)
         {
             Layers.Add(new NNNode[inputLayerSize]);
             Layers.Add(new NNNode[outputLayerSize]);
 
-            for (int j = 0; j < Layers[0].Length; j++)
+            for (int i = 0; i < Layers[0].Length; i++)
             {
-                Layers[0][j] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                Layers[0][i] = new NNNode(Random.RandomRangeDouble(-1, 1));
             }
 
             for (int i = 0; i < Layers[1].Length; i++)
@@ -25,32 +39,47 @@ namespace EvolutionSandbox.NeuralNetwork
                 Layers[1][i] = new NNNode(Random.RandomRangeDouble(-1, 1));
                 for (int j = 0; j < Layers[0].Length; j++)
                 {
-                    Connections.Add(new NNConnection(Layers[1][i], Random.RandomRangeDouble(-1, 1)));
+                    Connections.Add(new NNConnection(Layers[0][j], Layers[1][i], Random.RandomRangeDouble(-1, 1)));
                     Layers[0][j].OutConns.Add(Connections[Connections.Count - 1]);
                 }
             }
+
+            Mutate();
         }
 
         public MovementType Forward(double[] input)
         {
             Debug.Assert(input.Length == Layers[0].Length, "Input to forward pass isn't equal to lenght of inpput layer");
+
+            // Reset NN and apply bias
+            for (int l = 1; l < Layers.Count; l++)
+            {
+                for (int i = 0; i < Layers[l].Length; i++)
+                {
+                    Layers[l][i].Value = Layers[l][i].Bias;
+                }
+            }
+
+            // Assign input
             for (int i = 0; i < Layers[0].Length; i++)
             {
                 Layers[0][i].Value = input[i];
             }
 
-            for (int l = 0; l < Layers.Count; l++)
+            // Signal propagation
+            for (int l = 0; l < Layers.Count - 1; l++) // Output layer don't have OutConns so we save one itteration
             {
                 foreach(NNNode node in Layers[l])
                 {
                     foreach(NNConnection conn in node.OutConns)
                     {
-                        conn.GToNode.Value = conn.Weight * node.Value;
+                        conn.GToNode.Value += conn.Weight * node.Value;
                     }
                 }
                 //TODO: Activation function for layer l+1
             }
 
+            // Get result
             double maxVal = double.MinValue;
             int idx = 0;
             int lastIdx = Layers.Count - 1;
@@ -63,6 +92,96 @@ namespace EvolutionSandbox.NeuralNetwork
                 }
             }
             return (MovementType)idx;
+        }
+
+
+        public void Mutate()
+        {
+            // First add bias so there is chance that nex connection will be added
+            if (Random.Chance(NewNodeMutationChance))
+            {
+                if(Layers.Count == 2) // if there is only input layer we must create new layer bc we don't want to change input or output size
+                {
+                    Layers.Insert(1, new NNNode[1]);
+                    Layers[1][0] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                }
+                else
+                {
+                    int randomLayerIdx = Random.RandomRangeInt(1, Layers.Count - 1); // Except input and output layer
+
+                    NNNode[] targetArray = Layers[randomLayerIdx];
+                    Array.Resize(ref targetArray, targetArray.Length + 1);
+                    Layers[randomLayerIdx] = targetArray;
+
+                    Layers[randomLayerIdx][targetArray.Length - 1] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                }
+            }
+
+            // Second so there is chance for it to get splited
+            if (Random.Chance(NewConnectionMutationChance))
+            {
+                int randomLayerIdx1 = Random.RandomRangeInt(0, Layers.Count - 1); // except output bc there won't be next layer if output l got chousen
+                int randomLayerIdx2 = Random.RandomRangeInt(randomLayerIdx1 + 1, Layers.Count); // random layer from randomLayerIdx1
+
+                int randomNodeIdx1 = Random.RandomRangeInt(0, Layers[randomLayerIdx1].Length);
+                int randomNodeIdx2 = Random.RandomRangeInt(0, Layers[randomLayerIdx2].Length);
+
+                Connections.Add(new NNConnection(Layers[randomLayerIdx1][randomNodeIdx1], Layers[randomLayerIdx2][randomNodeIdx2], Random.RandomRangeDouble(-1, 1)));
+                Layers[randomLayerIdx1][randomNodeIdx1].OutConns.Add(Connections[Connections.Count - 1]);
+            }
+
+            // Third split so there is a chance that new conns and node gets weights and bias mutated later
+            if (Random.Chance(SplitMutationChance))
+            {
+                int randomConnection = Random.RandomRangeInt(0, Connections.Count);
+
+                Connections[randomConnection].GFromNode.OutConns.Remove(Connections[randomConnection]);
+
+                //Find layer of from node
+                int layer = -1;
+                for (int l = 0; l < Layers.Count; l++)
+                {
+                    if (Layers[l].Contains(Connections[randomConnection].GFromNode))
+                    {
+                        layer = l;
+                        break;
+                    }
+                }
+                if(layer != -1)
+                {
+                    Layers.Insert(layer + 1, new NNNode[1]);
+                    Layers[layer + 1][0] = new NNNode(Random.RandomRangeDouble(-1, 1));
+
+                    Connections.Add(new NNConnection(Connections[randomConnection].GFromNode, Layers[layer + 1][0], Random.RandomRangeDouble(-1, 1)));
+                    Connections.Add(new NNConnection(Layers[layer + 1][0], Connections[randomConnection].GToNode, Random.RandomRangeDouble(-1, 1)));
+
+                    Connections[randomConnection].GFromNode.OutConns.Add(Connections[Connections.Count - 2]);
+                    Layers[layer + 1][0].OutConns.Add(Connections[Connections.Count - 1]);
+
+                    Connections.Remove(Connections[randomConnection]);
+                }
+            }
+
+            // Weights mutation
+            for (int i = 0; i < Connections.Count; i++)
+            {
+                if (Random.Chance(WeightMutationChance))
+                {
+                    Connections[i].Weight += Random.RandomRangeDouble(WeightMutationSizeMin, WeightMutationSizeMax);
+                }
+            }
+
+            // BIases mutation
+            for (int l = 0; l < Layers.Count; l++)
+            {
+                for (int i = 0; i < Layers[l].Length; i++)
+                {
+                    if (Random.Chance(BiasMutationChance))
+                    {
+                        Layers[l][i].Bias += Random.RandomRangeDouble(BiasMutationSizeMin, BiasMutationSizeMax);
+                    }
+                }
+            }
         }
 
         /* getters */
