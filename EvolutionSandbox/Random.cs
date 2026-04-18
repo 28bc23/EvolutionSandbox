@@ -16,5 +16,10 @@
 
             return rand.NextDouble() * (max - min) + min;
         }
+
+        public static bool Chance(float chance)
+        {
+            return rand.NextDouble() < chance;
+        }
     }
 }
