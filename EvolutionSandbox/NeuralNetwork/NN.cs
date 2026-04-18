@@ -109,11 +109,9 @@ namespace EvolutionSandbox.NeuralNetwork
                 {
                     int randomLayerIdx = Random.RandomRangeInt(1, Layers.Count - 1); // Except input and output layer
 
-                    NNNode[] targetArray = Layers[randomLayerIdx];
-                    Array.Resize(ref targetArray, targetArray.Length + 1);
-                    Layers[randomLayerIdx] = targetArray;
+                    ResizeLayer(randomLayerIdx, 1);
 
-                    Layers[randomLayerIdx][targetArray.Length - 1] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                    Layers[randomLayerIdx][Layers[randomLayerIdx].Length - 1] = new NNNode(Random.RandomRangeDouble(-1, 1));
                 }
             }
 
@@ -138,25 +136,42 @@ namespace EvolutionSandbox.NeuralNetwork
                 Connections[randomConnection].GFromNode.OutConns.Remove(Connections[randomConnection]);
 
                 //Find layer of from node
-                int layer = -1;
+                int FromLayer = -1;
+                int ToLayer = -1;
                 for (int l = 0; l < Layers.Count; l++)
                 {
                     if (Layers[l].Contains(Connections[randomConnection].GFromNode))
                     {
-                        layer = l;
+                        FromLayer = l;
+                    }
+
+                    if (Layers[l].Contains(Connections[randomConnection].GToNode))
+                    {
+                        ToLayer = l;
                         break;
                     }
                 }
-                if(layer != -1)
+                if(FromLayer != -1)
                 {
-                    Layers.Insert(layer + 1, new NNNode[1]);
-                    Layers[layer + 1][0] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                    NNNode newNodeRef;
+                    if (ToLayer - FromLayer == 1)
+                    {
+                        Layers.Insert(FromLayer + 1, new NNNode[1]);
+                        Layers[FromLayer + 1][0] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                        newNodeRef = Layers[FromLayer + 1][0];
+                    }
+                    else
+                    {
+                        ResizeLayer(FromLayer + 1, 1);
+                        Layers[FromLayer + 1][Layers[FromLayer + 1].Length - 1] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                        newNodeRef = Layers[FromLayer + 1][Layers[FromLayer + 1].Length - 1];
+                    }
 
-                    Connections.Add(new NNConnection(Connections[randomConnection].GFromNode, Layers[layer + 1][0], Random.RandomRangeDouble(-1, 1)));
-                    Connections.Add(new NNConnection(Layers[layer + 1][0], Connections[randomConnection].GToNode, Random.RandomRangeDouble(-1, 1)));
+                    Connections.Add(new NNConnection(Connections[randomConnection].GFromNode, newNodeRef, Random.RandomRangeDouble(-1, 1)));
+                    Connections.Add(new NNConnection(newNodeRef, Connections[randomConnection].GToNode, Random.RandomRangeDouble(-1, 1)));
 
                     Connections[randomConnection].GFromNode.OutConns.Add(Connections[Connections.Count - 2]);
-                    Layers[layer + 1][0].OutConns.Add(Connections[Connections.Count - 1]);
+                    Layers[FromLayer + 1][0].OutConns.Add(Connections[Connections.Count - 1]);
 
                     Connections.Remove(Connections[randomConnection]);
                 }
@@ -182,6 +197,13 @@ namespace EvolutionSandbox.NeuralNetwork
                     }
                 }
             }
+        }
+
+        void ResizeLayer(int layerIdx, uint plusSize)
+        {
+            NNNode[] targetArray = Layers[layerIdx];
+            Array.Resize(ref targetArray, targetArray.Length + (int)plusSize);
+            Layers[layerIdx] = targetArray;
         }
 
         /* getters */
