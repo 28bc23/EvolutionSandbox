@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using EvolutionSandbox.NeuralNetwork;
+﻿using EvolutionSandbox.NeuralNetwork;
 
 namespace EvolutionSandbox
 {
@@ -26,7 +24,7 @@ namespace EvolutionSandbox
             double[] input = new double[nn.GInputSize];
             for (int i = 0; i < input.Length; i++)
             {
-                input[i] = Program.GRND.NextDouble() * 2 - 1;
+                input[i] = Random.RandomRangeDouble(-1, 1);
             }
 
             MovementType move = nn.Forward(input);

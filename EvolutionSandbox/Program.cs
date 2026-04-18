@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-
-namespace EvolutionSandbox
+﻿namespace EvolutionSandbox
 {
     internal class Program
     {
@@ -16,7 +9,7 @@ namespace EvolutionSandbox
 
         static Dictionary<Guid, Queue<Action>> Actions = new Dictionary<Guid, Queue<Action>>();
 
-        static Random RND = new Random();
+        
 
         static double DeltaTime;
 
@@ -106,9 +99,6 @@ namespace EvolutionSandbox
         }
 
         /* Getters and setters */
-        public static Random GRND{
-            get { return RND; }
-        }
 
         public static double GDeltaTime
         {

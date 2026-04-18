@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace EvolutionSandbox.NeuralNetwork
 {
@@ -23,15 +17,15 @@ namespace EvolutionSandbox.NeuralNetwork
 
             for (int j = 0; j < Layers[0].Length; j++)
             {
-                Layers[0][j] = new NNNode(Program.GRND.NextDouble() * 2 - 1);
+                Layers[0][j] = new NNNode(Random.RandomRangeDouble(-1, 1));
             }
 
             for (int i = 0; i < Layers[1].Length; i++)
             {
-                Layers[1][i] = new NNNode(Program.GRND.NextDouble() * 2 - 1);
+                Layers[1][i] = new NNNode(Random.RandomRangeDouble(-1, 1));
                 for (int j = 0; j < Layers[0].Length; j++)
                 {
-                    Connections.Add(new NNConnection(Layers[1][i], Program.GRND.NextDouble() * 2 - 1));
+                    Connections.Add(new NNConnection(Layers[1][i], Random.RandomRangeDouble(-1, 1)));
                     Layers[0][j].OutConns.Add(Connections[Connections.Count - 1]);
                 }
             }

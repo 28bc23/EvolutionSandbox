@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 namespace EvolutionSandbox
 {
     internal static class Grid
     {
         static bool bInicialised = false;
         static Vector2Int GridSize;
-        static List<GameObject>[,] Cells;
+        static List<GameObject>[,] Cells = new List<GameObject>[0, 0];
 
         static string LastGrid = "";
 
