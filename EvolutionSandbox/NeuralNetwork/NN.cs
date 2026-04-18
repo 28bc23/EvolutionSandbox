@@ -171,7 +171,7 @@ namespace EvolutionSandbox.NeuralNetwork
                     Connections.Add(new NNConnection(newNodeRef, Connections[randomConnection].GToNode, Random.RandomRangeDouble(-1, 1)));
 
                     Connections[randomConnection].GFromNode.OutConns.Add(Connections[Connections.Count - 2]);
-                    Layers[FromLayer + 1][0].OutConns.Add(Connections[Connections.Count - 1]);
+                    newNodeRef.OutConns.Add(Connections[Connections.Count - 1]);
 
                     Connections.Remove(Connections[randomConnection]);
                 }
