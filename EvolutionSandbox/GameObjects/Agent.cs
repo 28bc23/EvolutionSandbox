@@ -1,13 +1,14 @@
-﻿using System;
-using System.IO;
+﻿using EvolutionSandbox.NeuralNetwork;
 
 namespace EvolutionSandbox
 {
     internal class Agent : GameObject
     {
         float EnergyDecreaseRate = 1;
+        NN nn;
         public Agent(Vector2Int spawnPos, Guid id) : base(spawnPos, id, '*', GameObjectType.Agent, 100)
         {
+            nn = new NN(5, 13);
         }
 
         public override void Update()
@@ -19,9 +20,15 @@ namespace EvolutionSandbox
                 Program.DestroyGameObject(this);
             }
 
-            //Movement test
-            MovementType randomMove = (MovementType)Program.GRND.Next(0, 12);
-            MakeAction(new MoveAction(randomMove, GSPos, this));
+            //Generate random input for forward pass
+            double[] input = new double[nn.GInputSize];
+            for (int i = 0; i < input.Length; i++)
+            {
+                input[i] = Random.RandomRangeDouble(-1, 1);
+            }
+
+            MovementType move = nn.Forward(input);
+            MakeAction(new MoveAction(move, GSPos, this));
         }
 
         public override void OnCollisionEnter(CollisionType collision, GameObject collidedGameObject)

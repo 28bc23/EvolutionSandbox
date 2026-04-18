@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 namespace EvolutionSandbox
 {
     internal class FoodManager : GameObject
@@ -15,7 +13,7 @@ namespace EvolutionSandbox
             if (foods.Count < MaxFood)
             {
                 Vector2Int gridSize = Grid.GGridSize;
-                Vector2Int pos = new Vector2Int(Program.GRND.Next(0, gridSize.X - 1), Program.GRND.Next(0, gridSize.Y - 1));
+                Vector2Int pos = new Vector2Int(Random.RandomRangeInt(0, gridSize.X - 1), Random.RandomRangeInt(0, gridSize.Y - 1));
                 foods.Add(new Food(pos, Guid.NewGuid()));
             }
         }

@@ -1,4 +1,3 @@
-using System;
 namespace EvolutionSandbox
 {
     internal class Food : GameObject
