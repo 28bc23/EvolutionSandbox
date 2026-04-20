@@ -4,6 +4,11 @@
     {
         static System.Random rand = new System.Random();
 
+        public static void SetSeed(int seed)
+        {
+            rand = new System.Random(seed);
+        }
+
         public static int RandomRangeInt(int min, int max)
         {
             return rand.Next(min, max);
