@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 namespace EvolutionSandbox
 {
     internal static class Configuration
@@ -7,6 +9,7 @@ namespace EvolutionSandbox
             string? envNameN; // string
             string? gridSizeXN; // uint
             string? gridSizeYN; // uint
+            string? seedN; // int
 
             string? fpsCapN; // uint
             string? apsN; // uint
@@ -30,6 +33,41 @@ namespace EvolutionSandbox
             string? weightMutationSizeMaxN; // float
             string? biasMutationSizeMinN; // float
             string? biasMutationSizeMaxN; // float
+
+            string? temp;
+            while (true)
+            {
+                Console.Clear();
+                Console.Write("Enter name of the Enviroment: ");
+                envNameN = Console.ReadLine();
+                if(envNameN != null)
+                {
+                    Directory.CreateDirectory($"./{envNameN}");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Please enter an name - press any key to repeat action . . .");
+                    Console.ReadKey();
+                }
+            }
+
+                        while (true)
+            {
+                Console.Clear();
+                Console.Write("Enter name of the Enviroment: ");
+                envNameN = Console.ReadLine();
+                if(envNameN != null)
+                {
+                    Directory.CreateDirectory($"./{envNameN}");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Please enter an name - press any key to repeat action . . .");
+                    Console.ReadKey();
+                }
+            }
         }
 
         public static void LoadEnvFromConfig()
