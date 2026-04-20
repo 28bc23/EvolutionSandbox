@@ -2,7 +2,7 @@
 {
     internal static class Random
     {
-        static System.Random rand = new System.Random();
+        static System.Random rand = new System.Random(); // TODO: make own random generator so we can save its state
 
         public static void SetSeed(int seed)
         {

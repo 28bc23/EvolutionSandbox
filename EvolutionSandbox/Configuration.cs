@@ -6,44 +6,55 @@ namespace EvolutionSandbox
     {
         public static void GenerateConfigForEnv()
         {
-            string? envNameN; // string
-            string? gridSizeXN; // uint
-            string? gridSizeYN; // uint
-            string? seedN; // int
+            string envName;
+            uint gridSizeX;
+            uint gridSizeY;
+            int seed;
 
-            string? fpsCapN; // uint
-            string? apsN; // uint
+            uint fpsCap;
+            uint aps;
 
-            string? numAgentsToStartWithN; // uint
+            uint numAgentsToStartWith;
 
-            string? foodSpawnRateN; // float
-            string? maxFoodInEnvN; // uint
-            string? foodEnergyN; // double
+            uint maxFoodInEnv;
+            float foodSpawnRate;
+            double foodEnergy;
 
-            string? agentMaxEnergyN; // double
-            string? agentEnergyDecreaseRateN; // float
+            double agentMaxEnergy;
+            float agentEnergyDecreaseRate;
 
-            string? weightMutationChanceN; // float
-            string? biasMutationChanceN; // float
-            string? splitMutationChanceN; // float
-            string? newConnectionMutationChanceN; // float
-            string? newNodeMutationChanceN; // float
+            float weightMutationChance;
+            float biasMutationChance;
+            float splitMutationChance;
+            float newConnectionMutationChance;
+            float newNodeMutationChance;
 
-            string? weightMutationSizeMinN; // float
-            string? weightMutationSizeMaxN; // float
-            string? biasMutationSizeMinN; // float
-            string? biasMutationSizeMaxN; // float
+            float weightMutationSizeMin;
+            float weightMutationSizeMax;
+            float biasMutationSizeMin;
+            float biasMutationSizeMax;
 
             string? temp;
+
+            // get name
             while (true)
             {
                 Console.Clear();
                 Console.Write("Enter name of the Enviroment: ");
-                envNameN = Console.ReadLine();
-                if(envNameN != null)
+                temp = Console.ReadLine();
+                if(temp != null && temp != "" && temp != " " && temp[0] != '.')
                 {
-                    Directory.CreateDirectory($"./{envNameN}");
-                    break;
+                    if (!Directory.Exists($"./{temp}"))
+                    {
+                        envName = temp;
+                        Directory.CreateDirectory($"./{envName}");
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Enviroment with this name alerady exist, please choose another name - press any key to repeat action . . .");
+                        Console.ReadKey();
+                    }
                 }
                 else
                 {
@@ -52,20 +63,131 @@ namespace EvolutionSandbox
                 }
             }
 
-                        while (true)
+            // get grid size
+            while (true)
             {
                 Console.Clear();
-                Console.Write("Enter name of the Enviroment: ");
-                envNameN = Console.ReadLine();
-                if(envNameN != null)
+                Console.Write($"Enter X size of grid for the {envName}: ");
+                temp = Console.ReadLine();
+                if(!uint.TryParse(temp, out gridSizeX))
                 {
-                    Directory.CreateDirectory($"./{envNameN}");
-                    break;
+                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
+                    Console.ReadKey();
                 }
                 else
                 {
-                    Console.WriteLine("Please enter an name - press any key to repeat action . . .");
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter Y size of grid for the {envName}(X: {gridSizeX},Y: ?): ");
+                temp = Console.ReadLine();
+                if(!uint.TryParse(temp, out gridSizeY))
+                {
+                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
                     Console.ReadKey();
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            // Seed, FPS and APS
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter seed for the {envName}(X: {gridSizeX},Y: ?): ");
+                temp = Console.ReadLine();
+                if(!int.TryParse(temp, out seed))
+                {
+                    Console.WriteLine("Please enter an inteager - press any key to repeat action . . .");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter fps cap for the {envName}(X: {gridSizeX},Y: {gridSizeX}): ");
+                temp = Console.ReadLine();
+                if(!uint.TryParse(temp, out fpsCap))
+                {
+                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter actions per second for the {envName}(X: {gridSizeX},Y: {gridSizeX}): ");
+                temp = Console.ReadLine();
+                if(!uint.TryParse(temp, out aps))
+                {
+                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            // num agents
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"With how many agents do you want do start the {envName}(X: {gridSizeX},Y: {gridSizeX}): ");
+                temp = Console.ReadLine();
+                if(!uint.TryParse(temp, out numAgentsToStartWith))
+                {
+                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            // Food
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Maximum of food that can be spawned in the {envName}(X: {gridSizeX},Y: {gridSizeX}): ");
+                temp = Console.ReadLine();
+                if(!uint.TryParse(temp, out maxFoodInEnv))
+                {
+                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Maximum of food that can be spawned in the {envName}(X: {gridSizeX},Y: {gridSizeX}): ");
+                temp = Console.ReadLine();
+                if(!uint.TryParse(temp, out maxFoodInEnv))
+                {
+                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    break;
                 }
             }
         }
