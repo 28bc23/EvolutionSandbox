@@ -2,7 +2,7 @@
 {
     internal abstract class Action
     {
-        Enum ActionType;
+        Enum ActionType = null;
         Vector2Int CurrentPos;
         GameObject Initiator;
         float EnergyCost = 0;

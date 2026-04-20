@@ -2,8 +2,8 @@
 {
     internal class Program
     {
-        static int FPScap = 10;
-        public static int APS = 20; // Actions per second
+        static uint FPScap = 10;
+        public static uint APS = 20; // Actions per second
 
         static List<GameObject> GameObjects = new List<GameObject>();
 
@@ -28,7 +28,7 @@
         {
             DateTime lastTimeFPS = DateTime.Now; // Last time for FPS limiter
             DateTime lastGameLoopTime = DateTime.Now; // Last time of game loop
-            int targetFrameTime = 1000 / FPScap; // How often should be showed new frame in ms
+            int targetFrameTime = 1000 / (int)FPScap; // How often should be showed new frame in ms
             while (true)
             {
                 /* calculat delta time */

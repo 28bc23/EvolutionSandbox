@@ -25,7 +25,7 @@
             TimePerAction = 1000 / Program.APS;
             nextActionTime = DateTime.Now.AddMilliseconds(TimePerAction);
             Energy = energy;
-            Program.SpawnGameObject(this, Pos);
+            Program.SpawnGameObject(this, Pos); // TODO: This maybey remove later
         }
         public abstract void Update();
 

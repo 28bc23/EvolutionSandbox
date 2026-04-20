@@ -1,6 +1,6 @@
 namespace EvolutionSandbox
 {
-    internal class FoodManager : GameObject
+    internal class FoodManager : GameObject // TODO: spawnRate
     {
         int MaxFood = 10;
         List<Food> foods = new List<Food>();
