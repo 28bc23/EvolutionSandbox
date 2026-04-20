@@ -26,6 +26,8 @@ A console application in C# (.NET Framework) simulating the evolution of agents 
   - Mutation of neural network.
   - Crossbreeding of the most successful agents.
 - **Sensor Expansion:** Agents need the ability to "see" their surroundings or the direction to the nearest food for the neural network to function.
+- Saving progress of evolution.
+- Make it possible for users to customize the environment.
 
 ## 3. Potential Expansions
 - Aggressive interactions (agents can attack each other).
