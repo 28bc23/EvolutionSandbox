@@ -4,9 +4,9 @@ namespace EvolutionSandbox
 {
     internal class Agent : GameObject
     {
-        float EnergyDecreaseRate = 1;
+        float EnergyDecreaseRate = Configuration.Config.AgentEnergyDecreaseRate;
         NN nn;
-        public Agent(Vector2Int spawnPos, Guid id) : base(spawnPos, id, '*', GameObjectType.Agent, 100)
+        public Agent(Vector2Int spawnPos, Guid id) : base(spawnPos, id, '*', GameObjectType.Agent, Configuration.Config.AgentMaxEnergy)
         {
             nn = new NN(5, 13);
         }

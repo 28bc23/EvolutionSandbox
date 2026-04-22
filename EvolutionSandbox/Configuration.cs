@@ -5,6 +5,7 @@ namespace EvolutionSandbox
 {
     internal static class Configuration
     {
+        public static EnviromentConfig Config;
         public static void GenerateConfigForEnv()
         {
             EnviromentConfig config = new EnviromentConfig();
@@ -171,7 +172,7 @@ namespace EvolutionSandbox
                 Console.Clear();
                 Console.Write($"Enter energy of Food in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!double.TryParse(temp, out config.FoodEnergy))
+                if (!float.TryParse(temp, out config.FoodEnergy))
                 {
                     Console.WriteLine("Please enter an double - press any key to repeat action . . .");
                     Console.ReadKey();
@@ -203,7 +204,7 @@ namespace EvolutionSandbox
                 Console.Clear();
                 Console.Write($"Enter max energy of Agent in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!double.TryParse(temp, out config.AgentMaxEnergy))
+                if (!float.TryParse(temp, out config.AgentMaxEnergy))
                 {
                     Console.WriteLine("Please enter an double - press any key to repeat action . . .");
                     Console.ReadKey();
@@ -397,8 +398,8 @@ namespace EvolutionSandbox
 
                 if (configN != null)
                 {
-                    EnviromentConfig config = configN;
-                    Console.WriteLine($"Loaded config for {config.EnvName}");
+                    Config = configN;
+                    Console.WriteLine($"Loaded config for {Config.EnvName}");
                 }
                 else
                 {
@@ -414,8 +415,6 @@ namespace EvolutionSandbox
                 Environment.Exit(1);
             }
         }
-
-
     }
 
     public class EnviromentConfig
@@ -432,9 +431,9 @@ namespace EvolutionSandbox
 
         public uint MaxFoodInEnv;
         public float FoodSpawnRate;
-        public double FoodEnergy;
+        public float FoodEnergy;
 
-        public double AgentMaxEnergy;
+        public float AgentMaxEnergy;
         public float AgentEnergyDecreaseRate;
 
         public float WeightMutationChance;

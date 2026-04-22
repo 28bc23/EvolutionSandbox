@@ -3,7 +3,7 @@
     internal class Program
     {
         static uint FPScap = 10;
-        public static uint APS = 20; // Actions per second
+        static uint APS = 20; // Actions per second
 
         static List<GameObject> GameObjects = new List<GameObject>();
 
@@ -27,10 +27,19 @@
             {
                 Configuration.GetConfigFromUser();
             }
-            
-            Grid.Init(new Vector2Int(20, 10)); // Inicialize size of grid
 
-            Agent agent = new Agent(new Vector2Int(10, 5), Guid.NewGuid());
+            Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Inicialize size of grid
+
+            Random.SetSeed(Configuration.Config.Seed);
+
+            FPScap = Configuration.Config.FpsCap;
+            APS = Configuration.Config.APS;
+
+            for(int i = 0; i < Configuration.Config.NumAgentsToStartWith; i++)
+            {
+                Agent agent = new Agent(new Vector2Int(10, 5), Guid.NewGuid());
+            }
+
             FoodManager foodManager = new FoodManager(Guid.NewGuid());
             
             GameLoop(); // Start Gmae loop
@@ -115,6 +124,11 @@
         public static double GDeltaTime
         {
             get { return DeltaTime; }
+        }
+
+        public static uint GAPS
+        {
+            get { return APS; }
         }
     }
 

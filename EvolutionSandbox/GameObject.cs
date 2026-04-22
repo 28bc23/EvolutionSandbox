@@ -22,7 +22,7 @@
             ID = id;
             Character = character;
             GameObjectType = gameObjectType;
-            TimePerAction = 1000 / Program.APS;
+            TimePerAction = 1000 / Program.GAPS;
             nextActionTime = DateTime.Now.AddMilliseconds(TimePerAction);
             Energy = energy;
             Program.SpawnGameObject(this, Pos); // TODO: This maybey remove later

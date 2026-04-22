@@ -2,7 +2,7 @@ namespace EvolutionSandbox
 {
     internal class FoodManager : GameObject // TODO: spawnRate
     {
-        int MaxFood = 10;
+        uint MaxFood = Configuration.Config.MaxFoodInEnv;
         List<Food> foods = new List<Food>();
         public FoodManager(Guid id) : base(new Vector2Int(0, 0), id, 'M', GameObjectType.Manager)
         {

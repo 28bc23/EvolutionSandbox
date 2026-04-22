@@ -12,17 +12,17 @@ namespace EvolutionSandbox.NeuralNetwork
         List<NNConnection> Connections = new List<NNConnection>();
 
         //Mutation chances - percentages in float form
-        float WeightMutationChance = 0.95f;
-        float BiasMutationChance = 0.75f;
-        float SplitMutationChance = 0.2f;
-        float NewConnectionMutationChance = 0.1f;
-        float NewNodeMutationChance = 0.01f;
+        float WeightMutationChance = Configuration.Config.WeightMutationChance;
+        float BiasMutationChance = Configuration.Config.BiasMutationChance;
+        float SplitMutationChance = Configuration.Config.SplitMutationChance;
+        float NewConnectionMutationChance = Configuration.Config.NewConnectionMutationChance;
+        float NewNodeMutationChance = Configuration.Config.NewNodeMutationChance;
 
         // Mutation size
-        float WeightMutationSizeMin = -1.0f;
-        float WeightMutationSizeMax = 1.0f;
-        float BiasMutationSizeMin = -0.5f;
-        float BiasMutationSizeMax = 0.5f;
+        float WeightMutationSizeMin = Configuration.Config.WeightMutationSizeMin;
+        float WeightMutationSizeMax = Configuration.Config.WeightMutationSizeMax;
+        float BiasMutationSizeMin = Configuration.Config.BiasMutationSizeMin;
+        float BiasMutationSizeMax = Configuration.Config.BiasMutationSizeMax;
 
         public NN(int inputLayerSize, int outputLayerSize)
         {
