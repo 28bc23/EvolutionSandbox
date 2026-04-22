@@ -107,12 +107,19 @@
 
         public static bool SpawnGameObject(GameObject gameObject, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
         {
-            GameObjects.Add(gameObject);
-
-            if(gameObject.GGameObjectType == GameObjectType.Manager)
+            if (gameObject.GGameObjectType == GameObjectType.Manager)
+            {
+                GameObjects.Add(gameObject);
                 return true;
+            }
 
-            return Grid.SpawnGameObject(gameObject, doNotSpawnWhenColliding, ignoreCollisions);
+            if (Grid.SpawnGameObject(gameObject, doNotSpawnWhenColliding, ignoreCollisions))
+            {
+                GameObjects.Add(gameObject);
+                return true;
+            }
+
+            return false;
         }
 
         public static bool DestroyGameObject(GameObject gameObject)
