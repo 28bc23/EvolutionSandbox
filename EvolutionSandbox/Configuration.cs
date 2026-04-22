@@ -6,6 +6,9 @@ namespace EvolutionSandbox
     internal static class Configuration
     {
         public static EnviromentConfig Config;
+
+        static string UintWarnMsg = "Please enter an positive inteager";
+        static string FloatWarnMsg = "Please enter an float";
         public static void GenerateConfigForEnv()
         {
             EnviromentConfig config = new EnviromentConfig();
@@ -29,14 +32,12 @@ namespace EvolutionSandbox
                     }
                     else
                     {
-                        Console.WriteLine("Enviroment with this name alerady exist, please choose another name - press any key to repeat action . . .");
-                        Console.ReadKey();
+                        WaitForPress("Enviroment with this name alerady exist, please choose another name");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Please enter an name - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress("Please enter an name");
                 }
             }
 
@@ -48,8 +49,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!uint.TryParse(temp, out config.GridSizeX))
                 {
-                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(UintWarnMsg);
                 }
                 else
                 {
@@ -63,8 +63,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!uint.TryParse(temp, out config.GridSizeY))
                 {
-                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(UintWarnMsg);
                 }
                 else
                 {
@@ -80,8 +79,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!int.TryParse(temp, out config.Seed))
                 {
-                    Console.WriteLine("Please enter an inteager - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress("Please enter an inteager");
                 }
                 else
                 {
@@ -95,8 +93,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!uint.TryParse(temp, out config.FpsCap))
                 {
-                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(UintWarnMsg);
                 }
                 else
                 {
@@ -110,8 +107,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!uint.TryParse(temp, out config.APS))
                 {
-                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(UintWarnMsg);
                 }
                 else
                 {
@@ -127,8 +123,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!uint.TryParse(temp, out config.NumAgentsToStartWith))
                 {
-                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(UintWarnMsg);
                 }
                 else
                 {
@@ -144,8 +139,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!uint.TryParse(temp, out config.MaxFoodInEnv))
                 {
-                    Console.WriteLine("Please enter an positive inteager - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(UintWarnMsg);
                 }
                 else
                 {
@@ -159,8 +153,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.FoodSpawnRate))
                 {
-                    Console.WriteLine("Please enter an float - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -174,8 +167,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.FoodEnergy))
                 {
-                    Console.WriteLine("Please enter an double - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -191,8 +183,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.AgentEnergyDecreaseRate))
                 {
-                    Console.WriteLine("Please enter an float - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -206,8 +197,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.AgentMaxEnergy))
                 {
-                    Console.WriteLine("Please enter an double - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -223,8 +213,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.WeightMutationChance))
                 {
-                    Console.WriteLine("Please enter an float - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -238,8 +227,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.BiasMutationChance))
                 {
-                    Console.WriteLine("Please enter an float - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -253,8 +241,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.SplitMutationChance))
                 {
-                    Console.WriteLine("Please enter an float - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -268,8 +255,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.NewNodeMutationChance))
                 {
-                    Console.WriteLine("Please enter an float - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -283,8 +269,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.NewConnectionMutationChance))
                 {
-                    Console.WriteLine("Please enter an float - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -300,8 +285,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.WeightMutationSizeMin))
                 {
-                    Console.WriteLine("Please enter an float - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -315,8 +299,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.WeightMutationSizeMax))
                 {
-                    Console.WriteLine("Please enter an float - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -330,8 +313,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.BiasMutationSizeMin))
                 {
-                    Console.WriteLine("Please enter an float - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -345,8 +327,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.BiasMutationSizeMax))
                 {
-                    Console.WriteLine("Please enter an float - press any key to repeat action . . .");
-                    Console.ReadKey();
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -376,23 +357,28 @@ namespace EvolutionSandbox
 
                 if (envNameN == "" || envNameN == null)
                 {
-                    Console.WriteLine("Please enter enviroment name. Press any key to retry action . . .");
-                    Console.ReadKey();
+                    WaitForPress("Please enter enviroment name");
                     continue;
                 }
 
-                LoadEnvFromConfig(envNameN);
-                break;
+                if (LoadEnvFromConfig(envNameN))
+                    break;
+                WaitForPress("");
             }
         }
 
-        public static void LoadEnvFromConfig(string envName)
+        static bool LoadEnvFromConfig(string envName)
         {
             string configPath = $"{envName}/{envName}.conf";
-            if (File.Exists(configPath))
+            if (!File.Exists(configPath))
+            {
+                Console.WriteLine("Enviroment doesn't exist.");
+                return false;
+            }
+
+            try
             {
                 string jsonString = File.ReadAllText(configPath);
-
                 var options = new JsonSerializerOptions { IncludeFields = true };
                 EnviromentConfig? configN = JsonSerializer.Deserialize<EnviromentConfig>(jsonString, options);
 
@@ -400,20 +386,24 @@ namespace EvolutionSandbox
                 {
                     Config = configN;
                     Console.WriteLine($"Loaded config for {Config.EnvName}");
+                    return true;
                 }
-                else
-                {
-                    Console.WriteLine("Config files failed to load.");
-                    Console.WriteLine("Exitting . . .");
-                    Environment.Exit(1);
-                }
+
+                Console.WriteLine("Config file was empty or invalid.");
+                return false;
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("Enviroment doesn't exist.");
-                Console.WriteLine("Exitting . . .");
-                Environment.Exit(1);
+                Console.WriteLine($"Failed to load config: {ex.Message}");
+                return false;
             }
+        }
+
+        static void WaitForPress(string msg)
+        {
+            Console.WriteLine(msg);
+            Console.WriteLine("Press any key to retry action . . .");
+            Console.ReadKey();
         }
     }
 
