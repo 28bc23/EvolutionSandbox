@@ -16,6 +16,18 @@
         //Game Start
         static void Main(string[] args)
         {
+            Console.Clear();
+            Console.Write("Do you wanna create new enviroment? [y/N]: ");
+            string? input = Console.ReadLine();
+            if (input != null && input.ToLower() == "y")
+            {
+                Configuration.GenerateConfigForEnv();
+            }
+            else
+            {
+                Configuration.GetConfigFromUser();
+            }
+            
             Grid.Init(new Vector2Int(20, 10)); // Inicialize size of grid
 
             Agent agent = new Agent(new Vector2Int(10, 5), Guid.NewGuid());

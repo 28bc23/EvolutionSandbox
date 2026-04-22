@@ -11,6 +11,7 @@ namespace EvolutionSandbox
         static bool DrawIndicator = false;
 
         public static void Init(Vector2Int gridSize){
+            Console.Clear();
             GridSize = gridSize;
             Cells = new List<GameObject>[GridSize.Y, GridSize.X];
             bInicialised = true;
