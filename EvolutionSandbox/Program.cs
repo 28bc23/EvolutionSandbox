@@ -38,10 +38,13 @@
             for(int i = 0; i < Configuration.Config.NumAgentsToStartWith; i++)
             {
                 Agent agent = new Agent(new Vector2Int(10, 5), Guid.NewGuid());
+                SpawnGameObject(agent);
             }
 
             FoodManager foodManager = new FoodManager(Guid.NewGuid());
-            
+            SpawnGameObject(foodManager);
+
+
             GameLoop(); // Start Gmae loop
         }
 
@@ -102,14 +105,14 @@
             }
         }
 
-        public static bool SpawnGameObject(GameObject gameObject, Vector2Int pos, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
+        public static bool SpawnGameObject(GameObject gameObject, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
         {
             GameObjects.Add(gameObject);
 
             if(gameObject.GGameObjectType == GameObjectType.Manager)
                 return true;
 
-            return Grid.SpawnGameObject(gameObject, pos, doNotSpawnWhenColliding, ignoreCollisions);
+            return Grid.SpawnGameObject(gameObject, doNotSpawnWhenColliding, ignoreCollisions);
         }
 
         public static bool DestroyGameObject(GameObject gameObject)

@@ -62,11 +62,11 @@ namespace EvolutionSandbox
             }
         }
 
-        public static bool SpawnGameObject(GameObject gameObject, Vector2Int pos, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
+        public static bool SpawnGameObject(GameObject gameObject, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
         {
             if (!bInicialised)
                 return false;
-
+            Vector2Int pos = gameObject.GSPos;
             if (pos.Y < 0 || pos.Y >= GridSize.Y || pos.X < 0 || pos.X >= GridSize.X)
                 return false;
             if(!doNotSpawnWhenColliding)
