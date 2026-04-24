@@ -2,20 +2,20 @@
 {
     internal class Program
     {
-        static uint FPScap = 10;
+        static uint FpsCap = 10;
 
         static List<GameObject> GameObjects = new List<GameObject>();
 
-        static Dictionary<Guid, Queue<Action>> Actions = new Dictionary<Guid, Queue<Action>>();
+        static Dictionary<Guid, Queue<Action>> ActionsQueue = new Dictionary<Guid, Queue<Action>>();
 
-        static double FixedDeltaTime;
+        public static double FixedDeltaTime { get; private set;  }
         static double accumulator = 0.0;
 
         //Game Start
         static void Main(string[] args)
         {
             Console.Clear();
-            Console.Write("Do you wanna create new enviroment? [y/N]: ");
+            Console.Write("Do you wanna create new environment? [y/N]: ");
             string? input = Console.ReadLine();
             if (input != null && input.ToLower() == "y")
             {
@@ -26,11 +26,11 @@
                 Configuration.GetConfigFromUser();
             }
 
-            Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Inicialize size of grid
+            Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Initialize size of grid
 
             Random.Init(Configuration.Config.Seed, true);
 
-            FPScap = Configuration.Config.FpsCap;
+            FpsCap = Configuration.Config.FpsCap;
 
             FixedDeltaTime = 1.0 / Configuration.Config.TPS;
 
@@ -50,33 +50,33 @@
         static void GameLoop()
         {
             DateTime lastTimeFPS = DateTime.Now; // Last time for FPS limiter
-            int targetFrameTime = 1000 / (int)FPScap; // How often should be showed new frame in ms
+            int targetFrameTime = 1000 / (int)FpsCap; // How often should be showed new frame in ms
 
             DateTime lastGameLoopTime = DateTime.Now; // Last time of game loop
             while (true)
             {
-                /* calculat delta time */
+                /* calculate delta time */
                 DateTime now = DateTime.Now;
-                double frameTime = (now - lastGameLoopTime).TotalSeconds; // Get deltatime (time from last game loop) in seconds
+                double frameTime = (now - lastGameLoopTime).TotalSeconds; // Get deltaTime (time from last game loop) in seconds
                 lastGameLoopTime = now;
 
                 accumulator += frameTime;
 
                 while (accumulator >= FixedDeltaTime)
                 {
-                    // Update and get actions form gameobjects
+                    // Update and get actions from gameobjects
                     GameObject[] gameObjects = GameObjects.ToArray();
                     foreach (GameObject gObj in gameObjects)
                     {
                         gObj.Update();
-                        Actions[gObj.GID] = gObj.GActions;
+                        ActionsQueue[gObj.ID] = gObj.GetCopyOfActions();
                         gObj.ClearActions();
                     }
 
 
                     Dictionary<Guid, Queue<MoveAction>> goMoveActions = new Dictionary<Guid, Queue<MoveAction>>();
 
-                    foreach (KeyValuePair<Guid, Queue<Action>> goActionsKVP in Actions)
+                    foreach (KeyValuePair<Guid, Queue<Action>> goActionsKVP in ActionsQueue)
                     {
                         while (goActionsKVP.Value.Count > 0)
                         {
@@ -97,7 +97,7 @@
                     if (goMoveActions.Count > 0)
                         Grid.MoveObjects(goMoveActions);
 
-                    Actions.Clear();
+                    ActionsQueue.Clear();
 
                     accumulator -= FixedDeltaTime;
                 }
@@ -112,7 +112,7 @@
 
         public static bool SpawnGameObject(GameObject gameObject, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
         {
-            if (gameObject.GGameObjectType == GameObjectType.Manager)
+            if (gameObject.GameObjectType == GameObjectType.Manager)
             {
                 GameObjects.Add(gameObject);
                 return true;
@@ -132,13 +132,6 @@
             if(Grid.RemoveGameObject(gameObject))
                 return GameObjects.Remove(gameObject);
             return false;
-        }
-
-        /* Getters and setters */
-
-        public static double GFixedDeltaTime
-        {
-            get { return FixedDeltaTime; }
         }
     }
 

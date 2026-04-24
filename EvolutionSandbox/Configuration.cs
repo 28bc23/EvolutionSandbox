@@ -5,13 +5,13 @@ namespace EvolutionSandbox
 {
     internal static class Configuration
     {
-        public static EnviromentConfig Config;
+        public static EnvironmentConfig Config;
 
-        static string UintWarnMsg = "Please enter an positive inteager";
-        static string FloatWarnMsg = "Please enter an float";
+        static string UintWarnMsg = "Please enter a positive integer";
+        static string FloatWarnMsg = "Please enter a float";
         public static void GenerateConfigForEnv()
         {
-            EnviromentConfig config = new EnviromentConfig();
+            EnvironmentConfig config = new EnvironmentConfig();
 
             #region Get User Input
             string? temp;
@@ -20,7 +20,7 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write("Enter name of the Enviroment: ");
+                Console.Write("Enter name of the Environment: ");
                 temp = Console.ReadLine();
                 if (temp != null && temp != "" && temp != " " && temp[0] != '.')
                 {
@@ -32,12 +32,12 @@ namespace EvolutionSandbox
                     }
                     else
                     {
-                        WaitForPress("Enviroment with this name alerady exist, please choose another name");
+                        WaitForPress("Environment with this name already exists, please choose another name");
                     }
                 }
                 else
                 {
-                    WaitForPress("Please enter an name");
+                    WaitForPress("Please enter a name");
                 }
             }
 
@@ -79,7 +79,7 @@ namespace EvolutionSandbox
                 temp = Console.ReadLine();
                 if (!ulong.TryParse(temp, out config.Seed))
                 {
-                    WaitForPress("Please enter an inteager");
+                    WaitForPress("Please enter an integer");
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"With how many agents do you want do start the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"With how many agents do you want to start the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
                 temp = Console.ReadLine();
                 if (!uint.TryParse(temp, out config.NumAgentsToStartWith))
                 {
@@ -179,7 +179,7 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter enegry decrease rate of Agent (-energy/second) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter energy decrease rate of Agent (-energy/second) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out config.AgentEnergyDecreaseRate))
                 {
@@ -351,13 +351,13 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write("Enter enviroment name of env you wanna load: ");
+                Console.Write("Enter environment name of env you wanna load: ");
                 string? envNameN = Console.ReadLine();
                 Console.Clear();
 
                 if (envNameN == "" || envNameN == null)
                 {
-                    WaitForPress("Please enter enviroment name");
+                    WaitForPress("Please enter environment name");
                     continue;
                 }
 
@@ -372,7 +372,7 @@ namespace EvolutionSandbox
             string configPath = $"{envName}/{envName}.conf";
             if (!File.Exists(configPath))
             {
-                Console.WriteLine("Enviroment doesn't exist.");
+                Console.WriteLine("environment doesn't exists.");
                 return false;
             }
 
@@ -380,7 +380,7 @@ namespace EvolutionSandbox
             {
                 string jsonString = File.ReadAllText(configPath);
                 var options = new JsonSerializerOptions { IncludeFields = true };
-                EnviromentConfig? configN = JsonSerializer.Deserialize<EnviromentConfig>(jsonString, options);
+                EnvironmentConfig? configN = JsonSerializer.Deserialize<EnvironmentConfig>(jsonString, options);
 
                 if (configN != null)
                 {
@@ -407,7 +407,7 @@ namespace EvolutionSandbox
         }
     }
 
-    public class EnviromentConfig
+    public class EnvironmentConfig
     {
         public string EnvName;
         public uint GridSizeX;

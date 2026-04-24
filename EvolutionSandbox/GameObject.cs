@@ -2,17 +2,17 @@
 {
     internal abstract class GameObject
     {
-        Vector2Int Pos;
+        public Vector2Int Pos { get; set; }
 
         Queue<Action> actions = new Queue<Action>();
 
-        Guid ID;
+        public Guid ID { get; private set; }
 
-        char Character;
+        public char Character { get; private set; }
 
-        GameObjectType GameObjectType;
+        public GameObjectType GameObjectType { get; private set; }
 
-        double Energy = 10;
+        public double Energy { get; protected set; }
 
         public GameObject(Vector2Int spawnPos, Guid id, char character, GameObjectType gameObjectType, float energy = 0)
         {
@@ -27,7 +27,7 @@
         public virtual void MakeAction(Action action)
         {
             if (GameObjectType == GameObjectType.Agent)
-                Energy -= action.GSEnergyCost;
+                Energy -= action.EnergyCost;
 
             actions.Enqueue(action);
         }
@@ -47,40 +47,9 @@
             return;
         }
 
-
-
-
-        /* Getters and Setters */
-        public Vector2Int GSPos
+        public Queue<Action> GetCopyOfActions()
         {
-            get { return Pos; }
-            set { Pos = value; }
-        }
-
-        public Guid GID
-        {
-            get { return ID;  }
-        }
-
-        public Queue<Action> GActions
-        {
-            get { return new Queue<Action>(actions); }
-        }
-
-        public char GCharacter
-        {
-            get { return Character; }
-        }
-
-        public GameObjectType GGameObjectType
-        {
-            get { return GameObjectType; }
-        }
-
-        public double GSEnergy
-        {
-            get { return Energy; }
-            protected set { Energy = value; }
+            return new Queue<Action>(actions);
         }
     }
 

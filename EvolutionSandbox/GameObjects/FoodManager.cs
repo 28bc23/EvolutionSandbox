@@ -22,12 +22,12 @@ namespace EvolutionSandbox
                 return;
             }
 
-            SpawnAccumulator += SpawnRate * Program.GFixedDeltaTime;
+            SpawnAccumulator += SpawnRate * Program.FixedDeltaTime;
 
             while (SpawnAccumulator >= 1.0 && foods.Count < MaxFood)
             {
                 foods.RemoveAll(x => x == null);
-                Vector2Int gridSize = Grid.GGridSize;
+                Vector2Int gridSize = Grid.GridSize;
                 Vector2Int pos = new Vector2Int(Random.Next(gridSize.X), Random.Next(gridSize.Y));
                 Food temp = new Food(pos, Guid.NewGuid());
                 if (Program.SpawnGameObject(temp))
