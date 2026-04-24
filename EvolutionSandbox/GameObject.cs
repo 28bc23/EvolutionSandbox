@@ -2,7 +2,7 @@
 {
     internal abstract class GameObject
     {
-        Vector2Int Pos { get; set; }
+        public Vector2Int Pos { get; set; }
 
         Queue<Action> actions = new Queue<Action>();
 
@@ -27,7 +27,7 @@
         public virtual void MakeAction(Action action)
         {
             if (GameObjectType == GameObjectType.Agent)
-                Energy -= action.GSEnergyCost;
+                Energy -= action.EnergyCost;
 
             actions.Enqueue(action);
         }

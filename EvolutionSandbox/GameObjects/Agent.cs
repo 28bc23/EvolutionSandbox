@@ -14,8 +14,8 @@ namespace EvolutionSandbox
         public override void Update()
         {
             //Desrease energy
-            GSEnergy -= EnergyDecreaseRate * Program.GFixedDeltaTime;
-            if (GSEnergy <= 0)
+            Energy -= EnergyDecreaseRate * Program.FixedDeltaTime;
+            if (Energy <= 0)
             {
                 Program.DestroyGameObject(this);
                 return;
@@ -29,7 +29,7 @@ namespace EvolutionSandbox
             }
 
             MovementType move = nn.Forward(input);
-            MakeAction(new MoveAction(move, GSPos, this));
+            MakeAction(new MoveAction(move, Pos, this));
         }
 
         public override void OnCollisionEnter(CollisionType collision, GameObject collidedGameObject)
@@ -37,10 +37,10 @@ namespace EvolutionSandbox
             if (collision != CollisionType.CollisionGameObject)
                 return;
 
-            if (collidedGameObject.GGameObjectType != GameObjectType.Food)
+            if (collidedGameObject.GameObjectType != GameObjectType.Food)
                 return;
 
-            GSEnergy += collidedGameObject.GSEnergy; // collidedGameObject should be food thanks to if statement above
+            Energy += collidedGameObject.Energy; // collidedGameObject should be food thanks to if statement above
 
             Program.DestroyGameObject(collidedGameObject);
         }

@@ -69,7 +69,7 @@
                     foreach (GameObject gObj in gameObjects)
                     {
                         gObj.Update();
-                        Actions[gObj.GID] = gObj.GetCopyOfActions;
+                        Actions[gObj.ID] = gObj.GetCopyOfActions;
                         gObj.ClearActions();
                     }
 
@@ -112,7 +112,7 @@
 
         public static bool SpawnGameObject(GameObject gameObject, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
         {
-            if (gameObject.GGameObjectType == GameObjectType.Manager)
+            if (gameObject.GameObjectType == GameObjectType.Manager)
             {
                 GameObjects.Add(gameObject);
                 return true;

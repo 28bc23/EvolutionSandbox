@@ -73,7 +73,7 @@ namespace EvolutionSandbox.NeuralNetwork
                 {
                     foreach(NNConnection conn in node.OutConns)
                     {
-                        conn.GToNode.Value += conn.Weight * node.Value;
+                        conn.ToNode.Value += conn.Weight * node.Value;
                     }
                 }
                 //TODO: Activation function for layer l+1
@@ -133,19 +133,19 @@ namespace EvolutionSandbox.NeuralNetwork
             {
                 int randomConnection = Random.Next(Connections.Count);
 
-                Connections[randomConnection].GFromNode.OutConns.Remove(Connections[randomConnection]);
+                Connections[randomConnection].FromNode.OutConns.Remove(Connections[randomConnection]);
 
                 //Find layer of from node
                 int FromLayer = -1;
                 int ToLayer = -1;
                 for (int l = 0; l < Layers.Count; l++)
                 {
-                    if (Layers[l].Contains(Connections[randomConnection].GFromNode))
+                    if (Layers[l].Contains(Connections[randomConnection].FromNode))
                     {
                         FromLayer = l;
                     }
 
-                    if (Layers[l].Contains(Connections[randomConnection].GToNode))
+                    if (Layers[l].Contains(Connections[randomConnection].ToNode))
                     {
                         ToLayer = l;
                         break;
@@ -167,10 +167,10 @@ namespace EvolutionSandbox.NeuralNetwork
                         newNodeRef = Layers[FromLayer + 1][Layers[FromLayer + 1].Length - 1];
                     }
 
-                    Connections.Add(new NNConnection(Connections[randomConnection].GFromNode, newNodeRef, Random.NextDouble(-1, 1)));
-                    Connections.Add(new NNConnection(newNodeRef, Connections[randomConnection].GToNode, Random.NextDouble(-1, 1)));
+                    Connections.Add(new NNConnection(Connections[randomConnection].FromNode, newNodeRef, Random.NextDouble(-1, 1)));
+                    Connections.Add(new NNConnection(newNodeRef, Connections[randomConnection].ToNode, Random.NextDouble(-1, 1)));
 
-                    Connections[randomConnection].GFromNode.OutConns.Add(Connections[Connections.Count - 2]);
+                    Connections[randomConnection].FromNode.OutConns.Add(Connections[Connections.Count - 2]);
                     newNodeRef.OutConns.Add(Connections[Connections.Count - 1]);
 
                     Connections.Remove(Connections[randomConnection]);

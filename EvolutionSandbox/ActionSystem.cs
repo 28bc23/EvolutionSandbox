@@ -12,10 +12,10 @@
     {
         public MoveAction(MovementType movementType, Vector2Int startingPos, GameObject initiator)
         {
-            GSActionType = movementType;
-            GSCurrentPos = startingPos;
-            GSInitiator = initiator;
-            GSEnergyCost = 5;
+            ActionType = movementType;
+            CurrentPos = startingPos;
+            Initiator = initiator;
+            EnergyCost = 5;
         }
     }
 
