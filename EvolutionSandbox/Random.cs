@@ -2,29 +2,75 @@
 {
     internal static class Random
     {
-        static System.Random rand = new System.Random(); // TODO: make own random generator so we can save its state
+        #region PCG-XSH-RR random number generator - https://en.wikipedia.org/wiki/Permuted_congruential_generator
+        static ulong State;
+        const ulong  Multiplier = 6364136223846793005u;
+        const ulong Increment = 1442695040888963407u;
 
-        public static void SetSeed(int seed)
+        public static void Init(ulong initVal, bool bIsSeed)
         {
-            rand = new System.Random(seed);
+            if( bIsSeed)
+            {
+                State = initVal + Increment;
+                Next(); // first move for better generation
+            }
+            else
+            {
+                State = initVal;
+            }
         }
 
-        public static int RandomRangeInt(int min, int max)
+        static uint rot(uint x, int r) // rotation of bits to right
         {
-            return rand.Next(min, max);
+            return x >> r | x << (-r & 31); // first part shifts x to right by r. second part shifts x to left by 32 - r so ve get bits that we lost in first part. By or op. ve combine these parts and get rotation to right.
         }
 
-        public static double RandomRangeDouble(double min, double max)
+        static uint Next()
+        {
+            ulong x = State;
+            uint count = (uint)(x >> 59); // shifts x to right by 59 so we get num between 0 - 31 for bit rotation later
+            State = x * Multiplier + Increment; // LCG
+            x ^= x >> 18; // Xorshift for better random num from LCG
+            return rot((uint)(x >> 27), (int)count); // result of the PCG
+        }
+        #endregion
+
+        public static int Next(int max) // gen random number between 0 - max (except max)
+        {
+            if (0 >= max)
+                throw new ArgumentException("max must be positive number");
+            return (int)(((ulong)Next() * (uint)max) >> 32); // >> 32 - we throw away lower half to make it int32
+        }
+
+        public static int Next(int min, int max)
         {
             if (min > max)
                 throw new ArgumentException("min must be less than or equal to max");
 
-            return rand.NextDouble() * (max - min) + min;
+            uint range = (uint)(max - min);
+            return ((int)(((ulong)Next() * range) >> 32) + min);
         }
+
+        public static double NextDouble()
+        {
+            return Next() / 4294967296.0;
+        }
+
+        public static double NextDouble(double min, double max)
+        {
+            if (min > max)
+                throw new ArgumentException("min must be less than or equal to max");
+
+            return (NextDouble() * (max - min)) + min;
+        }
+
+
+
+
 
         public static bool Chance(float chance)
         {
-            return rand.NextDouble() < chance;
+            return NextDouble() < chance;
         }
     }
 }
