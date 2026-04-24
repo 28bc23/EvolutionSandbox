@@ -18,13 +18,14 @@ namespace EvolutionSandbox
             if (GSEnergy <= 0)
             {
                 Program.DestroyGameObject(this);
+                return;
             }
 
             //Generate random input for forward pass
             double[] input = new double[nn.GInputSize];
             for (int i = 0; i < input.Length; i++)
             {
-                input[i] = Random.RandomRangeDouble(-1, 1);
+                input[i] = Random.NextDouble(-1, 1);
             }
 
             MovementType move = nn.Forward(input);

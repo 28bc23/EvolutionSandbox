@@ -30,7 +30,7 @@
 
             Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Inicialize size of grid
 
-            Random.SetSeed(Configuration.Config.Seed);
+            Random.Init(Configuration.Config.Seed, true);
 
             FPScap = Configuration.Config.FpsCap;
             APS = Configuration.Config.APS;

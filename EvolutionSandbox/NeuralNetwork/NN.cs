@@ -31,15 +31,15 @@ namespace EvolutionSandbox.NeuralNetwork
 
             for (int i = 0; i < Layers[0].Length; i++)
             {
-                Layers[0][i] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                Layers[0][i] = new NNNode(Random.NextDouble(-1, 1));
             }
 
             for (int i = 0; i < Layers[1].Length; i++)
             {
-                Layers[1][i] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                Layers[1][i] = new NNNode(Random.NextDouble(-1, 1));
                 for (int j = 0; j < Layers[0].Length; j++)
                 {
-                    Connections.Add(new NNConnection(Layers[0][j], Layers[1][i], Random.RandomRangeDouble(-1, 1)));
+                    Connections.Add(new NNConnection(Layers[0][j], Layers[1][i], Random.NextDouble(-1, 1)));
                     Layers[0][j].OutConns.Add(Connections[Connections.Count - 1]);
                 }
             }
@@ -103,35 +103,35 @@ namespace EvolutionSandbox.NeuralNetwork
                 if(Layers.Count == 2) // if there is only input layer we must create new layer bc we don't want to change input or output size
                 {
                     Layers.Insert(1, new NNNode[1]);
-                    Layers[1][0] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                    Layers[1][0] = new NNNode(Random.NextDouble(-1, 1));
                 }
                 else
                 {
-                    int randomLayerIdx = Random.RandomRangeInt(1, Layers.Count - 1); // Except input and output layer
+                    int randomLayerIdx = Random.Next(1, Layers.Count - 1); // Except input and output layer
 
                     ResizeLayer(randomLayerIdx, 1);
 
-                    Layers[randomLayerIdx][Layers[randomLayerIdx].Length - 1] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                    Layers[randomLayerIdx][Layers[randomLayerIdx].Length - 1] = new NNNode(Random.NextDouble(-1, 1));
                 }
             }
 
             // Second so there is chance for it to get splited
             if (Random.Chance(NewConnectionMutationChance))
             {
-                int randomLayerIdx1 = Random.RandomRangeInt(0, Layers.Count - 1); // except output bc there won't be next layer if output l got chousen
-                int randomLayerIdx2 = Random.RandomRangeInt(randomLayerIdx1 + 1, Layers.Count); // random layer from randomLayerIdx1
+                int randomLayerIdx1 = Random.Next(Layers.Count - 1); // except output bc there won't be next layer if output l got chousen
+                int randomLayerIdx2 = Random.Next(randomLayerIdx1 + 1, Layers.Count); // random layer from randomLayerIdx1
 
-                int randomNodeIdx1 = Random.RandomRangeInt(0, Layers[randomLayerIdx1].Length);
-                int randomNodeIdx2 = Random.RandomRangeInt(0, Layers[randomLayerIdx2].Length);
+                int randomNodeIdx1 = Random.Next(Layers[randomLayerIdx1].Length);
+                int randomNodeIdx2 = Random.Next(Layers[randomLayerIdx2].Length);
 
-                Connections.Add(new NNConnection(Layers[randomLayerIdx1][randomNodeIdx1], Layers[randomLayerIdx2][randomNodeIdx2], Random.RandomRangeDouble(-1, 1)));
+                Connections.Add(new NNConnection(Layers[randomLayerIdx1][randomNodeIdx1], Layers[randomLayerIdx2][randomNodeIdx2], Random.NextDouble(-1, 1)));
                 Layers[randomLayerIdx1][randomNodeIdx1].OutConns.Add(Connections[Connections.Count - 1]);
             }
 
             // Third split so there is a chance that new conns and node gets weights and bias mutated later
             if (Random.Chance(SplitMutationChance))
             {
-                int randomConnection = Random.RandomRangeInt(0, Connections.Count);
+                int randomConnection = Random.Next(Connections.Count);
 
                 Connections[randomConnection].GFromNode.OutConns.Remove(Connections[randomConnection]);
 
@@ -157,18 +157,18 @@ namespace EvolutionSandbox.NeuralNetwork
                     if (ToLayer - FromLayer == 1)
                     {
                         Layers.Insert(FromLayer + 1, new NNNode[1]);
-                        Layers[FromLayer + 1][0] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                        Layers[FromLayer + 1][0] = new NNNode(Random.NextDouble(-1, 1));
                         newNodeRef = Layers[FromLayer + 1][0];
                     }
                     else
                     {
                         ResizeLayer(FromLayer + 1, 1);
-                        Layers[FromLayer + 1][Layers[FromLayer + 1].Length - 1] = new NNNode(Random.RandomRangeDouble(-1, 1));
+                        Layers[FromLayer + 1][Layers[FromLayer + 1].Length - 1] = new NNNode(Random.NextDouble(-1, 1));
                         newNodeRef = Layers[FromLayer + 1][Layers[FromLayer + 1].Length - 1];
                     }
 
-                    Connections.Add(new NNConnection(Connections[randomConnection].GFromNode, newNodeRef, Random.RandomRangeDouble(-1, 1)));
-                    Connections.Add(new NNConnection(newNodeRef, Connections[randomConnection].GToNode, Random.RandomRangeDouble(-1, 1)));
+                    Connections.Add(new NNConnection(Connections[randomConnection].GFromNode, newNodeRef, Random.NextDouble(-1, 1)));
+                    Connections.Add(new NNConnection(newNodeRef, Connections[randomConnection].GToNode, Random.NextDouble(-1, 1)));
 
                     Connections[randomConnection].GFromNode.OutConns.Add(Connections[Connections.Count - 2]);
                     newNodeRef.OutConns.Add(Connections[Connections.Count - 1]);
@@ -182,7 +182,7 @@ namespace EvolutionSandbox.NeuralNetwork
             {
                 if (Random.Chance(WeightMutationChance))
                 {
-                    Connections[i].Weight += Random.RandomRangeDouble(WeightMutationSizeMin, WeightMutationSizeMax);
+                    Connections[i].Weight += Random.NextDouble(WeightMutationSizeMin, WeightMutationSizeMax);
                 }
             }
 
@@ -193,7 +193,7 @@ namespace EvolutionSandbox.NeuralNetwork
                 {
                     if (Random.Chance(BiasMutationChance))
                     {
-                        Layers[l][i].Bias += Random.RandomRangeDouble(BiasMutationSizeMin, BiasMutationSizeMax);
+                        Layers[l][i].Bias += Random.NextDouble(BiasMutationSizeMin, BiasMutationSizeMax);
                     }
                 }
             }

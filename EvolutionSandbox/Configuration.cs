@@ -77,7 +77,7 @@ namespace EvolutionSandbox
                 Console.Clear();
                 Console.Write($"Enter seed for the {config.EnvName} (X: {config.GridSizeX},Y: ?): ");
                 temp = Console.ReadLine();
-                if (!int.TryParse(temp, out config.Seed))
+                if (!ulong.TryParse(temp, out config.Seed))
                 {
                     WaitForPress("Please enter an inteager");
                 }
@@ -412,7 +412,7 @@ namespace EvolutionSandbox
         public string EnvName;
         public uint GridSizeX;
         public uint GridSizeY;
-        public int Seed;
+        public ulong Seed;
 
         public uint FpsCap;
         public uint APS;
