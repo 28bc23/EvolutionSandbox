@@ -15,7 +15,7 @@ A console application in C# (.NET Framework) simulating the evolution of agents 
 - **Action System (`ActionSystem.cs`):** Agents interact with the environment using an action queue. `MoveAction` is implemented with various movement types (orthogonal, diagonal, jumps) and defined energy costs.
 - **Agents (`Agent.cs`):** Entity with energy that gradually decreases over time (`DeltaTime`). The agent is removed when energy reaches zero. It can consume food upon collision. Movement is currently randomized (for grid testing purposes).
 - **Food and Management (`Food.cs`, `FoodManager.cs`):** Classes ensuring the existence of food (adds energy) and its automatic replenishment at random positions up to a specified limit.
-- **Neural Network (NN):** Forward pass is drafted, currently in an untested prototype phase waiting for integration. (On NN branch)
+- **Neural Network (NN):** Forward pass is drafted, currently in an untested prototype phase waiting for integration. (On NN branch, commit `cc17032`)
 
 ## 2. TODO
 
