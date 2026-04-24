@@ -115,6 +115,9 @@ namespace EvolutionSandbox
 
                     MoveAction moveAction = goMoveActions[key].Dequeue();
 
+                    if (moveAction.GSInitiator == null)
+                        return GridResult.InitiatorIsNull;
+
                     Vector2Int pos = moveAction.GSInitiator.GSPos;
                     int newX = pos.X;
                     int newY = pos.Y;
@@ -223,6 +226,8 @@ namespace EvolutionSandbox
                                 continue;
                             }
                             break;
+                        case MovementType.NoMove:
+                            break;
                         default:
                             return GridResult.InvalidMovementType;
                     }
@@ -263,6 +268,7 @@ namespace EvolutionSandbox
         TriedToMoveEmptySpaceOrFood,
         GridNotInicialized,
         InvalidMovementType,
+        InitiatorIsNull
     }
 
     internal enum CollisionType

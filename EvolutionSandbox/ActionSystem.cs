@@ -2,13 +2,13 @@
 {
     internal abstract class Action
     {
-        Enum ActionType = null;
+        Enum? ActionType = null;
         Vector2Int CurrentPos;
-        GameObject Initiator;
+        GameObject? Initiator;
         float EnergyCost = 0;
 
         /* Getters and Setters */
-        public Enum GSActionType
+        public Enum? GSActionType
         {
             get { return ActionType; }
             protected set { ActionType = value; }
@@ -20,7 +20,7 @@
             protected set { CurrentPos = value; }
         }
 
-        public GameObject GSInitiator
+        public GameObject? GSInitiator
         {
             get { return Initiator; }
             protected set { Initiator = value; }

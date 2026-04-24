@@ -22,7 +22,7 @@ namespace EvolutionSandbox
                 return;
             }
 
-            SpawnAccumulator += SpawnRate * Program.GDeltaTime;
+            SpawnAccumulator += SpawnRate * Program.GFixedDeltaTime;
 
             while (SpawnAccumulator >= 1.0 && foods.Count < MaxFood)
             {

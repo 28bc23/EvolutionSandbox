@@ -11,8 +11,6 @@
         char Character;
 
         GameObjectType GameObjectType;
-        double TimePerAction; // How long one action takes in ms
-        DateTime nextActionTime;
 
         double Energy = 10;
 
@@ -22,22 +20,16 @@
             ID = id;
             Character = character;
             GameObjectType = gameObjectType;
-            TimePerAction = 1000 / Program.GAPS;
-            nextActionTime = DateTime.Now.AddMilliseconds(TimePerAction);
             Energy = energy;
         }
         public abstract void Update();
 
         public virtual void MakeAction(Action action)
         {
-            if(DateTime.Now < nextActionTime)
-                return;
-
-            if(GameObjectType == GameObjectType.Agent)
+            if (GameObjectType == GameObjectType.Agent)
                 Energy -= action.GSEnergyCost;
 
             actions.Enqueue(action);
-            nextActionTime = DateTime.Now.AddMilliseconds(TimePerAction);
         }
 
         public virtual void ClearActions()

@@ -71,7 +71,7 @@ namespace EvolutionSandbox
                 }
             }
 
-            // Seed, FPS and APS
+            // Seed, FPS and TPS
             while (true)
             {
                 Console.Clear();
@@ -103,9 +103,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter actions per second for the {config.EnvName} (X: {config.GridSizeX},Y: {config.GridSizeX}): ");
+                Console.Write($"Enter ticks per second for the {config.EnvName} (X: {config.GridSizeX},Y: {config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out config.APS))
+                if (!uint.TryParse(temp, out config.TPS))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -415,7 +415,7 @@ namespace EvolutionSandbox
         public ulong Seed;
 
         public uint FpsCap;
-        public uint APS;
+        public uint TPS;
 
         public uint NumAgentsToStartWith;
 
