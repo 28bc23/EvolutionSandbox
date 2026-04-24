@@ -107,7 +107,7 @@ namespace EvolutionSandbox.NeuralNetwork
                 }
                 else
                 {
-                    int randomLayerIdx = Random.RandomRangeInt(1, Layers.Count - 1); // Except input and output layer
+                    int randomLayerIdx = Random.Next(1, Layers.Count - 1); // Except input and output layer
 
                     ResizeLayer(randomLayerIdx, 1);
 
@@ -118,11 +118,11 @@ namespace EvolutionSandbox.NeuralNetwork
             // Second so there is chance for it to get splited
             if (Random.Chance(NewConnectionMutationChance))
             {
-                int randomLayerIdx1 = Random.RandomRangeInt(0, Layers.Count - 1); // except output bc there won't be next layer if output l got chousen
-                int randomLayerIdx2 = Random.RandomRangeInt(randomLayerIdx1 + 1, Layers.Count); // random layer from randomLayerIdx1
+                int randomLayerIdx1 = Random.Next(Layers.Count - 1); // except output bc there won't be next layer if output l got chousen
+                int randomLayerIdx2 = Random.Next(randomLayerIdx1 + 1, Layers.Count); // random layer from randomLayerIdx1
 
-                int randomNodeIdx1 = Random.RandomRangeInt(0, Layers[randomLayerIdx1].Length);
-                int randomNodeIdx2 = Random.RandomRangeInt(0, Layers[randomLayerIdx2].Length);
+                int randomNodeIdx1 = Random.Next(Layers[randomLayerIdx1].Length);
+                int randomNodeIdx2 = Random.Next(Layers[randomLayerIdx2].Length);
 
                 Connections.Add(new NNConnection(Layers[randomLayerIdx1][randomNodeIdx1], Layers[randomLayerIdx2][randomNodeIdx2], Random.NextDouble(-1, 1)));
                 Layers[randomLayerIdx1][randomNodeIdx1].OutConns.Add(Connections[Connections.Count - 1]);
@@ -131,7 +131,7 @@ namespace EvolutionSandbox.NeuralNetwork
             // Third split so there is a chance that new conns and node gets weights and bias mutated later
             if (Random.Chance(SplitMutationChance))
             {
-                int randomConnection = Random.RandomRangeInt(0, Connections.Count);
+                int randomConnection = Random.Next(Connections.Count);
 
                 Connections[randomConnection].GFromNode.OutConns.Remove(Connections[randomConnection]);
 

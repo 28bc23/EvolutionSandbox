@@ -4,12 +4,12 @@
     {
         #region PCG-XSH-RR random number generator - https://en.wikipedia.org/wiki/Permuted_congruential_generator
         static ulong State;
-        const ulong  Multiplier = 6364136223846793005u;
+        const ulong Multiplier = 6364136223846793005u;
         const ulong Increment = 1442695040888963407u;
 
         public static void Init(ulong initVal, bool bIsSeed)
         {
-            if( bIsSeed)
+            if (bIsSeed)
             {
                 State = initVal + Increment;
                 Next(); // first move for better generation
@@ -42,7 +42,7 @@
             return (int)(((ulong)Next() * (uint)max) >> 32); // >> 32 - we throw away lower half to make it int32
         }
 
-        public static int Next(int min, int max)
+        public static int Next(int min, int max) // gen random number between min - max (except max)
         {
             if (min > max)
                 throw new ArgumentException("min must be less than or equal to max");
@@ -51,12 +51,12 @@
             return ((int)(((ulong)Next() * range) >> 32) + min);
         }
 
-        public static double NextDouble()
+        public static double NextDouble() // generate random double between 0 - 1 (except 1)
         {
-            return Next() / 4294967296.0;
+            return Next() / 4294967296.0; // üint32 devided by max value of uint32 + 1
         }
 
-        public static double NextDouble(double min, double max)
+        public static double NextDouble(double min, double max) // generate random double between min - max (except max)
         {
             if (min > max)
                 throw new ArgumentException("min must be less than or equal to max");
@@ -64,11 +64,7 @@
             return (NextDouble() * (max - min)) + min;
         }
 
-
-
-
-
-        public static bool Chance(float chance)
+        public static bool Chance(float chance) // returns true or false based on probability (0.0 - 1.0)
         {
             return NextDouble() < chance;
         }

@@ -28,7 +28,7 @@ namespace EvolutionSandbox
             {
                 foods.RemoveAll(x => x == null);
                 Vector2Int gridSize = Grid.GGridSize;
-                Vector2Int pos = new Vector2Int(Random.RandomRangeInt(0, gridSize.X - 1), Random.RandomRangeInt(0, gridSize.Y - 1));
+                Vector2Int pos = new Vector2Int(Random.Next(gridSize.X), Random.Next(gridSize.Y));
                 Food temp = new Food(pos, Guid.NewGuid());
                 if (Program.SpawnGameObject(temp))
                 {
