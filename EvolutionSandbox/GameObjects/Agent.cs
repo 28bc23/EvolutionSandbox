@@ -18,6 +18,7 @@ namespace EvolutionSandbox
             if (GSEnergy <= 0)
             {
                 Program.DestroyGameObject(this);
+                return;
             }
 
             //Generate random input for forward pass
