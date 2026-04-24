@@ -9,9 +9,8 @@
 
         static Dictionary<Guid, Queue<Action>> Actions = new Dictionary<Guid, Queue<Action>>();
 
-        
-
-        static double DeltaTime;
+        static double FixedDeltaTime;
+        static double accumulator = 0.0;
 
         //Game Start
         static void Main(string[] args)
@@ -35,6 +34,8 @@
             FPScap = Configuration.Config.FpsCap;
             APS = Configuration.Config.APS;
 
+            FixedDeltaTime = 1.0 / APS;
+
             for(int i = 0; i < Configuration.Config.NumAgentsToStartWith; i++)
             {
                 Agent agent = new Agent(new Vector2Int(10, 5), Guid.NewGuid());
@@ -51,57 +52,63 @@
         static void GameLoop()
         {
             DateTime lastTimeFPS = DateTime.Now; // Last time for FPS limiter
-            DateTime lastGameLoopTime = DateTime.Now; // Last time of game loop
             int targetFrameTime = 1000 / (int)FPScap; // How often should be showed new frame in ms
+
+            DateTime lastGameLoopTime = DateTime.Now; // Last time of game loop
             while (true)
             {
                 /* calculat delta time */
                 DateTime now = DateTime.Now;
-                DeltaTime = (now - lastGameLoopTime).TotalSeconds; // Get deltatime (time from last game loop) in seconds
+                double frameTime = (now - lastGameLoopTime).TotalSeconds; // Get deltatime (time from last game loop) in seconds
                 lastGameLoopTime = now;
 
-                // Update and get actions form gameobjects
-                GameObject[] gameObjects = GameObjects.ToArray();
-                foreach (GameObject gObj in gameObjects)
+                accumulator += frameTime;
+
+                while (accumulator >= FixedDeltaTime)
                 {
-                    gObj.Update();
-                    Actions[gObj.GID] = gObj.GActions;
-                    gObj.ClearActions();
-                }
-
-
-                Dictionary<Guid, Queue<MoveAction>> goMoveActions = new Dictionary<Guid, Queue<MoveAction>>();
-
-                foreach(KeyValuePair<Guid, Queue<Action>> goActionsKVP in Actions)
-                {
-                    while (goActionsKVP.Value.Count > 0)
+                    // Update and get actions form gameobjects
+                    GameObject[] gameObjects = GameObjects.ToArray();
+                    foreach (GameObject gObj in gameObjects)
                     {
-                        Action gmAction = goActionsKVP.Value.Dequeue();
+                        gObj.Update();
+                        Actions[gObj.GID] = gObj.GActions;
+                        gObj.ClearActions();
+                    }
 
-                        switch (gmAction)
+
+                    Dictionary<Guid, Queue<MoveAction>> goMoveActions = new Dictionary<Guid, Queue<MoveAction>>();
+
+                    foreach (KeyValuePair<Guid, Queue<Action>> goActionsKVP in Actions)
+                    {
+                        while (goActionsKVP.Value.Count > 0)
                         {
-                            case MoveAction moveAction:
-                                if(!goMoveActions.ContainsKey(goActionsKVP.Key))
-                                    goMoveActions.Add(goActionsKVP.Key, new Queue<MoveAction>());
-                                goMoveActions[goActionsKVP.Key].Enqueue(moveAction);
-                                break;
-                            default:
-                                break;
+                            Action gmAction = goActionsKVP.Value.Dequeue();
+
+                            switch (gmAction)
+                            {
+                                case MoveAction moveAction:
+                                    if (!goMoveActions.ContainsKey(goActionsKVP.Key))
+                                        goMoveActions.Add(goActionsKVP.Key, new Queue<MoveAction>());
+                                    goMoveActions[goActionsKVP.Key].Enqueue(moveAction);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
-                }
-                if(goMoveActions.Count > 0)
-                    Grid.MoveObjects(goMoveActions);
+                    if (goMoveActions.Count > 0)
+                        Grid.MoveObjects(goMoveActions);
 
-                if((DateTime.Now - lastTimeFPS).TotalMilliseconds >= targetFrameTime)
+                    Actions.Clear();
+
+                    accumulator -= FixedDeltaTime;
+                }
+
+                if ((DateTime.Now - lastTimeFPS).TotalMilliseconds >= targetFrameTime)
                 {
                     Grid.DrawGrid();
                     lastTimeFPS = DateTime.Now;
                 }
-                
-
-
-                Actions.Clear();
             }
         }
 
@@ -131,9 +138,9 @@
 
         /* Getters and setters */
 
-        public static double GDeltaTime
+        public static double GFixedDeltaTime
         {
-            get { return DeltaTime; }
+            get { return FixedDeltaTime; }
         }
 
         public static uint GAPS
