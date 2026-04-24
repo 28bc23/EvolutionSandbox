@@ -3,7 +3,7 @@
     internal class Program
     {
         static uint FPScap = 10;
-        static uint APS = 20; // Actions per second
+        static uint TPS = 20; // ticks per second
 
         static List<GameObject> GameObjects = new List<GameObject>();
 
@@ -32,9 +32,9 @@
             Random.Init(Configuration.Config.Seed, true);
 
             FPScap = Configuration.Config.FpsCap;
-            APS = Configuration.Config.APS;
+            TPS = Configuration.Config.TPS;
 
-            FixedDeltaTime = 1.0 / APS;
+            FixedDeltaTime = 1.0 / TPS;
 
             for(int i = 0; i < Configuration.Config.NumAgentsToStartWith; i++)
             {
@@ -141,11 +141,6 @@
         public static double GFixedDeltaTime
         {
             get { return FixedDeltaTime; }
-        }
-
-        public static uint GAPS
-        {
-            get { return APS; }
         }
     }
 
