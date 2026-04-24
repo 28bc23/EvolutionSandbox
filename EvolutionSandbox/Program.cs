@@ -2,7 +2,7 @@
 {
     internal class Program
     {
-        static uint FPScap = 10;
+        static uint FpsCap = 10;
 
         static List<GameObject> GameObjects = new List<GameObject>();
 
@@ -26,11 +26,11 @@
                 Configuration.GetConfigFromUser();
             }
 
-            Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Inicialize size of grid
+            Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Initialize size of grid
 
             Random.Init(Configuration.Config.Seed, true);
 
-            FPScap = Configuration.Config.FpsCap;
+            FpsCap = Configuration.Config.FpsCap;
 
             FixedDeltaTime = 1.0 / Configuration.Config.TPS;
 
@@ -50,21 +50,21 @@
         static void GameLoop()
         {
             DateTime lastTimeFPS = DateTime.Now; // Last time for FPS limiter
-            int targetFrameTime = 1000 / (int)FPScap; // How often should be showed new frame in ms
+            int targetFrameTime = 1000 / (int)FpsCap; // How often should be showed new frame in ms
 
             DateTime lastGameLoopTime = DateTime.Now; // Last time of game loop
             while (true)
             {
-                /* calculat delta time */
+                /* calculate delta time */
                 DateTime now = DateTime.Now;
-                double frameTime = (now - lastGameLoopTime).TotalSeconds; // Get deltatime (time from last game loop) in seconds
+                double frameTime = (now - lastGameLoopTime).TotalSeconds; // Get deltaTime (time from last game loop) in seconds
                 lastGameLoopTime = now;
 
                 accumulator += frameTime;
 
                 while (accumulator >= FixedDeltaTime)
                 {
-                    // Update and get actions form gameobjects
+                    // Update and get actions from gameobjects
                     GameObject[] gameObjects = GameObjects.ToArray();
                     foreach (GameObject gObj in gameObjects)
                     {

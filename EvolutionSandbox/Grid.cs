@@ -46,7 +46,7 @@ namespace EvolutionSandbox
                 grid += '\n';
             }
 
-            if (!grid.Equals(LastGrid)) //Revrites grid if there was change
+            if (!grid.Equals(LastGrid)) //Rewrites grid if there was a change
             {
                 Console.SetCursorPosition(0, 0);
                 Console.Write(grid);
@@ -101,7 +101,7 @@ namespace EvolutionSandbox
         public static GridResult MoveObjects(Dictionary<Guid, Queue<MoveAction>> goMoveActions)
         {
             if (!bInitialized)
-                return GridResult.GridNotInicialized;
+                return GridResult.GridNotInitialized;
 
             while (goMoveActions.Count > 0)
             {
@@ -260,7 +260,7 @@ namespace EvolutionSandbox
     {
         Success,
         TriedToMoveEmptySpaceOrFood,
-        GridNotInicialized,
+        GridNotInitialized,
         InvalidMovementType,
         InitiatorIsNull
     }

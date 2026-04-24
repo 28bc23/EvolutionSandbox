@@ -53,7 +53,7 @@
 
         public static double NextDouble() // generate random double between 0 - 1 (except 1)
         {
-            return Next() / 4294967296.0; // üint32 devided by max value of uint32 + 1
+            return Next() / 4294967296.0; // int32 divided by max value of uint32 + 1
         }
 
         public static double NextDouble(double min, double max) // generate random double between min - max (except max)

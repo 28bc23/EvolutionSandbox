@@ -67,7 +67,7 @@ namespace EvolutionSandbox.NeuralNetwork
             }
 
             // Signal propagation
-            for (int l = 0; l < Layers.Count - 1; l++) // Output layer don't have OutConns so we save one itteration
+            for (int l = 0; l < Layers.Count - 1; l++) // Output layer don't have OutConns so we save one iteration
             {
                 foreach(NNNode node in Layers[l])
                 {
@@ -186,7 +186,7 @@ namespace EvolutionSandbox.NeuralNetwork
                 }
             }
 
-            // BIases mutation
+            // Biases mutation
             for (int l = 0; l < Layers.Count; l++)
             {
                 for (int i = 0; i < Layers[l].Length; i++)

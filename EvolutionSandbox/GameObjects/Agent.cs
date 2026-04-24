@@ -13,7 +13,7 @@ namespace EvolutionSandbox
 
         public override void Update()
         {
-            //Desrease energy
+            //Decrease energy
             Energy -= EnergyDecreaseRate * Program.FixedDeltaTime;
             if (Energy <= 0)
             {
