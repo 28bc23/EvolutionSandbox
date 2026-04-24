@@ -3,7 +3,6 @@
     internal class Program
     {
         static uint FPScap = 10;
-        static uint TPS = 20; // ticks per second
 
         static List<GameObject> GameObjects = new List<GameObject>();
 
@@ -32,13 +31,12 @@
             Random.Init(Configuration.Config.Seed, true);
 
             FPScap = Configuration.Config.FpsCap;
-            TPS = Configuration.Config.TPS;
 
-            FixedDeltaTime = 1.0 / TPS;
+            FixedDeltaTime = 1.0 / Configuration.Config.TPS;
 
             for(int i = 0; i < Configuration.Config.NumAgentsToStartWith; i++)
             {
-                Agent agent = new Agent(new Vector2Int(10, 5), Guid.NewGuid());
+                Agent agent = new Agent(new Vector2Int(Random.Next((int)Configuration.Config.GridSizeX), Random.Next((int)Configuration.Config.GridSizeY)), Guid.NewGuid());
                 SpawnGameObject(agent);
             }
 
