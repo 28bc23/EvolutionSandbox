@@ -207,12 +207,12 @@ namespace EvolutionSandbox.NeuralNetwork
         }
 
         /* getters */
-        public int GInputSize
+        public int GetInputSize
         {
             get { return Layers[0].Length; }
         }
 
-        public int GOutputSize
+        public int GetOutputSize
         {
             get { return Layers[Layers.Count - 1].Length; }
         }

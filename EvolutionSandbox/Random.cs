@@ -3,7 +3,7 @@
     internal static class Random
     {
         #region PCG-XSH-RR random number generator - https://en.wikipedia.org/wiki/Permuted_congruential_generator
-        static ulong State;
+        public static ulong State { get; private set; }
         const ulong Multiplier = 6364136223846793005u;
         const ulong Increment = 1442695040888963407u;
 

@@ -8,7 +8,7 @@
 
         static Dictionary<Guid, Queue<Action>> Actions = new Dictionary<Guid, Queue<Action>>();
 
-        static double FixedDeltaTime;
+        public static double FixedDeltaTime { get; private set;  }
         static double accumulator = 0.0;
 
         //Game Start
@@ -69,7 +69,7 @@
                     foreach (GameObject gObj in gameObjects)
                     {
                         gObj.Update();
-                        Actions[gObj.GID] = gObj.GActions;
+                        Actions[gObj.GID] = gObj.GetCopyOfActions;
                         gObj.ClearActions();
                     }
 
@@ -132,13 +132,6 @@
             if(Grid.RemoveGameObject(gameObject))
                 return GameObjects.Remove(gameObject);
             return false;
-        }
-
-        /* Getters and setters */
-
-        public static double GFixedDeltaTime
-        {
-            get { return FixedDeltaTime; }
         }
     }
 

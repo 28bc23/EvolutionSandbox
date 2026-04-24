@@ -3,7 +3,7 @@ namespace EvolutionSandbox
     internal static class Grid
     {
         static bool bInicialised = false;
-        static Vector2Int GridSize;
+        public static Vector2Int GridSize { get; private set; }
         static List<GameObject>[,] Cells = new List<GameObject>[0, 0];
 
         static string LastGrid = "";
@@ -253,12 +253,6 @@ namespace EvolutionSandbox
             }
 
             return GridResult.Success;
-        }
-
-        /* Getters ans Setters */
-        public static Vector2Int GGridSize
-        {
-            get {  return GridSize; }
         }
     }
 
