@@ -47,14 +47,9 @@
             return;
         }
 
-
-
-
-        /* Getters and Setters */
-
-        public Queue<Action> GetCopyOfActions
+        public Queue<Action> GetCopyOfActions()
         {
-            get { return new Queue<Action>(actions); }
+            return new Queue<Action>(actions);
         }
     }
 

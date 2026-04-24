@@ -5,13 +5,13 @@ namespace EvolutionSandbox
 {
     internal static class Configuration
     {
-        public static EnviromentConfig Config;
+        public static EnvironmentConfig Config;
 
-        static string UintWarnMsg = "Please enter an positive inteager";
-        static string FloatWarnMsg = "Please enter an float";
+        static string UintWarnMsg = "Please enter a positive integer";
+        static string FloatWarnMsg = "Please enter a float";
         public static void GenerateConfigForEnv()
         {
-            EnviromentConfig config = new EnviromentConfig();
+            EnvironmentConfig config = new EnvironmentConfig();
 
             #region Get User Input
             string? temp;
@@ -20,7 +20,7 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write("Enter name of the Enviroment: ");
+                Console.Write("Enter name of the Environment: ");
                 temp = Console.ReadLine();
                 if (temp != null && temp != "" && temp != " " && temp[0] != '.')
                 {
@@ -32,12 +32,12 @@ namespace EvolutionSandbox
                     }
                     else
                     {
-                        WaitForPress("Enviroment with this name alerady exist, please choose another name");
+                        WaitForPress("Environment with this name already exist, please choose another name");
                     }
                 }
                 else
                 {
-                    WaitForPress("Please enter an name");
+                    WaitForPress("Please enter a name");
                 }
             }
 
@@ -380,7 +380,7 @@ namespace EvolutionSandbox
             {
                 string jsonString = File.ReadAllText(configPath);
                 var options = new JsonSerializerOptions { IncludeFields = true };
-                EnviromentConfig? configN = JsonSerializer.Deserialize<EnviromentConfig>(jsonString, options);
+                EnvironmentConfig? configN = JsonSerializer.Deserialize<EnvironmentConfig>(jsonString, options);
 
                 if (configN != null)
                 {
@@ -407,7 +407,7 @@ namespace EvolutionSandbox
         }
     }
 
-    public class EnviromentConfig
+    public class EnvironmentConfig
     {
         public string EnvName;
         public uint GridSizeX;

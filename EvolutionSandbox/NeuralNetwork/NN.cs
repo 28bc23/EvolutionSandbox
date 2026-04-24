@@ -49,7 +49,7 @@ namespace EvolutionSandbox.NeuralNetwork
 
         public MovementType Forward(double[] input)
         {
-            Debug.Assert(input.Length == Layers[0].Length, "Input to forward pass isn't equal to lenght of inpput layer");
+            Debug.Assert(input.Length == Layers[0].Length, "Input to forward pass isn't equal to length of inpput layer");
 
             // Reset NN and apply bias
             for (int l = 1; l < Layers.Count; l++)
@@ -118,14 +118,14 @@ namespace EvolutionSandbox.NeuralNetwork
             // Second so there is chance for it to get splited
             if (Random.Chance(NewConnectionMutationChance))
             {
-                int randomLayerIdx1 = Random.Next(Layers.Count - 1); // except output bc there won't be next layer if output l got chousen
-                int randomLayerIdx2 = Random.Next(randomLayerIdx1 + 1, Layers.Count); // random layer from randomLayerIdx1
+                int randomSourceLayerIdx = Random.Next(Layers.Count - 1); // except output bc there won't be next layer if output l got chousen
+                int randomTargetLayerIdx = Random.Next(randomSourceLayerIdx + 1, Layers.Count); // random layer from randomSourceLayerIdx to output layer
 
-                int randomNodeIdx1 = Random.Next(Layers[randomLayerIdx1].Length);
-                int randomNodeIdx2 = Random.Next(Layers[randomLayerIdx2].Length);
+                int randomSourceNodeIdx = Random.Next(Layers[randomSourceLayerIdx].Length);
+                int randomTargetNodeIdx = Random.Next(Layers[randomTargetLayerIdx].Length);
 
-                Connections.Add(new NNConnection(Layers[randomLayerIdx1][randomNodeIdx1], Layers[randomLayerIdx2][randomNodeIdx2], Random.NextDouble(-1, 1)));
-                Layers[randomLayerIdx1][randomNodeIdx1].OutConns.Add(Connections[Connections.Count - 1]);
+                Connections.Add(new NNConnection(Layers[randomSourceLayerIdx][randomSourceNodeIdx], Layers[randomTargetLayerIdx][randomTargetNodeIdx], Random.NextDouble(-1, 1)));
+                Layers[randomSourceLayerIdx][randomSourceNodeIdx].OutConns.Add(Connections[Connections.Count - 1]);
             }
 
             // Third split so there is a chance that new conns and node gets weights and bias mutated later
@@ -199,20 +199,20 @@ namespace EvolutionSandbox.NeuralNetwork
             }
         }
 
-        void ResizeLayer(int layerIdx, uint plusSize)
+        void ResizeLayer(int layerIdx, uint nodesToAddCount)
         {
             NNNode[] targetArray = Layers[layerIdx];
-            Array.Resize(ref targetArray, targetArray.Length + (int)plusSize);
+            Array.Resize(ref targetArray, targetArray.Length + (int)nodesToAddCount);
             Layers[layerIdx] = targetArray;
         }
 
         /* getters */
-        public int GetInputSize
+        public int InputSize
         {
             get { return Layers[0].Length; }
         }
 
-        public int GetOutputSize
+        public int OutputSize
         {
             get { return Layers[Layers.Count - 1].Length; }
         }

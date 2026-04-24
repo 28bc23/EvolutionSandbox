@@ -22,7 +22,7 @@ namespace EvolutionSandbox
             }
 
             //Generate random input for forward pass
-            double[] input = new double[nn.GetInputSize];
+            double[] input = new double[nn.InputSize];
             for (int i = 0; i < input.Length; i++)
             {
                 input[i] = Random.NextDouble(-1, 1);

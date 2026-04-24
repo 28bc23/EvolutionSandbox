@@ -2,7 +2,7 @@ namespace EvolutionSandbox
 {
     internal static class Grid
     {
-        static bool bInicialised = false;
+        static bool bInitialized = false;
         public static Vector2Int GridSize { get; private set; }
         static List<GameObject>[,] Cells = new List<GameObject>[0, 0];
 
@@ -14,13 +14,13 @@ namespace EvolutionSandbox
             Console.Clear();
             GridSize = gridSize;
             Cells = new List<GameObject>[GridSize.Y, GridSize.X];
-            bInicialised = true;
+            bInitialized = true;
             ClearGrid();
             DrawGrid();
         }
 
         public static void ClearGrid(){
-            if(!bInicialised)
+            if(!bInitialized)
                 return;
 
             for(int i = 0; i < GridSize.Y; i++){
@@ -31,7 +31,7 @@ namespace EvolutionSandbox
         }
 
         public static void DrawGrid(){
-            if(!bInicialised)
+            if(!bInitialized)
                 return;
 
             string grid = "";
@@ -64,7 +64,7 @@ namespace EvolutionSandbox
 
         public static bool SpawnGameObject(GameObject gameObject, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
         {
-            if (!bInicialised)
+            if (!bInitialized)
                 return false;
             Vector2Int pos = gameObject.Pos;
             if (pos.Y < 0 || pos.Y >= GridSize.Y || pos.X < 0 || pos.X >= GridSize.X)
@@ -100,7 +100,7 @@ namespace EvolutionSandbox
 
         public static GridResult MoveObjects(Dictionary<Guid, Queue<MoveAction>> goMoveActions)
         {
-            if (!bInicialised)
+            if (!bInitialized)
                 return GridResult.GridNotInicialized;
 
             while (goMoveActions.Count > 0)

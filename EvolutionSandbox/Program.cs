@@ -6,7 +6,7 @@
 
         static List<GameObject> GameObjects = new List<GameObject>();
 
-        static Dictionary<Guid, Queue<Action>> Actions = new Dictionary<Guid, Queue<Action>>();
+        static Dictionary<Guid, Queue<Action>> ActionsQueue = new Dictionary<Guid, Queue<Action>>();
 
         public static double FixedDeltaTime { get; private set;  }
         static double accumulator = 0.0;
@@ -15,7 +15,7 @@
         static void Main(string[] args)
         {
             Console.Clear();
-            Console.Write("Do you wanna create new enviroment? [y/N]: ");
+            Console.Write("Do you wanna create new environment? [y/N]: ");
             string? input = Console.ReadLine();
             if (input != null && input.ToLower() == "y")
             {
@@ -69,14 +69,14 @@
                     foreach (GameObject gObj in gameObjects)
                     {
                         gObj.Update();
-                        Actions[gObj.ID] = gObj.GetCopyOfActions;
+                        ActionsQueue[gObj.ID] = gObj.GetCopyOfActions();
                         gObj.ClearActions();
                     }
 
 
                     Dictionary<Guid, Queue<MoveAction>> goMoveActions = new Dictionary<Guid, Queue<MoveAction>>();
 
-                    foreach (KeyValuePair<Guid, Queue<Action>> goActionsKVP in Actions)
+                    foreach (KeyValuePair<Guid, Queue<Action>> goActionsKVP in ActionsQueue)
                     {
                         while (goActionsKVP.Value.Count > 0)
                         {
@@ -97,7 +97,7 @@
                     if (goMoveActions.Count > 0)
                         Grid.MoveObjects(goMoveActions);
 
-                    Actions.Clear();
+                    ActionsQueue.Clear();
 
                     accumulator -= FixedDeltaTime;
                 }
