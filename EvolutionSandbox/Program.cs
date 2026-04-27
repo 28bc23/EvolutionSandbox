@@ -8,7 +8,7 @@
 
         static Dictionary<Guid, Queue<Action>> ActionsQueue = new Dictionary<Guid, Queue<Action>>();
 
-        public static double FixedDeltaTime { get; private set;  }
+        public static double FixedDeltaTime { get; private set; }
         static double accumulator = 0.0;
 
         //Game Start
@@ -26,23 +26,14 @@
                 Configuration.GetConfigFromUser();
             }
 
-            Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Initialize size of grid
-
             Random.Init(Configuration.Config.Seed, true);
 
             FpsCap = Configuration.Config.FpsCap;
 
             FixedDeltaTime = 1.0 / Configuration.Config.TPS;
 
-            for(int i = 0; i < Configuration.Config.NumAgentsToStartWith; i++)
-            {
-                Agent agent = new Agent(new Vector2Int(Random.Next((int)Configuration.Config.GridSizeX), Random.Next((int)Configuration.Config.GridSizeY)), Guid.NewGuid());
-                SpawnGameObject(agent);
-            }
-
-            FoodManager foodManager = new FoodManager(Guid.NewGuid());
-            SpawnGameObject(foodManager);
-
+            EvolutionManager evolutionManager = new EvolutionManager(Guid.NewGuid());
+            SpawnGameObject(evolutionManager);
 
             GameLoop(); // Start Gmae loop
         }
@@ -129,8 +120,11 @@
 
         public static bool DestroyGameObject(GameObject gameObject)
         {
-            if(Grid.RemoveGameObject(gameObject))
+            if (Grid.RemoveGameObject(gameObject))
+            {
+                gameObject.OnDestroy();
                 return GameObjects.Remove(gameObject);
+            }
             return false;
         }
     }

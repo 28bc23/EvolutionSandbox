@@ -47,6 +47,11 @@
             return;
         }
 
+        public virtual void OnDestroy()
+        {
+
+        }
+
         public Queue<Action> GetCopyOfActions()
         {
             return new Queue<Action>(actions);

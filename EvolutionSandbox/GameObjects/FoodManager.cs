@@ -6,7 +6,7 @@ namespace EvolutionSandbox
         float SpawnRate;
         double SpawnAccumulator = 0;
 
-        List<Food> foods = new List<Food>();
+        List<Food> Foods = new List<Food>();
 
         public FoodManager(Guid id) : base(new Vector2Int(0, 0), id, 'M', GameObjectType.Manager)
         {
@@ -16,7 +16,7 @@ namespace EvolutionSandbox
 
         public override void Update()
         {
-            if (foods.Count >= MaxFood)
+            if (Foods.Count >= MaxFood)
             {
                 SpawnAccumulator = 0;
                 return;
@@ -24,18 +24,23 @@ namespace EvolutionSandbox
 
             SpawnAccumulator += SpawnRate * Program.FixedDeltaTime;
 
-            while (SpawnAccumulator >= 1.0 && foods.Count < MaxFood)
+            while (SpawnAccumulator >= 1.0 && Foods.Count < MaxFood)
             {
-                foods.RemoveAll(x => x == null); // Not optimal, maybey clear only when food is destoryed
+                //foods.RemoveAll(x => x == null); // Not optimal, maybey clear only when food is destoryed
                 Vector2Int gridSize = Grid.GridSize;
                 Vector2Int pos = new Vector2Int(Random.Next(gridSize.X), Random.Next(gridSize.Y));
-                Food temp = new Food(pos, Guid.NewGuid());
+                Food temp = new Food(pos, Guid.NewGuid(), this);
                 if (Program.SpawnGameObject(temp))
                 {
-                    foods.Add(temp);
+                    Foods.Add(temp);
                 }
                 SpawnAccumulator -= 1.0;
             }
+        }
+
+        public bool RemoveFoodFromList(Food food)
+        {
+            return Foods.Remove(food);
         }
     }
 }
