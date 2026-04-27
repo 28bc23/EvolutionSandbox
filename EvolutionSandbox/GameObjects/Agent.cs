@@ -61,6 +61,11 @@ namespace EvolutionSandbox
             return FoodEaten + Math.Max(0, (float)Math.Round(Energy, 2));
         }
 
+        public void MutateNN()
+        {
+            nn.Mutate();
+        }
+
         public int CompareTo(Agent? compareAgent)
         {
             if (compareAgent == null)

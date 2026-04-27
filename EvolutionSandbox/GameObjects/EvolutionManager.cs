@@ -52,11 +52,18 @@ namespace EvolutionSandbox
 
                     // Highest
                     HighestScoreLastGen = currGen[currGen.Count - 1].GetScore();
-                }
 
-                Console.WriteLine($"Median: {MedianScoreLastGen}");
-                Console.WriteLine($"Average: {AverageScoreLastGen}");
-                Console.WriteLine($"Highest: {HighestScoreLastGen}");
+                    List<Agent> higherHalf = currGen.GetRange(mid, currGen.Count - mid);
+                    List<Agent> newGen = new List<Agent>((int)Configuration.Config.NumAgents);
+
+                    for (int i = 0; i < Configuration.Config.NumAgents; i++)
+                    {
+                        higherHalf[i % higherHalf.Count].MutateNN();
+                        newGen.Add(higherHalf[i % higherHalf.Count]); // make deep copy insted
+                    }
+                    currGen = newGen;
+                    // Spawn agents and add them to alive list
+                }
 
                 Environment.Exit(0); // insted: Take Higher half, copy them so there is max num of agents, mutate them and spawn new gen
             }
@@ -66,7 +73,7 @@ namespace EvolutionSandbox
         {
             Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Initialize size of grid
 
-            for (int i = 0; i < Configuration.Config.NumAgentsToStartWith; i++)
+            for (int i = 0; i < Configuration.Config.NumAgents; i++)
             {
                 Agent agent = new Agent(new Vector2Int(Random.Next((int)Configuration.Config.GridSizeX),
                     Random.Next((int)Configuration.Config.GridSizeY)),

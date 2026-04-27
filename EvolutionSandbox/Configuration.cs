@@ -119,9 +119,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"With how many agents do you want to start the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"With how many agents do you want to train in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out config.NumAgentsToStartWith))
+                if (!uint.TryParse(temp, out config.NumAgents))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -417,7 +417,7 @@ namespace EvolutionSandbox
         public uint FpsCap;
         public uint TPS;
 
-        public uint NumAgentsToStartWith;
+        public uint NumAgents;
 
         public uint MaxFoodInEnv;
         public float FoodSpawnRate;
