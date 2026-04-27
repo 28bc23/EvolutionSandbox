@@ -2,6 +2,9 @@ namespace EvolutionSandbox
 {
     internal class EvolutionManager : GameObject
     {
+        List<Agent> currGen = new List<Agent>();
+        List<Agent> AliveAgents = new List<Agent>();
+
         public EvolutionManager(Guid id) : base(new Vector2Int(0, 0), id, 'M', GameObjectType.Manager)
         {
             StartNew();
@@ -9,7 +12,10 @@ namespace EvolutionSandbox
 
         public override void Update()
         {
-
+            if (AliveAgents.Count == 0)
+            {
+                Environment.Exit(0);
+            }
         }
 
         void StartNew() // Starts new evolution based on config
@@ -18,7 +24,11 @@ namespace EvolutionSandbox
 
             for (int i = 0; i < Configuration.Config.NumAgentsToStartWith; i++)
             {
-                Agent agent = new Agent(new Vector2Int(Random.Next((int)Configuration.Config.GridSizeX), Random.Next((int)Configuration.Config.GridSizeY)), Guid.NewGuid());
+                Agent agent = new Agent(new Vector2Int(Random.Next((int)Configuration.Config.GridSizeX),
+                    Random.Next((int)Configuration.Config.GridSizeY)),
+                    Guid.NewGuid(), this);
+                currGen.Add(agent);
+                AliveAgents.Add(agent);
                 Program.SpawnGameObject(agent);
             }
 
@@ -34,6 +44,11 @@ namespace EvolutionSandbox
         void SaveProgress() // Creates an checkpoint
         {
 
+        }
+
+        public bool RemoveFromAliveList(Agent agent)
+        {
+            return AliveAgents.Remove(agent);
         }
     }
 }

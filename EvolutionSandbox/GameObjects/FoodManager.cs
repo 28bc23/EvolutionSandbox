@@ -26,7 +26,6 @@ namespace EvolutionSandbox
 
             while (SpawnAccumulator >= 1.0 && Foods.Count < MaxFood)
             {
-                //foods.RemoveAll(x => x == null); // Not optimal, maybey clear only when food is destoryed
                 Vector2Int gridSize = Grid.GridSize;
                 Vector2Int pos = new Vector2Int(Random.Next(gridSize.X), Random.Next(gridSize.Y));
                 Food temp = new Food(pos, Guid.NewGuid(), this);
