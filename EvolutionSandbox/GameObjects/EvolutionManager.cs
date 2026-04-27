@@ -5,6 +5,11 @@ namespace EvolutionSandbox
         List<Agent> currGen = new List<Agent>();
         List<Agent> AliveAgents = new List<Agent>();
 
+        int GenCount = 0;
+        float MedianScoreLastGen = 0;
+        float AverageScoreLastGen = 0;
+        float HighestScoreLastGen = 0;
+
         public EvolutionManager(Guid id) : base(new Vector2Int(0, 0), id, 'M', GameObjectType.Manager)
         {
             StartNew();
@@ -12,9 +17,48 @@ namespace EvolutionSandbox
 
         public override void Update()
         {
-            if (AliveAgents.Count == 0)
+            if (AliveAgents.Count == 0) // Generation finished
             {
-                Environment.Exit(0);
+                /* Evaluation */
+
+                if (currGen.Count == 0)
+                {
+                    MedianScoreLastGen = 0;
+                    AverageScoreLastGen = 0;
+                    HighestScoreLastGen = 0;
+                }
+                else
+                {
+                    currGen.Sort();
+
+                    // Median
+                    int mid = currGen.Count / 2;
+                    if (currGen.Count % 2 == 0)
+                    {
+                        MedianScoreLastGen = (currGen[mid - 1].GetScore() + currGen[mid].GetScore()) / 2.0f;
+                    }
+                    else
+                    {
+                        MedianScoreLastGen = currGen[mid].GetScore();
+                    }
+
+                    // Average
+                    AverageScoreLastGen = 0;
+                    foreach (Agent a in currGen)
+                    {
+                        AverageScoreLastGen += a.GetScore();
+                    }
+                    AverageScoreLastGen = AverageScoreLastGen / currGen.Count;
+
+                    // Highest
+                    HighestScoreLastGen = currGen[currGen.Count - 1].GetScore();
+                }
+
+                Console.WriteLine($"Median: {MedianScoreLastGen}");
+                Console.WriteLine($"Average: {AverageScoreLastGen}");
+                Console.WriteLine($"Highest: {HighestScoreLastGen}");
+
+                Environment.Exit(0); // insted: Take Higher half, copy them so there is max num of agents, mutate them and spawn new gen
             }
         }
 

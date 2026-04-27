@@ -2,11 +2,14 @@
 
 namespace EvolutionSandbox
 {
-    internal class Agent : GameObject
+    internal class Agent : GameObject, IComparable<Agent>
     {
-        float EnergyDecreaseRate = Configuration.Config.AgentEnergyDecreaseRate;
         NN nn;
         EvolutionManager Manager;
+
+        public int FoodEaten { get; private set; }
+        float EnergyDecreaseRate = Configuration.Config.AgentEnergyDecreaseRate;
+
         public Agent(Vector2Int spawnPos, Guid id, EvolutionManager manager) : base(spawnPos, id, '*', GameObjectType.Agent, Configuration.Config.AgentMaxEnergy)
         {
             nn = new NN(5, 13);
@@ -43,6 +46,7 @@ namespace EvolutionSandbox
                 return;
 
             Energy += collidedGameObject.Energy; // collidedGameObject should be food thanks to if statement above
+            FoodEaten++;
 
             Program.DestroyGameObject(collidedGameObject);
         }
@@ -50,6 +54,20 @@ namespace EvolutionSandbox
         public override void OnDestroy()
         {
             Manager.RemoveFromAliveList(this);
+        }
+
+        public float GetScore()
+        {
+            return FoodEaten + Math.Max(0, (float)Math.Round(Energy, 2));
+        }
+
+        public int CompareTo(Agent? compareAgent)
+        {
+            if (compareAgent == null)
+                return 1;
+
+            else
+                return this.GetScore().CompareTo(compareAgent.GetScore());
         }
     }
 }
