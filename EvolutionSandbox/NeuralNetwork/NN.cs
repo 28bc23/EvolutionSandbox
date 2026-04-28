@@ -24,19 +24,22 @@ namespace EvolutionSandbox.NeuralNetwork
         float BiasMutationSizeMin = Configuration.Config.BiasMutationSizeMin;
         float BiasMutationSizeMax = Configuration.Config.BiasMutationSizeMax;
 
-        public NN(int inputLayerSize, int outputLayerSize)
+        public NN(int inputLayerSize, int outputLayerSize, bool inicialize = true)
         {
+            if (!inicialize)
+                return;
+
             Layers.Add(new NNNode[inputLayerSize]);
             Layers.Add(new NNNode[outputLayerSize]);
 
             for (int i = 0; i < Layers[0].Length; i++)
             {
-                Layers[0][i] = new NNNode(Random.NextDouble(-1, 1));
+                Layers[0][i] = new NNNode(Random.NextDouble(-1, 1), 0, i);
             }
 
             for (int i = 0; i < Layers[1].Length; i++)
             {
-                Layers[1][i] = new NNNode(Random.NextDouble(-1, 1));
+                Layers[1][i] = new NNNode(Random.NextDouble(-1, 1), 1, i);
                 for (int j = 0; j < Layers[0].Length; j++)
                 {
                     Connections.Add(new NNConnection(Layers[0][j], Layers[1][i], Random.NextDouble(-1, 1)));
@@ -69,9 +72,9 @@ namespace EvolutionSandbox.NeuralNetwork
             // Signal propagation
             for (int l = 0; l < Layers.Count - 1; l++) // Output layer don't have OutConns so we save one iteration
             {
-                foreach(NNNode node in Layers[l])
+                foreach (NNNode node in Layers[l])
                 {
-                    foreach(NNConnection conn in node.OutConns)
+                    foreach (NNConnection conn in node.OutConns)
                     {
                         conn.ToNode.Value += conn.Weight * node.Value;
                     }
@@ -83,7 +86,7 @@ namespace EvolutionSandbox.NeuralNetwork
             double maxVal = double.MinValue;
             int idx = 0;
             int lastIdx = Layers.Count - 1;
-            for(int i = 0; i < Layers[lastIdx].Length; i++)
+            for (int i = 0; i < Layers[lastIdx].Length; i++)
             {
                 if (Layers[lastIdx][i].Value > maxVal)
                 {
@@ -100,10 +103,9 @@ namespace EvolutionSandbox.NeuralNetwork
             // First add bias so there is chance that nex connection will be added
             if (Random.Chance(NewNodeMutationChance))
             {
-                if(Layers.Count == 2) // if there is only input layer we must create new layer bc we don't want to change input or output size
+                if (Layers.Count == 2) // if there is only input layer we must create new layer bc we don't want to change input or output size
                 {
-                    Layers.Insert(1, new NNNode[1]);
-                    Layers[1][0] = new NNNode(Random.NextDouble(-1, 1));
+                    InsertLayer(1);
                 }
                 else
                 {
@@ -111,7 +113,7 @@ namespace EvolutionSandbox.NeuralNetwork
 
                     ResizeLayer(randomLayerIdx, 1);
 
-                    Layers[randomLayerIdx][Layers[randomLayerIdx].Length - 1] = new NNNode(Random.NextDouble(-1, 1));
+                    Layers[randomLayerIdx][Layers[randomLayerIdx].Length - 1] = new NNNode(Random.NextDouble(-1, 1), randomLayerIdx, Layers[randomLayerIdx].Length - 1);
                 }
             }
 
@@ -151,19 +153,18 @@ namespace EvolutionSandbox.NeuralNetwork
                         break;
                     }
                 }
-                if(FromLayer != -1)
+                if (FromLayer != -1)
                 {
                     NNNode newNodeRef;
                     if (ToLayer - FromLayer == 1)
                     {
-                        Layers.Insert(FromLayer + 1, new NNNode[1]);
-                        Layers[FromLayer + 1][0] = new NNNode(Random.NextDouble(-1, 1));
+                        InsertLayer(FromLayer + 1);
                         newNodeRef = Layers[FromLayer + 1][0];
                     }
                     else
                     {
                         ResizeLayer(FromLayer + 1, 1);
-                        Layers[FromLayer + 1][Layers[FromLayer + 1].Length - 1] = new NNNode(Random.NextDouble(-1, 1));
+                        Layers[FromLayer + 1][Layers[FromLayer + 1].Length - 1] = new NNNode(Random.NextDouble(-1, 1), FromLayer + 1, Layers[FromLayer + 1].Length - 1);
                         newNodeRef = Layers[FromLayer + 1][Layers[FromLayer + 1].Length - 1];
                     }
 
@@ -206,6 +207,19 @@ namespace EvolutionSandbox.NeuralNetwork
             Layers[layerIdx] = targetArray;
         }
 
+        void InsertLayer(int layerIndex)
+        {
+            Layers.Insert(layerIndex, new NNNode[1]);
+            Layers[layerIndex][0] = new NNNode(Random.NextDouble(-1, 1), layerIndex, 0);
+            for (int l = layerIndex + 1; l < Layers.Count; l++)
+            {
+                for (int i = 0; i < Layers[l].Length; i++)
+                {
+                    Layers[l][i].Layer++;
+                }
+            }
+        }
+
         /* getters */
         public int InputSize
         {
@@ -215,6 +229,42 @@ namespace EvolutionSandbox.NeuralNetwork
         public int OutputSize
         {
             get { return Layers[Layers.Count - 1].Length; }
+        }
+
+        public NN Copy(bool mutate)
+        {
+            NN nn = new NN(0, 0, false);
+            nn.BiasMutationChance = BiasMutationChance;
+            nn.SplitMutationChance = SplitMutationChance;
+            nn.WeightMutationChance = WeightMutationChance;
+            nn.NewNodeMutationChance = NewNodeMutationChance;
+            nn.NewConnectionMutationChance = NewConnectionMutationChance;
+
+            nn.BiasMutationSizeMin = BiasMutationSizeMin;
+            nn.BiasMutationSizeMax = BiasMutationSizeMax;
+
+            nn.WeightMutationSizeMin = WeightMutationSizeMin;
+            nn.WeightMutationSizeMax = WeightMutationSizeMax;
+
+            for (int l = 0; l < Layers.Count; l++)
+            {
+                nn.Layers.Add(new NNNode[Layers[l].Length]);
+                for (int i = 0; i < nn.Layers[l].Length; i++)
+                {
+                    nn.Layers[l][i] = new NNNode(Layers[l][i].Bias, Layers[l][i].Layer, Layers[l][i].Index);
+                }
+            }
+
+            foreach (NNConnection c in Connections)
+            {
+                nn.Connections.Add(new NNConnection(nn.Layers[c.FromNode.Layer][c.FromNode.Index], nn.Layers[c.ToNode.Layer][c.ToNode.Index], c.Weight));
+                nn.Layers[c.FromNode.Layer][c.FromNode.Index].OutConns.Add(nn.Connections[nn.Connections.Count - 1]);
+            }
+
+            if (mutate)
+                nn.Mutate();
+
+            return nn;
         }
     }
 }

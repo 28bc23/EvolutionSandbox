@@ -66,6 +66,14 @@ namespace EvolutionSandbox
             nn.Mutate();
         }
 
+        public Agent DeepCopy(bool mutate = true)
+        {
+            Agent agent = new Agent(new Vector2Int(Random.Next((int)Configuration.Config.GridSizeX),
+                    Random.Next((int)Configuration.Config.GridSizeY)),
+                    Guid.NewGuid(), Manager);
+            agent.nn = nn.Copy(mutate);
+            return agent;
+        }
         public int CompareTo(Agent? compareAgent)
         {
             if (compareAgent == null)
