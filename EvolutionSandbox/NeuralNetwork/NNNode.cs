@@ -2,8 +2,8 @@
 {
     internal class NNNode
     {
-        public double Value;
-        public double Bias;
+        public double Value { get; set; }
+        public double Bias { get; set; }
 
         public int Layer { get; set; }
         public int Index { get; private set; }

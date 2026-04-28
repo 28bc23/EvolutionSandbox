@@ -4,7 +4,7 @@
     {
         public NNNode FromNode { get; private set; }
         public NNNode ToNode { get; private set; }
-        public double Weight;
+        public double Weight { get; set; }
 
         public NNConnection(NNNode fromNode, NNNode toNode, double weight)
         {

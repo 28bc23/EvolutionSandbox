@@ -61,11 +61,6 @@ namespace EvolutionSandbox
             return FoodEaten + Math.Max(0, (float)Math.Round(Energy, 2));
         }
 
-        public void MutateNN()
-        {
-            nn.Mutate();
-        }
-
         public Agent DeepCopy(bool mutate = true)
         {
             Agent agent = new Agent(new Vector2Int(Random.Next((int)Configuration.Config.GridSizeX),
