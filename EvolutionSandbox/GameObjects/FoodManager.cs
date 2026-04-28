@@ -39,7 +39,19 @@ namespace EvolutionSandbox
 
         public Vector2Int GetPosOfClosestFood(Vector2Int pos)
         {
+            float minDistance = float.MaxValue;
+            Vector2Int closestPos = new Vector2Int(-1, -1); // this position shouldn't exist on grid so if we feed it to NN it can learn that propably no food is around
+            foreach (Food food in Foods)
+            {
+                float distance = MathF.Pow(food.Pos.X - pos.X, 2) + MathF.Pow(food.Pos.Y - pos.Y, 2); // we won't do sqrt to make it faster. we don't nessery need it here anyway
+                if(distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestPos = food.Pos;
+                }
+            }
 
+            return closestPos;
         }
 
         public bool RemoveFoodFromList(Food food)
