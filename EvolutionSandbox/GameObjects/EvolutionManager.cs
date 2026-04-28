@@ -4,6 +4,7 @@ namespace EvolutionSandbox
     {
         List<Agent> currGen = new List<Agent>();
         List<Agent> AliveAgents = new List<Agent>();
+        int AliveAgentsCountLast = -1;
 
         int GenCount = 0;
         float MedianScoreLastGen = 0;
@@ -17,6 +18,12 @@ namespace EvolutionSandbox
 
         public override void Update()
         {
+            if (AliveAgentsCountLast != AliveAgents.Count)
+            {
+                UpdateStats();
+            }
+
+
             if (AliveAgents.Count == 0) // Generation finished
             {
                 /* Evaluation */
@@ -63,16 +70,10 @@ namespace EvolutionSandbox
                         Agent newAgent = higherHalf[i % higherHalf.Count].DeepCopy();
                         currGen.Add(newAgent);
                         AliveAgents.Add(newAgent);
-                        Program.SpawnGameObject(newAgent);
+                        Program.SpawnGameObject(newAgent, false, false);
                     }
                     GenCount++;
-
-                    Grid.SetUnderGridText($"""
-                        Generation: {GenCount}
-                        Median of last gen scores: {MedianScoreLastGen}
-                        Average of last gen scores: {AverageScoreLastGen}
-                        Highest score of last gen: {HighestScoreLastGen}
-                        """);
+                    UpdateStats();
                 }
             }
         }
@@ -81,12 +82,7 @@ namespace EvolutionSandbox
         {
             Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Initialize size of grid
 
-            Grid.SetUnderGridText($"""
-                Generation: {GenCount}
-                Median of last gen scores: {MedianScoreLastGen}
-                Average of last gen scores: {AverageScoreLastGen}
-                Highest score of last gen: {HighestScoreLastGen}
-                """);
+            UpdateStats();
 
             for (int i = 0; i < Configuration.Config.NumAgents; i++)
             {
@@ -115,6 +111,17 @@ namespace EvolutionSandbox
         public bool RemoveFromAliveList(Agent agent)
         {
             return AliveAgents.Remove(agent);
+        }
+
+        void UpdateStats()
+        {
+            Grid.SetUnderGridText($"""
+                Generation: {GenCount}          
+                Alive agents: {AliveAgents.Count}          
+                Median of last gen scores: {MedianScoreLastGen}          
+                Average of last gen scores: {AverageScoreLastGen}          
+                Highest score of last gen: {HighestScoreLastGen}          
+                """);
         }
     }
 }
