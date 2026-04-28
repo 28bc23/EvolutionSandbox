@@ -28,7 +28,7 @@ namespace EvolutionSandbox
             
             Vector2Int closestFoodPos = Manager.GetPosOfClosestFood(Pos);
 
-            double[] input = new double[nn.InputSize];
+            double[] input = new double[nn.InputSize]; // maybey add normalization (betveen -1 - 1) of input to directions (insted of cords) and enargy
             input[nn.InputSize - 5] = Pos.X; input[nn.InputSize - 4] = Pos.Y; // The indexes cloud also be hardcoded bc the input size shouldn't change
             input[nn.InputSize - 3] = closestFoodPos.X; input[nn.InputSize - 2] = closestFoodPos.Y;
             input[nn.InputSize - 1] = Energy;
