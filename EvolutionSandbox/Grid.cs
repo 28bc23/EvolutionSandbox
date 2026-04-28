@@ -84,7 +84,7 @@ namespace EvolutionSandbox
                 {
                     if (Cells[pos.Y, pos.X].Count > 0)
                     {
-                        foreach (GameObject go in Cells[pos.Y, pos.X])
+                        foreach (GameObject go in Cells[pos.Y, pos.X].ToArray())
                         {
                             go.OnCollisionEnter(CollisionType.CollisionGameObject, gameObject); // Notify already spawned go
                             gameObject.OnCollisionEnter(CollisionType.CollisionGameObject, go); // Notify new go
