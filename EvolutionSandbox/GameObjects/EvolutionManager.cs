@@ -4,6 +4,8 @@ namespace EvolutionSandbox
     {
         List<Agent> currGen = new List<Agent>();
         List<Agent> AliveAgents = new List<Agent>();
+        FoodManager FoodMan;
+
         int AliveAgentsCountLast = -1;
 
         int GenCount = 0;
@@ -96,6 +98,7 @@ namespace EvolutionSandbox
 
             FoodManager foodManager = new FoodManager(Guid.NewGuid());
             Program.SpawnGameObject(foodManager);
+            FoodMan = foodManager;
         }
 
         void StartFormCheckpoint() // Starts evolution basaed on checkpoint
@@ -106,6 +109,11 @@ namespace EvolutionSandbox
         void SaveProgress() // Creates an checkpoint
         {
 
+        }
+
+        public Vector2Int GetPosOfClosestFood(Vector2Int pos)
+        {
+            return FoodMan.GetPosOfClosestFood(pos);
         }
 
         public bool RemoveFromAliveList(Agent agent)

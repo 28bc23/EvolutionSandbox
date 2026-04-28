@@ -25,13 +25,13 @@ namespace EvolutionSandbox
                 Program.DestroyGameObject(this);
                 return;
             }
+            
+            Vector2Int closestFoodPos = Manager.GetPosOfClosestFood(Pos);
 
-            //Generate random input for forward pass
             double[] input = new double[nn.InputSize];
-            for (int i = 0; i < input.Length; i++)
-            {
-                input[i] = Random.NextDouble(-1, 1);
-            }
+            input[nn.InputSize - 5] = Pos.X; input[nn.InputSize - 4] = Pos.Y; // The indexes cloud also be hardcoded bc the input size shouldn't change
+            input[nn.InputSize - 3] = closestFoodPos.X; input[nn.InputSize - 2] = closestFoodPos.Y;
+            input[nn.InputSize - 1] = Energy;
 
             MovementType move = nn.Forward(input);
             MakeAction(new MoveAction(move, Pos, this));
