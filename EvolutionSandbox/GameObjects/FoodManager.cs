@@ -58,5 +58,13 @@ namespace EvolutionSandbox
         {
             return Foods.Remove(food);
         }
+
+        public void Clear()
+        {
+            foreach (Food food in Foods.ToArray())
+            {
+                Program.DestroyGameObject(food);
+            }
+        }
     }
 }

@@ -66,6 +66,7 @@ namespace EvolutionSandbox
 
                     currGen.Clear();
                     AliveAgents.Clear();
+                    FoodMan.Clear();
 
                     for (int i = 0; i < Configuration.Config.NumAgents; i++)
                     {
