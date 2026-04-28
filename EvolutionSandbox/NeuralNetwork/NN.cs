@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Reflection.Emit;
 
 namespace EvolutionSandbox.NeuralNetwork
 {
@@ -81,9 +80,9 @@ namespace EvolutionSandbox.NeuralNetwork
                 }
                 if (l + 1 < Layers.Count - 1) // we won't apply activation function to output layer
                 {
-                    foreach (NNNode node in Layers[l])
+                    foreach (NNNode node in Layers[l + 1])
                     {
-                        node.Value = ReLu(node.Value);
+                        node.Value = ReLU(node.Value);
                     }
                 }
             }
@@ -104,7 +103,7 @@ namespace EvolutionSandbox.NeuralNetwork
         }
 
         #region Activation functions
-        double ReLu(double value)
+        double ReLU(double value)
         {
             return (value < 0) ? 0 : value;
         }
