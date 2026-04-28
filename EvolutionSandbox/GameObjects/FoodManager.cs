@@ -37,6 +37,11 @@ namespace EvolutionSandbox
             }
         }
 
+        public Vector2Int GetPosOfClosestFood(Vector2Int pos)
+        {
+
+        }
+
         public bool RemoveFoodFromList(Food food)
         {
             return Foods.Remove(food);
