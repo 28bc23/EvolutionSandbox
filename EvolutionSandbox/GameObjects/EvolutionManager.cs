@@ -66,6 +66,13 @@ namespace EvolutionSandbox
                         Program.SpawnGameObject(newAgent);
                     }
                     GenCount++;
+
+                    Grid.SetUnderGridText($"""
+                        Generation: {GenCount}
+                        Median of last gen scores: {MedianScoreLastGen}
+                        Average of last gen scores: {AverageScoreLastGen}
+                        Highest score of last gen: {HighestScoreLastGen}
+                        """);
                 }
             }
         }
@@ -73,6 +80,13 @@ namespace EvolutionSandbox
         void StartNew() // Starts new evolution based on config
         {
             Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Initialize size of grid
+
+            Grid.SetUnderGridText($"""
+                Generation: {GenCount}
+                Median of last gen scores: {MedianScoreLastGen}
+                Average of last gen scores: {AverageScoreLastGen}
+                Highest score of last gen: {HighestScoreLastGen}
+                """);
 
             for (int i = 0; i < Configuration.Config.NumAgents; i++)
             {

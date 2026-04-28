@@ -9,6 +9,7 @@ namespace EvolutionSandbox
         static List<GameObject>[,] Cells = new List<GameObject>[0, 0];
         static StringBuilder S = new StringBuilder();
         static string LastGrid = "";
+        static string UnderGridText = "";
 
         public static void Init(Vector2Int gridSize)
         {
@@ -53,6 +54,8 @@ namespace EvolutionSandbox
                 S.Append('\n');
             }
 
+            S.AppendLine(UnderGridText);
+
             string currGrid = S.ToString();
             if (currGrid != LastGrid) //Rewrites grid if there was a change
             {
@@ -61,6 +64,11 @@ namespace EvolutionSandbox
 
                 LastGrid = currGrid;
             }
+        }
+
+        public static void SetUnderGridText(string text)
+        {
+            UnderGridText = text;
         }
 
         public static bool SpawnGameObject(GameObject gameObject, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
