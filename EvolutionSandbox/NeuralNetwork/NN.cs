@@ -79,7 +79,13 @@ namespace EvolutionSandbox.NeuralNetwork
                         conn.ToNode.Value += conn.Weight * node.Value;
                     }
                 }
-                //TODO: Activation function for layer l+1
+                if (l + 1 < Layers.Count - 1) // we won't apply activation function to output layer
+                {
+                    foreach (NNNode node in Layers[l])
+                    {
+                        node.Value = ReLu(node.Value);
+                    }
+                }
             }
 
             // Get result
@@ -97,6 +103,12 @@ namespace EvolutionSandbox.NeuralNetwork
             return (MovementType)idx;
         }
 
+        #region Activation functions
+        double ReLu(double value)
+        {
+            return (value < 0) ? 0 : value;
+        }
+        #endregion
 
         public void Mutate()
         {
