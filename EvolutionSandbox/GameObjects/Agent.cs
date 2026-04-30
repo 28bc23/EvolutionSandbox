@@ -12,7 +12,7 @@ namespace EvolutionSandbox
 
         public Agent(Vector2Int spawnPos, Guid id, EvolutionManager manager) : base(spawnPos, id, '*', GameObjectType.Agent, Configuration.Config.AgentMaxEnergy)
         {
-            nn = new NN(5, 13);
+            nn = new NN(3, 13);
             Manager = manager;
         }
 
@@ -25,13 +25,13 @@ namespace EvolutionSandbox
                 Program.DestroyGameObject(this);
                 return;
             }
-            
+
             Vector2Int closestFoodPos = Manager.GetPosOfClosestFood(Pos);
 
-            double[] input = new double[nn.InputSize]; // maybey add normalization (betveen -1 - 1) of input to directions (insted of cords) and enargy
-            input[nn.InputSize - 5] = Pos.X; input[nn.InputSize - 4] = Pos.Y; // The indexes cloud also be hardcoded bc the input size shouldn't change
-            input[nn.InputSize - 3] = closestFoodPos.X; input[nn.InputSize - 2] = closestFoodPos.Y;
-            input[nn.InputSize - 1] = Energy;
+            double[] input = new double[nn.InputSize];
+            input[nn.InputSize - 3] = (Pos.X - closestFoodPos.X) / (double)Grid.GridSize.X;
+            input[nn.InputSize - 2] = (Pos.Y - closestFoodPos.Y) / (double)Grid.GridSize.Y;
+            input[nn.InputSize - 1] = (Energy / Configuration.Config.AgentMaxEnergy) * 2.0 - 1.0;
 
             MovementType move = nn.Forward(input);
             MakeAction(new MoveAction(move, Pos, this));
