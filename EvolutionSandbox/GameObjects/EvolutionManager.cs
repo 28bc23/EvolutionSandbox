@@ -94,7 +94,7 @@ namespace EvolutionSandbox
                     Guid.NewGuid(), this);
                 currGen.Add(agent);
                 AliveAgents.Add(agent);
-                Program.SpawnGameObject(agent);
+                Program.SpawnGameObject(agent, false, false);
             }
 
             FoodManager foodManager = new FoodManager(Guid.NewGuid());
