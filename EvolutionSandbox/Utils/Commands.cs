@@ -26,6 +26,9 @@ namespace EvolutionSandbox.Utils
                             case ":graph":
                                 Configuration.EventVariables.SaveGraph = true;
                                 break;
+                            case ":quit!":
+                                Environment.Exit(0);
+                                break;
                             default:
                                 break;
                         }
