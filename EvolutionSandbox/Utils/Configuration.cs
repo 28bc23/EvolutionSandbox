@@ -6,7 +6,6 @@ namespace EvolutionSandbox.Utils
     internal static class Configuration
     {
         public static EnvironmentConfig Config;
-        public static EventStartingVariables EventVariables = new EventStartingVariables();
 
         static string UintWarnMsg = "Please enter a positive integer";
         static string FloatWarnMsg = "Please enter a float";
@@ -452,27 +451,5 @@ namespace EvolutionSandbox.Utils
         public float WeightMutationSizeMax;
         public float BiasMutationSizeMin;
         public float BiasMutationSizeMax;
-    }
-
-    public struct EventStartingVariables
-    {
-        private bool _saveGraph;
-
-        public bool SaveGraph
-        {
-            get
-            {
-                if (_saveGraph)
-                {
-                    _saveGraph = false;
-                    return true;
-                }
-                return false;
-            }
-            set
-            {
-                _saveGraph = value;
-            }
-        }
     }
 }

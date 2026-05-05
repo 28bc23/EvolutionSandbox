@@ -8,6 +8,12 @@ namespace EvolutionSandbox.Utils
     {
         static bool ReadingCommand = false;
         static StringBuilder CurrCommandBuilder = new StringBuilder();
+
+        #region Events
+        public static event System.Action OnGraphCommand;
+        #endregion
+
+
         public static void ReadCommand()
         {
             if (Console.KeyAvailable)
@@ -24,7 +30,7 @@ namespace EvolutionSandbox.Utils
                         switch (CurrCommandBuilder.ToString())
                         {
                             case ":graph":
-                                Configuration.EventVariables.SaveGraph = true;
+                                OnGraphCommand?.Invoke();
                                 break;
                             case ":quit!":
                                 Environment.Exit(0);

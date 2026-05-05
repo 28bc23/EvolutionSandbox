@@ -1,5 +1,4 @@
-﻿using EvolutionSandbox;
-using EvolutionSandbox.Utils;
+﻿using EvolutionSandbox.Utils;
 using System.Diagnostics;
 
 namespace EvolutionSandbox.NeuralNetwork
