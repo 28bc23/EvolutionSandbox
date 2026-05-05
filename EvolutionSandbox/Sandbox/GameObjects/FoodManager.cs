@@ -1,4 +1,7 @@
-namespace EvolutionSandbox
+using EvolutionSandbox;
+using EvolutionSandbox.Utils;
+
+namespace EvolutionSandbox.GameObjects
 {
     internal class FoodManager : GameObject
     {
@@ -27,7 +30,7 @@ namespace EvolutionSandbox
             while (SpawnAccumulator >= 1.0 && Foods.Count < MaxFood)
             {
                 Vector2Int gridSize = Grid.GridSize;
-                Vector2Int pos = new Vector2Int(Random.Next(gridSize.X), Random.Next(gridSize.Y));
+                Vector2Int pos = new Vector2Int(Utils.Random.Next(gridSize.X), Utils.Random.Next(gridSize.Y));
                 Food temp = new Food(pos, Guid.NewGuid(), this);
                 if (Program.SpawnGameObject(temp))
                 {

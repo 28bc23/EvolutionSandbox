@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Text.Json;
-namespace EvolutionSandbox
+namespace EvolutionSandbox.Utils
 {
     internal static class Configuration
     {

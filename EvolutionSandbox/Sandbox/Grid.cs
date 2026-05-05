@@ -1,3 +1,5 @@
+using EvolutionSandbox.GameObjects;
+using System.Globalization;
 using System.Text;
 
 namespace EvolutionSandbox
@@ -55,6 +57,9 @@ namespace EvolutionSandbox
             }
 
             S.AppendLine(UnderGridText);
+            string command = Utils.Commands.GetCurrCommand;
+            if (command != "")
+                S.AppendLine(command);
 
             string currGrid = S.ToString();
             if (currGrid != LastGrid) //Rewrites grid if there was a change

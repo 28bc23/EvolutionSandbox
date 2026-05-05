@@ -1,6 +1,8 @@
-﻿using EvolutionSandbox.NeuralNetwork;
+﻿using EvolutionSandbox;
+using EvolutionSandbox.NeuralNetwork;
+using EvolutionSandbox.Utils;
 
-namespace EvolutionSandbox
+namespace EvolutionSandbox.GameObjects
 {
     internal class Agent : GameObject, IComparable<Agent>
     {
@@ -72,8 +74,8 @@ namespace EvolutionSandbox
 
         public Agent DeepCopy(bool mutate = true)
         {
-            Agent agent = new Agent(new Vector2Int(Random.Next((int)Configuration.Config.GridSizeX),
-                    Random.Next((int)Configuration.Config.GridSizeY)),
+            Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
+                    Utils.Random.Next((int)Configuration.Config.GridSizeY)),
                     Guid.NewGuid(), Manager);
             agent.nn = nn.Copy(mutate);
             return agent;

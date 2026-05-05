@@ -1,4 +1,4 @@
-﻿namespace EvolutionSandbox
+﻿namespace EvolutionSandbox.Utils
 {
     internal static class Random
     {

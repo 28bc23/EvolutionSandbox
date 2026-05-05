@@ -1,4 +1,6 @@
-﻿namespace EvolutionSandbox
+﻿using EvolutionSandbox;
+
+namespace EvolutionSandbox.GameObjects
 {
     internal abstract class GameObject
     {

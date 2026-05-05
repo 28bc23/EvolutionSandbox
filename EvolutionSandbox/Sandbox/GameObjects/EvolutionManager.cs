@@ -1,7 +1,9 @@
+using EvolutionSandbox;
+using EvolutionSandbox.Utils;
 using ScottPlot;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace EvolutionSandbox
+namespace EvolutionSandbox.GameObjects
 {
     internal class EvolutionManager : GameObject
     {
@@ -125,8 +127,8 @@ namespace EvolutionSandbox
 
             for (int i = 0; i < Configuration.Config.NumAgents; i++)
             {
-                Agent agent = new Agent(new Vector2Int(Random.Next((int)Configuration.Config.GridSizeX),
-                    Random.Next((int)Configuration.Config.GridSizeY)),
+                Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
+                    Utils.Random.Next((int)Configuration.Config.GridSizeY)),
                     Guid.NewGuid(), this);
                 currGen.Add(agent);
                 AliveAgents.Add(agent);

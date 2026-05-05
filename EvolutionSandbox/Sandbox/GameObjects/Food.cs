@@ -1,4 +1,6 @@
-namespace EvolutionSandbox
+using EvolutionSandbox.Utils;
+
+namespace EvolutionSandbox.GameObjects
 {
     internal class Food : GameObject
     {

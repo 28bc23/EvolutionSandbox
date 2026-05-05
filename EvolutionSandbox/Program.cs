@@ -1,4 +1,8 @@
-﻿namespace EvolutionSandbox
+﻿using EvolutionSandbox;
+using EvolutionSandbox.GameObjects;
+using EvolutionSandbox.Utils;
+
+namespace EvolutionSandbox
 {
     internal class Program
     {
@@ -26,7 +30,7 @@
                 Configuration.GetConfigFromUser();
             }
 
-            Random.Init(Configuration.Config.Seed, true);
+            Utils.Random.Init(Configuration.Config.Seed, true);
 
             FpsCap = Configuration.Config.FpsCap;
 
@@ -50,6 +54,8 @@
                 DateTime now = DateTime.Now;
                 double frameTime = (now - lastGameLoopTime).TotalSeconds; // Get deltaTime (time from last game loop) in seconds
                 lastGameLoopTime = now;
+
+                Utils.Commands.ReadCommand();
 
                 accumulator += frameTime;
 
