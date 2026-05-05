@@ -204,6 +204,20 @@ namespace EvolutionSandbox
                     break;
                 }
             }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter energy penalty for colliding with wall for agent in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}) (ex. 10): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out config.AgentWallCollisionEnergyPenalty))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
 
             // NN chances
             while (true)
@@ -425,6 +439,7 @@ namespace EvolutionSandbox
 
         public float AgentMaxEnergy;
         public float AgentEnergyDecreaseRate;
+        public float AgentWallCollisionEnergyPenalty;
 
         public float WeightMutationChance;
         public float BiasMutationChance;
