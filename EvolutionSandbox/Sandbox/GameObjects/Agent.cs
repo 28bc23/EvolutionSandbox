@@ -88,5 +88,10 @@ namespace EvolutionSandbox.GameObjects
             else
                 return this.GetScore().CompareTo(compareAgent.GetScore());
         }
+
+        public NN GetNNCopy()
+        {
+            return nn.Copy(false);
+        }
     }
 }

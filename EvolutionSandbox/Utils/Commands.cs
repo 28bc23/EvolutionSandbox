@@ -11,6 +11,7 @@ namespace EvolutionSandbox.Utils
 
         #region Events
         public static event System.Action OnGraphCommand;
+        public static event System.Action OnCreateCheckpoint;
         #endregion
 
 
@@ -31,6 +32,13 @@ namespace EvolutionSandbox.Utils
                         {
                             case ":graph":
                                 OnGraphCommand?.Invoke();
+                                break;
+                            case ":save":
+                                OnCreateCheckpoint?.Invoke();
+                                break;
+                            case ":quit":
+                                OnCreateCheckpoint?.Invoke();
+                                Environment.Exit(0);
                                 break;
                             case ":quit!":
                                 Environment.Exit(0);

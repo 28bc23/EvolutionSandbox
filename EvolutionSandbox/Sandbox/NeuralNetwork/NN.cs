@@ -1,4 +1,5 @@
-﻿using EvolutionSandbox.Utils;
+﻿using EvolutionSandbox;
+using EvolutionSandbox.Utils;
 using System.Diagnostics;
 
 namespace EvolutionSandbox.NeuralNetwork
@@ -241,6 +242,16 @@ namespace EvolutionSandbox.NeuralNetwork
         public int OutputSize
         {
             get { return Layers[Layers.Count - 1].Length; }
+        }
+
+        public NNNode[][] GetLayersCopy()
+        {
+            return Layers.ToArray();
+        }
+
+        public NNConnection[] GetConnectionsCopy()
+        {
+            return Connections.ToArray();
         }
 
         public NN Copy(bool mutate)

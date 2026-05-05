@@ -1,4 +1,8 @@
+using EvolutionSandbox.NeuralNetwork;
 using EvolutionSandbox.Utils;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EvolutionSandbox.GameObjects
 {
@@ -6,6 +10,7 @@ namespace EvolutionSandbox.GameObjects
     {
         List<Agent> currGen = new List<Agent>();
         List<Agent> AliveAgents = new List<Agent>();
+        List<Agent> HigherHalf = new List<Agent>();
         FoodManager FoodMan;
 
         int AliveAgentsCountLast = -1;
@@ -15,9 +20,15 @@ namespace EvolutionSandbox.GameObjects
         float AverageScoreLastGen = 0;
         float HighestScoreLastGen = 0;
 
-        List<float> medians = new List<float>();
-        List<float> averageScores = new List<float>();
-        List<float> highestScores = new List<float>();
+        List<float> Medians = new List<float>();
+        List<float> AverageScores = new List<float>();
+        List<float> HighestScores = new List<float>();
+
+        string GraphsDir = $"./{Configuration.Config.EnvName}/Graphs/";
+        string CheckpointsDir = $"./{Configuration.Config.EnvName}/Checkpoints/";
+
+        ulong PRGStateCheckpoint;
+        
 
         public EvolutionManager(Guid id) : base(new Vector2Int(0, 0), id, 'M', GameObjectType.Manager)
         {
@@ -68,7 +79,9 @@ namespace EvolutionSandbox.GameObjects
                     // Highest
                     HighestScoreLastGen = currGen[currGen.Count - 1].GetScore();
 
-                    List<Agent> higherHalf = currGen.GetRange(mid, currGen.Count - mid);
+                    HigherHalf.Clear();
+                    HigherHalf = currGen.GetRange(mid, currGen.Count - mid);
+                    PRGStateCheckpoint = Utils.Random.State;
 
                     currGen.Clear();
                     AliveAgents.Clear();
@@ -76,14 +89,14 @@ namespace EvolutionSandbox.GameObjects
 
                     for (int i = 0; i < Configuration.Config.NumAgents; i++)
                     {
-                        Agent newAgent = higherHalf[i % higherHalf.Count].DeepCopy();
+                        Agent newAgent = HigherHalf[i % HigherHalf.Count].DeepCopy();
                         currGen.Add(newAgent);
                         AliveAgents.Add(newAgent);
                         Program.SpawnGameObject(newAgent, false, false);
                     }
-                    medians.Add(MedianScoreLastGen);
-                    averageScores.Add(AverageScoreLastGen);
-                    highestScores.Add(HighestScoreLastGen);
+                    Medians.Add(MedianScoreLastGen);
+                    AverageScores.Add(AverageScoreLastGen);
+                    HighestScores.Add(HighestScoreLastGen);
                     GenCount++;
                     UpdateStats();
                 }
@@ -94,6 +107,7 @@ namespace EvolutionSandbox.GameObjects
         {
             #region Events
             Commands.OnGraphCommand += SaveGraph;
+            Commands.OnCreateCheckpoint += CreateCheckpoint;
             #endregion
 
             Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Initialize size of grid
@@ -120,8 +134,29 @@ namespace EvolutionSandbox.GameObjects
 
         }
 
-        void SaveProgress() // Creates an checkpoint
+        void CreateCheckpoint() // Creates an checkpoint
         {
+            /*Things to save
+                * Random generetor State
+                * HigherHalf of agents (NNs)
+                * stats (medians, averages, highests)
+             */
+
+            Directory.CreateDirectory(CheckpointsDir);
+            string checkpointName = $"{GenCount.ToString()}-GenCheckpoint.json";
+
+            var checkpoint = new
+            {
+                PRGState = PRGStateCheckpoint,
+                Layers = from Agent in HigherHalf select Agent.GetNNCopy().GetLayersCopy(),
+                Connections = from Agent in HigherHalf select Agent.GetNNCopy().GetConnectionsCopy(),
+                Medians = Medians,
+                AverageScores = AverageScores,
+                HigherHalf = HigherHalf,
+            };
+
+            string jsonString = JsonSerializer.Serialize(checkpoint, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, MaxDepth = 256, WriteIndented = true });
+            File.WriteAllText($"{CheckpointsDir}{checkpointName}", jsonString);
 
         }
 
@@ -129,10 +164,10 @@ namespace EvolutionSandbox.GameObjects
         {
             ScottPlot.Plot myPlot = new();
 
-            double[] generationsX = Enumerable.Range(1, medians.Count).Select(x => (double)x).ToArray();
-            double[] mediansY = medians.Select(x => (double)x).ToArray();
-            double[] averagesY = averageScores.Select(x => (double)x).ToArray();
-            double[] highestY = highestScores.Select(x => (double)x).ToArray();
+            double[] generationsX = Enumerable.Range(1, Medians.Count).Select(x => (double)x).ToArray();
+            double[] mediansY = Medians.Select(x => (double)x).ToArray();
+            double[] averagesY = AverageScores.Select(x => (double)x).ToArray();
+            double[] highestY = HighestScores.Select(x => (double)x).ToArray();
 
             ScottPlot.Plottables.Scatter scatterMedians = myPlot.Add.Scatter(generationsX, mediansY);
             scatterMedians.Color = ScottPlot.Colors.Blue;
@@ -147,10 +182,9 @@ namespace EvolutionSandbox.GameObjects
             scatterHighest.LegendText = "Highest score";
 
             myPlot.ShowLegend();
-            string graphDirPath = $"./{Configuration.Config.EnvName}/Graphs/";
             string graphName = $"{Configuration.Config.EnvName}-{GenCount}Gen-TrainGraph.png";
-            Directory.CreateDirectory(graphDirPath);
-            myPlot.SavePng($"{graphDirPath}{graphName}", 1920, 1080);
+            Directory.CreateDirectory(GraphsDir);
+            myPlot.SavePng($"{GraphsDir}{graphName}", 1920, 1080);
         }
 
         public Vector2Int GetPosOfClosestFood(Vector2Int pos)
