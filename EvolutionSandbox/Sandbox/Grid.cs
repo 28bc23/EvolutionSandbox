@@ -142,7 +142,7 @@ namespace EvolutionSandbox
                             if (newY >= GridSize.Y)
                             {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newY = GridSize.Y - 1;
                             }
                             break;
 
@@ -151,7 +151,7 @@ namespace EvolutionSandbox
                             if (newY < 0)
                             {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newY = 0;
                             }
                             break;
 
@@ -160,7 +160,7 @@ namespace EvolutionSandbox
                             if (newX >= GridSize.X)
                             {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newX = GridSize.X - 1;
                             }
                             break;
 
@@ -169,7 +169,7 @@ namespace EvolutionSandbox
                             if (newX < 0)
                             {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newX = 0;
                             }
                             break;
 
@@ -215,7 +215,8 @@ namespace EvolutionSandbox
                             if (newX >= GridSize.X || newY >= GridSize.Y)
                             {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newY = GridSize.Y - 1;
+                                newX = GridSize.X - 1;
                             }
                             break;
 
@@ -225,7 +226,8 @@ namespace EvolutionSandbox
                             if (newX >= GridSize.X || newY < 0)
                             {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newX = GridSize.X - 1;
+                                newY = 0;
                             }
                             break;
 
@@ -235,7 +237,8 @@ namespace EvolutionSandbox
                             if (newX < 0 || newY < 0)
                             {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newX = 0;
+                                newY = 0;
                             }
                             break;
 
@@ -245,7 +248,8 @@ namespace EvolutionSandbox
                             if (newX < 0 || newY >= GridSize.Y)
                             {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newX = 0;
+                                newY = GridSize.Y - 1;
                             }
                             break;
                         case MovementType.NoMove:
