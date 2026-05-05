@@ -88,30 +88,35 @@ namespace EvolutionSandbox.GameObjects
                     averageScores.Add(AverageScoreLastGen);
                     highestScores.Add(HighestScoreLastGen);
 
-                    #region Create Graph
-                    ScottPlot.Plot myPlot = new();
+                    if (Utils.Configuration.EventVariables.SaveGraph)
+                    {
+                        #region Create Graph
+                        ScottPlot.Plot myPlot = new();
 
-                    double[] generationsX = Enumerable.Range(1, medians.Count).Select(x => (double)x).ToArray();
-                    double[] mediansY = medians.Select(x => (double)x).ToArray();
-                    double[] averagesY = averageScores.Select(x => (double)x).ToArray();
-                    double[] highestY = highestScores.Select(x => (double)x).ToArray();
+                        double[] generationsX = Enumerable.Range(1, medians.Count).Select(x => (double)x).ToArray();
+                        double[] mediansY = medians.Select(x => (double)x).ToArray();
+                        double[] averagesY = averageScores.Select(x => (double)x).ToArray();
+                        double[] highestY = highestScores.Select(x => (double)x).ToArray();
 
-                    ScottPlot.Plottables.Scatter scatterMedians = myPlot.Add.Scatter(generationsX, mediansY);
-                    scatterMedians.Color = ScottPlot.Colors.Blue;
-                    scatterMedians.LegendText = "Median";
+                        ScottPlot.Plottables.Scatter scatterMedians = myPlot.Add.Scatter(generationsX, mediansY);
+                        scatterMedians.Color = ScottPlot.Colors.Blue;
+                        scatterMedians.LegendText = "Median";
 
-                    ScottPlot.Plottables.Scatter scatterAverages = myPlot.Add.Scatter(generationsX, averagesY);
-                    scatterAverages.Color = ScottPlot.Colors.Orange;
-                    scatterAverages.LegendText = "Averages";
+                        ScottPlot.Plottables.Scatter scatterAverages = myPlot.Add.Scatter(generationsX, averagesY);
+                        scatterAverages.Color = ScottPlot.Colors.Orange;
+                        scatterAverages.LegendText = "Averages";
 
-                    ScottPlot.Plottables.Scatter scatterHighest = myPlot.Add.Scatter(generationsX, highestY);
-                    scatterHighest.Color = ScottPlot.Colors.Green;
-                    scatterHighest.LegendText = "Highest score";
+                        ScottPlot.Plottables.Scatter scatterHighest = myPlot.Add.Scatter(generationsX, highestY);
+                        scatterHighest.Color = ScottPlot.Colors.Green;
+                        scatterHighest.LegendText = "Highest score";
 
-                    myPlot.ShowLegend();
-
-                    myPlot.SavePng($"{Configuration.Config.EnvName}-TrainGraph.png", 1920, 1080);
-                    #endregion
+                        myPlot.ShowLegend();
+                        string graphDirPath = $"./{Configuration.Config.EnvName}/Graphs/";
+                        string graphName = $"{Configuration.Config.EnvName}-{GenCount}Gen-TrainGraph.png";
+                        Directory.CreateDirectory(graphDirPath);
+                        myPlot.SavePng($"{graphDirPath}{graphName}", 1920, 1080);
+                        #endregion
+                    }
 
                     GenCount++;
                     UpdateStats();

@@ -7,7 +7,7 @@ namespace EvolutionSandbox.Utils
     internal static class Commands
     {
         static bool ReadingCommand = false;
-        static StringBuilder CurrCommandString = new StringBuilder();
+        static StringBuilder CurrCommandBuilder = new StringBuilder();
         public static void ReadCommand()
         {
             if (Console.KeyAvailable)
@@ -18,27 +18,36 @@ namespace EvolutionSandbox.Utils
                 {
                     if(keyInfo.Key == ConsoleKey.Enter)
                     {
-                        Console.WriteLine(CurrCommandString.ToString());
+                        Console.WriteLine(CurrCommandBuilder.ToString());
                         ReadingCommand = false;
 
-                        CurrCommandString.Clear();
+                        switch (CurrCommandBuilder.ToString())
+                        {
+                            case ":graph":
+                                Configuration.EventVariables.SaveGraph = true;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        CurrCommandBuilder.Clear();
                         return;
                     }
 
                     if (keyInfo.Key == ConsoleKey.Backspace)
                     {
-                        CurrCommandString.Length--;
-                        if (CurrCommandString.Length == 0)
+                        CurrCommandBuilder.Length--;
+                        if (CurrCommandBuilder.Length == 0)
                             ReadingCommand = false;
                         return;
                     }
 
-                    CurrCommandString.Append(keyInfo.KeyChar);
+                    CurrCommandBuilder.Append(keyInfo.KeyChar);
 
                 }else if (keyInfo.KeyChar == ':')
                 {
                     ReadingCommand = true;
-                    CurrCommandString.Append(keyInfo.KeyChar);
+                    CurrCommandBuilder.Append(keyInfo.KeyChar);
                 }
             }
         }
@@ -47,7 +56,7 @@ namespace EvolutionSandbox.Utils
         {
             get
             {
-                return CurrCommandString.ToString();
+                return CurrCommandBuilder.ToString();
             }
         }
 
