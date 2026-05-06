@@ -6,14 +6,13 @@ namespace EvolutionSandbox
 {
     internal class Program
     {
-        static uint FpsCap = 10;
-
         static List<GameObject> GameObjects = new List<GameObject>();
 
         static Dictionary<Guid, Queue<Action>> ActionsQueue = new Dictionary<Guid, Queue<Action>>();
 
         public static double FixedDeltaTime { get; private set; }
         static double accumulator = 0.0;
+        static int TargetFrameTime = 1000 / (int)Configuration.Config.FpsCap; // How often should be showed new frame in ms
 
         //Game Start
         static void Main(string[] args)
@@ -32,8 +31,6 @@ namespace EvolutionSandbox
 
             Utils.Random.Init(Configuration.Config.Seed, true);
 
-            FpsCap = Configuration.Config.FpsCap;
-
             FixedDeltaTime = 1.0 / Configuration.Config.TPS;
 
             EvolutionManager evolutionManager = new EvolutionManager(Guid.NewGuid());
@@ -45,7 +42,6 @@ namespace EvolutionSandbox
         static void GameLoop()
         {
             DateTime lastTimeFPS = DateTime.Now; // Last time for FPS limiter
-            int targetFrameTime = 1000 / (int)FpsCap; // How often should be showed new frame in ms
 
             DateTime lastGameLoopTime = DateTime.Now; // Last time of game loop
             while (true)
@@ -68,8 +64,6 @@ namespace EvolutionSandbox
 
                 while (accumulator >= FixedDeltaTime)
                 {
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine(accumulator);
                     // Update and get actions from gameobjects
                     GameObject[] gameObjects = GameObjects.ToArray();
                     foreach (GameObject gObj in gameObjects)
@@ -108,7 +102,7 @@ namespace EvolutionSandbox
                     accumulator -= FixedDeltaTime;
                 }
 
-                if ((DateTime.Now - lastTimeFPS).TotalMilliseconds >= targetFrameTime)
+                if ((DateTime.Now - lastTimeFPS).TotalMilliseconds >= TargetFrameTime)
                 {
                     Grid.DrawGrid();
                     lastTimeFPS = DateTime.Now;
@@ -141,6 +135,16 @@ namespace EvolutionSandbox
                 return GameObjects.Remove(gameObject);
             }
             return false;
+        }
+
+        public static void RecalculateFixedDeltaTime()
+        {
+            FixedDeltaTime = 1.0 / Configuration.Config.TPS;
+        }
+
+        public static void RecalculateTargetFrameTime()
+        {
+            TargetFrameTime = 1000 / (int)Configuration.Config.FpsCap;
         }
     }
 

@@ -10,9 +10,10 @@ namespace EvolutionSandbox.GameObjects
         EvolutionManager Manager;
 
         public int FoodEaten { get; private set; }
-        float EnergyDecreaseRate = Configuration.Config.AgentEnergyDecreaseRate;
 
-        public Agent(Vector2Int spawnPos, Guid id, EvolutionManager manager) : base(spawnPos, id, '*', GameObjectType.Agent, Configuration.Config.AgentMaxEnergy)
+        double MaxEnergy = Configuration.Config.AgentMaxEnergy;
+
+        public Agent(Vector2Int spawnPos, Guid id, EvolutionManager manager) : base(spawnPos, id, '*', GameObjectType.Agent, energy: Configuration.Config.AgentMaxEnergy)
         {
             nn = new NN(7, 13);
             Manager = manager;
@@ -21,7 +22,7 @@ namespace EvolutionSandbox.GameObjects
         public override void Update()
         {
             //Decrease energy
-            Energy -= EnergyDecreaseRate * Program.FixedDeltaTime;
+            Energy -= Configuration.Config.AgentEnergyDecreaseRate * Program.FixedDeltaTime;
             if (Energy <= 0)
             {
                 Program.DestroyGameObject(this);
@@ -33,7 +34,7 @@ namespace EvolutionSandbox.GameObjects
             double[] input = new double[nn.InputSize];
             input[0] = (Pos.X - closestFoodPos.X) / (double)Grid.GridSize.X; // x direction to food
             input[1] = (Pos.Y - closestFoodPos.Y) / (double)Grid.GridSize.Y; // y direction to food
-            input[2] = (Energy / Configuration.Config.AgentMaxEnergy) * 2.0 - 1.0; // current energy
+            input[2] = (Energy / MaxEnergy) * 2.0 - 1.0; // current energy
             input[3] = Pos.Y / (double)Grid.GridSize.Y; // distance from bottom edge
             input[4] = (Grid.GridSize.Y - Pos.Y) / (double)Grid.GridSize.Y; // distance from upper edge
             input[5] = Pos.X / (double)Grid.GridSize.X; // distance from left edge

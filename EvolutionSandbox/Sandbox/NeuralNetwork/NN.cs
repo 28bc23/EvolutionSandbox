@@ -1,9 +1,9 @@
-﻿using EvolutionSandbox;
-using EvolutionSandbox.Utils;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using static EvolutionSandbox.Utils.Configuration;
 
 namespace EvolutionSandbox.NeuralNetwork
 {
+    
     internal class NN
     {
         // Input: pozice agenta (2), pozice nejbližšího jídla (2),  energie agenta (1)
@@ -12,18 +12,7 @@ namespace EvolutionSandbox.NeuralNetwork
         List<NNNode[]> Layers = new List<NNNode[]>();
         List<NNConnection> Connections = new List<NNConnection>();
 
-        //Mutation chances - percentages in float form
-        float WeightMutationChance = Configuration.Config.WeightMutationChance;
-        float BiasMutationChance = Configuration.Config.BiasMutationChance;
-        float SplitMutationChance = Configuration.Config.SplitMutationChance;
-        float NewConnectionMutationChance = Configuration.Config.NewConnectionMutationChance;
-        float NewNodeMutationChance = Configuration.Config.NewNodeMutationChance;
 
-        // Mutation size
-        float WeightMutationSizeMin = Configuration.Config.WeightMutationSizeMin;
-        float WeightMutationSizeMax = Configuration.Config.WeightMutationSizeMax;
-        float BiasMutationSizeMin = Configuration.Config.BiasMutationSizeMin;
-        float BiasMutationSizeMax = Configuration.Config.BiasMutationSizeMax;
 
         public NN(int inputLayerSize, int outputLayerSize, bool inicialize = true)
         {
@@ -114,7 +103,7 @@ namespace EvolutionSandbox.NeuralNetwork
         public void Mutate()
         {
             // First add bias so there is chance that nex connection will be added
-            if (Utils.Random.Chance(NewNodeMutationChance))
+            if (Utils.Random.Chance(Config.NewNodeMutationChance))
             {
                 if (Layers.Count == 2) // if there is only input layer we must create new layer bc we don't want to change input or output size
                 {
@@ -131,7 +120,7 @@ namespace EvolutionSandbox.NeuralNetwork
             }
 
             // Second so there is chance for it to get splited
-            if (Utils.Random.Chance(NewConnectionMutationChance))
+            if (Utils.Random.Chance(Config.NewConnectionMutationChance))
             {
                 int randomSourceLayerIdx = Utils.Random.Next(Layers.Count - 1); // except output bc there won't be next layer if output l got chousen
                 int randomTargetLayerIdx = Utils.Random.Next(randomSourceLayerIdx + 1, Layers.Count); // random layer from randomSourceLayerIdx to output layer
@@ -144,7 +133,7 @@ namespace EvolutionSandbox.NeuralNetwork
             }
 
             // Third split so there is a chance that new conns and node gets weights and bias mutated later
-            if (Utils.Random.Chance(SplitMutationChance))
+            if (Utils.Random.Chance(Config.SplitMutationChance))
             {
                 int randomConnection = Utils.Random.Next(Connections.Count);
 
@@ -194,9 +183,9 @@ namespace EvolutionSandbox.NeuralNetwork
             // Weights mutation
             for (int i = 0; i < Connections.Count; i++)
             {
-                if (Utils.Random.Chance(WeightMutationChance))
+                if (Utils.Random.Chance(Config.WeightMutationChance))
                 {
-                    Connections[i].Weight += Utils.Random.NextDouble(WeightMutationSizeMin, WeightMutationSizeMax);
+                    Connections[i].Weight += Utils.Random.NextDouble(Config.WeightMutationSizeMin, Config.WeightMutationSizeMax);
                 }
             }
 
@@ -205,9 +194,9 @@ namespace EvolutionSandbox.NeuralNetwork
             {
                 for (int i = 0; i < Layers[l].Length; i++)
                 {
-                    if (Utils.Random.Chance(BiasMutationChance))
+                    if (Utils.Random.Chance(Config.BiasMutationChance))
                     {
-                        Layers[l][i].Bias += Utils.Random.NextDouble(BiasMutationSizeMin, BiasMutationSizeMax);
+                        Layers[l][i].Bias += Utils.Random.NextDouble(Config.BiasMutationSizeMin, Config.BiasMutationSizeMax);
                     }
                 }
             }
@@ -257,17 +246,6 @@ namespace EvolutionSandbox.NeuralNetwork
         public NN Copy(bool mutate)
         {
             NN nn = new NN(0, 0, false);
-            nn.BiasMutationChance = BiasMutationChance;
-            nn.SplitMutationChance = SplitMutationChance;
-            nn.WeightMutationChance = WeightMutationChance;
-            nn.NewNodeMutationChance = NewNodeMutationChance;
-            nn.NewConnectionMutationChance = NewConnectionMutationChance;
-
-            nn.BiasMutationSizeMin = BiasMutationSizeMin;
-            nn.BiasMutationSizeMax = BiasMutationSizeMax;
-
-            nn.WeightMutationSizeMin = WeightMutationSizeMin;
-            nn.WeightMutationSizeMax = WeightMutationSizeMax;
 
             for (int l = 0; l < Layers.Count; l++)
             {
