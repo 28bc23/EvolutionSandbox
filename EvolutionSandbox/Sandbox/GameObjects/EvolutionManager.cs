@@ -97,6 +97,15 @@ namespace EvolutionSandbox.GameObjects
                     Medians.Add(MedianScoreLastGen);
                     AverageScores.Add(AverageScoreLastGen);
                     HighestScores.Add(HighestScoreLastGen);
+
+                    if(Configuration.Config.GraphRate != 0)
+                    {                    
+                        if (GenCount % Configuration.Config.GraphRate == 0)
+                        {
+                            SaveGraph();
+                        }
+                    }
+
                     GenCount++;
                     UpdateStats();
                 }

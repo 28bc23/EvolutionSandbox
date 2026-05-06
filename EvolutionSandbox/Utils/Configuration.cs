@@ -219,6 +219,21 @@ namespace EvolutionSandbox.Utils
                 }
             }
 
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Graph save interval in generations (0 = disable): ");
+                temp = Console.ReadLine();
+                if (!uint.TryParse(temp, out config.GraphRate))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
             // NN chances
             while (true)
             {
@@ -430,6 +445,7 @@ namespace EvolutionSandbox.Utils
 
         public uint FpsCap;
         public uint TPS;
+        public double MaxTicksPerFrame = 3;
 
         public uint NumAgents;
 
@@ -440,6 +456,8 @@ namespace EvolutionSandbox.Utils
         public float AgentMaxEnergy;
         public float AgentEnergyDecreaseRate;
         public float AgentWallCollisionEnergyPenalty;
+
+        public uint GraphRate;
 
         public float WeightMutationChance;
         public float BiasMutationChance;
