@@ -73,7 +73,7 @@ namespace EvolutionSandbox.NeuralNetwork
                 {
                     foreach (NNNode node in Layers[l + 1])
                     {
-                        node.Value = ReLU(node.Value);
+                        node.Value = Math.Tanh(node.Value);
                     }
                 }
             }
