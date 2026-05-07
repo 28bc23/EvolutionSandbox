@@ -77,7 +77,7 @@ namespace EvolutionSandbox.Utils
                 temp = Console.ReadLine();
                 if (!ulong.TryParse(temp, out Config.Seed))
                 {
-                    WaitForPress("Please enter an integer");
+                    WaitForPress(UintWarnMsg += " (64 bit)");
                 }
                 else
                 {
@@ -112,6 +112,20 @@ namespace EvolutionSandbox.Utils
                     break;
                 }
             }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter time scale for the {Config.EnvName} (X: {Config.GridSizeX},Y: {Config.GridSizeX}) (ex. 10.0): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.TimeScale))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
 
             // num agents
             while (true)
@@ -122,6 +136,21 @@ namespace EvolutionSandbox.Utils
                 if (!uint.TryParse(temp, out Config.NumAgents))
                 {
                     WaitForPress(UintWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"How long should one generation take (seconds) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.GenerationTime))
+                {
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -266,7 +295,7 @@ namespace EvolutionSandbox.Utils
                 temp = Console.ReadLine();
                 if (!uint.TryParse(temp, out Config.GraphRate))
                 {
-                    WaitForPress(FloatWarnMsg);
+                    WaitForPress(UintWarnMsg);
                 }
                 else
                 {
@@ -447,6 +476,13 @@ namespace EvolutionSandbox.Utils
                 if (configN != null)
                 {
                     Config = configN;
+
+                    if(Config.TimeScale < 1)
+                    {
+                        Config.TimeScale = 1.0f;
+                        SaveConfig();
+                    }
+
                     Console.WriteLine($"Loaded config for {Config.EnvName}");
                     return true;
                 }
@@ -498,10 +534,12 @@ namespace EvolutionSandbox.Utils
         public ulong Seed = 24150;
 
         public uint FpsCap = 30;
-        public uint TPS = 30;
+        public uint TPS = 1;
+        public float TimeScale = 10;
         public double MaxTicksPerFrame = 3;
 
         public uint NumAgents = 50;
+        public float GenerationTime = 120.0f;
 
         public uint MaxFoodInEnv = 100;
         public float FoodSpawnRate = 25;
@@ -525,6 +563,6 @@ namespace EvolutionSandbox.Utils
         public float WeightMutationSizeMin = -0.2f;
         public float WeightMutationSizeMax = 0.2f;
         public float BiasMutationSizeMin = -0.1f;
-        public float BiasMutationSizeMax = 0.1;
+        public float BiasMutationSizeMax = 0.1f;
     }
 }

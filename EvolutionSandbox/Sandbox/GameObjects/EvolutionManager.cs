@@ -13,8 +13,6 @@ namespace EvolutionSandbox.GameObjects
         List<Agent> HigherHalf = new List<Agent>();
         FoodManager FoodMan;
 
-        int AliveAgentsCountLast = -1;
-
         int GenCount = 0;
         float MedianScoreLastGen = 0;
         float AverageScoreLastGen = 0;
@@ -29,6 +27,8 @@ namespace EvolutionSandbox.GameObjects
 
         ulong PRGStateCheckpoint;
 
+        double CurrentGenTime;
+
 
         public EvolutionManager(Guid id) : base(new Vector2Int(0, 0), id, 'M', GameObjectType.Manager)
         {
@@ -37,13 +37,11 @@ namespace EvolutionSandbox.GameObjects
 
         public override void Update()
         {
-            if (AliveAgentsCountLast != AliveAgents.Count)
-            {
-                UpdateStats();
-            }
+            CurrentGenTime -= Program.FixedDeltaTime;
 
+            UpdateStats();
 
-            if (AliveAgents.Count == 0) // Generation finished
+            if (AliveAgents.Count == 0 || CurrentGenTime <= 0) // Generation finished
             {
                 /* Evaluation */
 
@@ -108,6 +106,7 @@ namespace EvolutionSandbox.GameObjects
 
                     GenCount++;
                     UpdateStats();
+                    CurrentGenTime = Configuration.Config.GenerationTime;
                 }
             }
         }
@@ -136,6 +135,7 @@ namespace EvolutionSandbox.GameObjects
             FoodManager foodManager = new FoodManager(Guid.NewGuid());
             Program.SpawnGameObject(foodManager);
             FoodMan = foodManager;
+            CurrentGenTime = Configuration.Config.GenerationTime;
         }
 
         void StartFormCheckpoint() // Starts evolution basaed on checkpoint
@@ -210,6 +210,7 @@ namespace EvolutionSandbox.GameObjects
         {
             Grid.SetUnderGridText($"""
             Generation: {GenCount}
+            Remaining time: {CurrentGenTime}
             Alive agents: {AliveAgents.Count}
             Median of last gen scores: {MedianScoreLastGen}
             Average of last gen scores: {AverageScoreLastGen}
