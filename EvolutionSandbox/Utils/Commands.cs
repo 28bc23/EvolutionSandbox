@@ -23,7 +23,6 @@ namespace EvolutionSandbox.Utils
                 {
                     if (keyInfo.Key == ConsoleKey.Enter)
                     {
-                        Console.WriteLine(CurrCommandBuilder.ToString());
                         ReadingCommand = false;
 
                         string[] command = CurrCommandBuilder.ToString().Split(" ");
