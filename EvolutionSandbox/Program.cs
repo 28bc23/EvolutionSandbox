@@ -59,6 +59,7 @@ namespace EvolutionSandbox
                                                                                 By clamping the frameTime we tell the program that it taked for ex. 0.1 sec. insted of 2 sec. of real time.
                                                                                 This way we artificialy delay game time from realtime and make it run in "slow motion"(bc. in game will pass 0.1 in 2 sec. of real time)*/
 
+                frameTime *= Configuration.Config.TimeScale;
 
                 accumulator += frameTime;
 

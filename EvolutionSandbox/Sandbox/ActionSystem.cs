@@ -1,4 +1,5 @@
 ﻿using EvolutionSandbox.GameObjects;
+using EvolutionSandbox.Utils;
 
 namespace EvolutionSandbox
 {
@@ -17,7 +18,17 @@ namespace EvolutionSandbox
             ActionType = movementType;
             CurrentPos = startingPos;
             Initiator = initiator;
-            EnergyCost = 5;
+
+            if (movementType == MovementType.NoMove)
+                EnergyCost = Configuration.Config.AgentNoActionEnergyCost;
+            else if (movementType == MovementType.JumpUp || movementType == MovementType.JumpDown || movementType == MovementType.JumpLeft || movementType == MovementType.JumpRight)
+            {
+                EnergyCost = Configuration.Config.AgentJumpActionEnergyCost;
+            }
+            else
+            {
+                EnergyCost = Configuration.Config.AgentStepActionEnergyCost;
+            }
         }
     }
 

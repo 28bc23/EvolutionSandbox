@@ -77,7 +77,7 @@ namespace EvolutionSandbox.Utils
                 temp = Console.ReadLine();
                 if (!ulong.TryParse(temp, out Config.Seed))
                 {
-                    WaitForPress("Please enter an integer");
+                    WaitForPress(UintWarnMsg += " (64 bit)");
                 }
                 else
                 {
@@ -89,7 +89,7 @@ namespace EvolutionSandbox.Utils
                 Console.Clear();
                 Console.Write($"Enter fps cap for the {Config.EnvName} (X: {Config.GridSizeX},Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out Config.FpsCap))
+                if (!int.TryParse(temp, out Config.FpsCap))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -112,6 +112,20 @@ namespace EvolutionSandbox.Utils
                     break;
                 }
             }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter time scale for the {Config.EnvName} (X: {Config.GridSizeX},Y: {Config.GridSizeX}) (ex. 10.0): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.TimeScale))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
 
             // num agents
             while (true)
@@ -119,9 +133,24 @@ namespace EvolutionSandbox.Utils
                 Console.Clear();
                 Console.Write($"With how many agents do you want to train in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out Config.NumAgents))
+                if (!int.TryParse(temp, out Config.NumAgents))
                 {
                     WaitForPress(UintWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"How long should one generation take (seconds) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.GenerationTime))
+                {
+                    WaitForPress(FloatWarnMsg);
                 }
                 else
                 {
@@ -135,7 +164,7 @@ namespace EvolutionSandbox.Utils
                 Console.Clear();
                 Console.Write($"Enter Maximum of food that can be spawned in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out Config.MaxFoodInEnv))
+                if (!int.TryParse(temp, out Config.MaxFoodInEnv))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -177,7 +206,7 @@ namespace EvolutionSandbox.Utils
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter energy decrease rate of Agent (-energy/second) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
+                Console.Write($"Enter energy decrease rate of Agent (energy/second) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}) (ex. 1): ");
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out Config.AgentEnergyDecreaseRate))
                 {
@@ -216,13 +245,113 @@ namespace EvolutionSandbox.Utils
                     break;
                 }
             }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter energy cost for step movement action of agent in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}) (ex. 5): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.AgentStepActionEnergyCost))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter energy cost for jump movement action of agent in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}) (ex. 10): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.AgentJumpActionEnergyCost))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter energy cost for no-move movement action of agent in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}) (ex. 0): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.AgentNoActionEnergyCost))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
 
             while (true)
             {
                 Console.Clear();
                 Console.Write($"Graph save interval in generations (0 = disable): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out Config.GraphRate))
+                if (!int.TryParse(temp, out Config.GraphRate))
+                {
+                    WaitForPress(UintWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            // Score Coefs
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter coefficient for FoodScore (ex. 0.6): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.FoodScoreCoef))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter coefficient for energy bonus (ex. 0.2): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.EnergyBonusCoef))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter coefficient for close to food bonus (ex. 0.1): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.CloseToFoodBonusCoef))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter coefficient for center bonus (ex. 0.1): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.CenterBonusCoef))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -405,6 +534,13 @@ namespace EvolutionSandbox.Utils
                 if (configN != null)
                 {
                     Config = configN;
+
+                    if(Config.MaxTicksPerFrame < 1)
+                    {
+                        Config.MaxTicksPerFrame = 1;
+                        SaveConfig();
+                    }
+
                     Console.WriteLine($"Loaded config for {Config.EnvName}");
                     return true;
                 }
@@ -450,36 +586,46 @@ namespace EvolutionSandbox.Utils
 
     public class EnvironmentConfig
     {
-        public string EnvName;
-        public uint GridSizeX;
-        public uint GridSizeY;
-        public ulong Seed;
+        public string EnvName = "no-name";
+        public uint GridSizeX = 30;
+        public uint GridSizeY = 30;
+        public ulong Seed = 24150;
 
-        public uint FpsCap;
-        public uint TPS;
+        public int FpsCap = 30;
+        public uint TPS = 1;
+        public float TimeScale = 10;
         public double MaxTicksPerFrame = 3;
 
-        public uint NumAgents;
+        public int NumAgents = 50;
+        public float GenerationTime = 120.0f;
 
-        public uint MaxFoodInEnv;
-        public float FoodSpawnRate;
-        public float FoodEnergy;
+        public int MaxFoodInEnv = 100;
+        public float FoodSpawnRate = 25;
+        public float FoodEnergy = 50;
 
-        public float AgentMaxEnergy;
-        public float AgentEnergyDecreaseRate;
-        public float AgentWallCollisionEnergyPenalty;
+        public float AgentMaxEnergy = 500;
+        public float AgentEnergyDecreaseRate = 1;
+        public float AgentWallCollisionEnergyPenalty = 5;
+        public float AgentStepActionEnergyCost = 5;
+        public float AgentJumpActionEnergyCost = 10;
+        public float AgentNoActionEnergyCost = 0;
 
-        public uint GraphRate;
+        public int GraphRate = 100;
 
-        public float WeightMutationChance;
-        public float BiasMutationChance;
-        public float SplitMutationChance;
-        public float NewConnectionMutationChance;
-        public float NewNodeMutationChance;
+        public float FoodScoreCoef = .6f;
+        public float EnergyBonusCoef = .2f;
+        public float CloseToFoodBonusCoef = .1f;
+        public float CenterBonusCoef = .1f;
 
-        public float WeightMutationSizeMin;
-        public float WeightMutationSizeMax;
-        public float BiasMutationSizeMin;
-        public float BiasMutationSizeMax;
+        public float WeightMutationChance = 0.1f;
+        public float BiasMutationChance = 0.05f;
+        public float SplitMutationChance = 0.01f;
+        public float NewConnectionMutationChance = 0.02f;
+        public float NewNodeMutationChance = 0.01f;
+
+        public float WeightMutationSizeMin = -0.2f;
+        public float WeightMutationSizeMax = 0.2f;
+        public float BiasMutationSizeMin = -0.1f;
+        public float BiasMutationSizeMax = 0.1f;
     }
 }
