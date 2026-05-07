@@ -78,17 +78,29 @@ namespace EvolutionSandbox.Utils
                             case ":agent-wall-penalty":
                                 if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float wallPenalty)) Config.AgentWallCollisionEnergyPenalty = wallPenalty;
                                 break;
-                            case ":agent-step-Cost":
+                            case ":agent-step-cost":
                                 if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float stepCost)) Config.AgentStepActionEnergyCost = stepCost;
                                 break;
-                            case ":agent-jump-Cost":
+                            case ":agent-jump-cost":
                                 if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float jumpCost)) Config.AgentJumpActionEnergyCost = jumpCost;
                                 break;
-                            case ":agent-noact-Cost":
+                            case ":agent-noact-cost":
                                 if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float noActCost)) Config.AgentNoActionEnergyCost = noActCost;
                                 break;
                             case ":graph-rate":
                                 if (command.Length > 1 && int.TryParse(command[1], out int graphRate)) Config.GraphRate = graphRate;
+                                break;
+                            case ":food-score-coef":
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float foodScoreCoef)) Config.FoodScoreCoef = foodScoreCoef;
+                                break;
+                            case ":energy-bonus-coef":
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float energyBonusCoef)) Config.EnergyBonusCoef = energyBonusCoef;
+                                break;
+                            case ":ctf-bonus-cost":
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float closeBonusCoef)) Config.CloseToFoodBonusCoef = closeBonusCoef;
+                                break;
+                            case ":center-bonus-cost":
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float centerBonusCoef)) Config.CenterBonusCoef = centerBonusCoef;
                                 break;
                             case ":weight-mutation-chance":
                                 if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float wMutChance)) Config.WeightMutationChance = Math.Clamp(wMutChance, 0f, 1f);
