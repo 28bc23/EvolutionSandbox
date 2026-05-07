@@ -89,7 +89,7 @@ namespace EvolutionSandbox.Utils
                 Console.Clear();
                 Console.Write($"Enter fps cap for the {Config.EnvName} (X: {Config.GridSizeX},Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out Config.FpsCap))
+                if (!int.TryParse(temp, out Config.FpsCap))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -133,7 +133,7 @@ namespace EvolutionSandbox.Utils
                 Console.Clear();
                 Console.Write($"With how many agents do you want to train in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out Config.NumAgents))
+                if (!int.TryParse(temp, out Config.NumAgents))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -164,7 +164,7 @@ namespace EvolutionSandbox.Utils
                 Console.Clear();
                 Console.Write($"Enter Maximum of food that can be spawned in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out Config.MaxFoodInEnv))
+                if (!int.TryParse(temp, out Config.MaxFoodInEnv))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -293,7 +293,7 @@ namespace EvolutionSandbox.Utils
                 Console.Clear();
                 Console.Write($"Graph save interval in generations (0 = disable): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out Config.GraphRate))
+                if (!int.TryParse(temp, out Config.GraphRate))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -477,9 +477,9 @@ namespace EvolutionSandbox.Utils
                 {
                     Config = configN;
 
-                    if(Config.TimeScale < 1)
+                    if(Config.MaxTicksPerFrame < 1)
                     {
-                        Config.TimeScale = 1.0f;
+                        Config.MaxTicksPerFrame = 1;
                         SaveConfig();
                     }
 
@@ -533,15 +533,15 @@ namespace EvolutionSandbox.Utils
         public uint GridSizeY = 30;
         public ulong Seed = 24150;
 
-        public uint FpsCap = 30;
+        public int FpsCap = 30;
         public uint TPS = 1;
         public float TimeScale = 10;
         public double MaxTicksPerFrame = 3;
 
-        public uint NumAgents = 50;
+        public int NumAgents = 50;
         public float GenerationTime = 120.0f;
 
-        public uint MaxFoodInEnv = 100;
+        public int MaxFoodInEnv = 100;
         public float FoodSpawnRate = 25;
         public float FoodEnergy = 50;
 
@@ -552,7 +552,7 @@ namespace EvolutionSandbox.Utils
         public float AgentJumpActionEnergyCost = 10;
         public float AgentNoActionEnergyCost = 0;
 
-        public uint GraphRate = 100;
+        public int GraphRate = 100;
 
         public float WeightMutationChance = 0.1f;
         public float BiasMutationChance = 0.05f;

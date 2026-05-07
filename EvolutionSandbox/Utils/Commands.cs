@@ -43,37 +43,52 @@ namespace EvolutionSandbox.Utils
                                 if (command.Length > 1 && ulong.TryParse(command[1], out ulong seed)) { Config.Seed = seed; Random.Init(seed, true); }
                                 break;
                             case ":fps-cap":
-                                if (command.Length > 1 && uint.TryParse(command[1], out uint fps)) { Config.FpsCap = fps; Program.RecalculateTargetFrameTime(); }
+                                if (command.Length > 1 && int.TryParse(command[1], out int fps)) { Config.FpsCap = fps; Program.RecalculateTargetFrameTime(); }
                                 break;
-                            case ":tps":
+                            case ":tps": // Not recomended changing
                                 if (command.Length > 1 && uint.TryParse(command[1], out uint tps)) { Config.TPS = tps; Program.RecalculateFixedDeltaTime(); }
+                                break;
+                            case ":time-scale":
+                                if (command.Length > 1 && float.TryParse(command[1], out float timeScale)) { timeScale = (timeScale < 1) ? 1 : timeScale;  Config.TimeScale = timeScale; }
                                 break;
                             case ":max-ticks-per-frame":
                                 if (command.Length > 1 && double.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double maxTicks)) Config.MaxTicksPerFrame = Math.Max(1.0, maxTicks);
                                 break;
                             case ":num-agents": // takes effect on spawn of new gen
-                                if (command.Length > 1 && uint.TryParse(command[1], out uint agents)) Config.NumAgents = agents;
+                                if (command.Length > 1 && int.TryParse(command[1], out int agents)) Config.NumAgents = agents;
+                                break;
+                            case ":gen-time": // not recomended to change
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float timeLimit)) Config.GenerationTime = timeLimit;
                                 break;
                             case ":max-food-in-env":
-                                if (command.Length > 1 && uint.TryParse(command[1], out uint maxFood)) Config.MaxFoodInEnv = maxFood;
+                                if (command.Length > 1 && int.TryParse(command[1], out int maxFood)) Config.MaxFoodInEnv = maxFood;
                                 break;
                             case ":food-spawn-rate":
-                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float foodRate) && foodRate >= 0f) Config.FoodSpawnRate = foodRate;
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float foodRate)) Config.FoodSpawnRate = foodRate;
                                 break;
                             case ":food-energy": // takes effect on new food
-                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float foodEnergy) && foodEnergy >= 0f) Config.FoodEnergy = foodEnergy;
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float foodEnergy)) Config.FoodEnergy = foodEnergy;
                                 break;
                             case ":agent-max-energy": // takes effect on new gen
-                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float agentMaxE) && agentMaxE > 0f) Config.AgentMaxEnergy = agentMaxE;
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float agentMaxE)) Config.AgentMaxEnergy = agentMaxE;
                                 break;
                             case ":agent-energy-drate":
-                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float decreaseRate) && decreaseRate >= 0f) Config.AgentEnergyDecreaseRate = decreaseRate;
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float decreaseRate)) Config.AgentEnergyDecreaseRate = decreaseRate;
                                 break;
                             case ":agent-wall-penalty":
-                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float wallPenalty) && wallPenalty >= 0f) Config.AgentWallCollisionEnergyPenalty = wallPenalty;
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float wallPenalty)) Config.AgentWallCollisionEnergyPenalty = wallPenalty;
+                                break;
+                            case ":agent-step-Cost":
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float stepCost)) Config.AgentStepActionEnergyCost = stepCost;
+                                break;
+                            case ":agent-jump-Cost":
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float jumpCost)) Config.AgentJumpActionEnergyCost = jumpCost;
+                                break;
+                            case ":agent-noact-Cost":
+                                if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float noActCost)) Config.AgentNoActionEnergyCost = noActCost;
                                 break;
                             case ":graph-rate":
-                                if (command.Length > 1 && uint.TryParse(command[1], out uint graphRate)) Config.GraphRate = graphRate;
+                                if (command.Length > 1 && int.TryParse(command[1], out int graphRate)) Config.GraphRate = graphRate;
                                 break;
                             case ":weight-mutation-chance":
                                 if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float wMutChance)) Config.WeightMutationChance = Math.Clamp(wMutChance, 0f, 1f);
