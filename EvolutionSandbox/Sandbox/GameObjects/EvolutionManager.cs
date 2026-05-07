@@ -28,7 +28,7 @@ namespace EvolutionSandbox.GameObjects
         string CheckpointsDir = $"./{Configuration.Config.EnvName}/Checkpoints/";
 
         ulong PRGStateCheckpoint;
-        
+
 
         public EvolutionManager(Guid id) : base(new Vector2Int(0, 0), id, 'M', GameObjectType.Manager)
         {
@@ -98,8 +98,8 @@ namespace EvolutionSandbox.GameObjects
                     AverageScores.Add(AverageScoreLastGen);
                     HighestScores.Add(HighestScoreLastGen);
 
-                    if(Configuration.Config.GraphRate != 0)
-                    {                    
+                    if (Configuration.Config.GraphRate != 0)
+                    {
                         if (GenCount % Configuration.Config.GraphRate == 0)
                         {
                             SaveGraph();
@@ -209,12 +209,12 @@ namespace EvolutionSandbox.GameObjects
         void UpdateStats()
         {
             Grid.SetUnderGridText($"""
-                Generation: {GenCount}          
-                Alive agents: {AliveAgents.Count}          
-                Median of last gen scores: {MedianScoreLastGen}          
-                Average of last gen scores: {AverageScoreLastGen}          
-                Highest score of last gen: {HighestScoreLastGen}          
-                """);
+            Generation: {GenCount}
+            Alive agents: {AliveAgents.Count}
+            Median of last gen scores: {MedianScoreLastGen}
+            Average of last gen scores: {AverageScoreLastGen}
+            Highest score of last gen: {HighestScoreLastGen}
+            """);
         }
     }
 }

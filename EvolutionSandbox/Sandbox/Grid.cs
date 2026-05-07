@@ -10,8 +10,11 @@ namespace EvolutionSandbox
         public static Vector2Int GridSize { get; private set; }
         static List<GameObject>[,] Cells = new List<GameObject>[0, 0];
         static StringBuilder S = new StringBuilder();
+        static StringBuilder UnderGridTextBuilder = new StringBuilder();
         static string LastGrid = "";
         static string UnderGridText = "";
+        static string LastUnderGridText = "";
+        static int sdasds = 0;
 
         public static void Init(Vector2Int gridSize)
         {
@@ -55,16 +58,42 @@ namespace EvolutionSandbox
                 }
                 S.Append('\n');
             }
-
-            S.AppendLine(UnderGridText);
+            UnderGridTextBuilder.Clear();
+            UnderGridTextBuilder.AppendLine(UnderGridText);
             string command = Utils.Commands.GetCurrCommand;
             if (command != "")
-                S.AppendLine(command);
+                UnderGridTextBuilder.Append(command);
+
+            LastUnderGridText = LastUnderGridText.Replace("\u00A0", "");
+
+            if (LastUnderGridText.Length > UnderGridTextBuilder.Length)
+            {
+                string[] lastSplit = LastUnderGridText.Split('\n');
+                List<string> split = UnderGridTextBuilder.ToString().Split('\n').ToList();
+                for (int i = 0; i < lastSplit.Length; i++)
+                {
+                    if (i >= split.Count)
+                    {
+                        split.Add(new string('\u00A0', lastSplit[i].Length));
+                    }
+                    else if (lastSplit[i].Length > split[i].Length)
+                    {
+                        int diff = lastSplit[i].Length - split[i].Length;
+                        split[i] += new string('\u00A0', diff);
+                    }
+                }
+                UnderGridTextBuilder.Clear();
+                UnderGridTextBuilder.Append(string.Join("\n", split));
+            }
+
+            LastUnderGridText = UnderGridTextBuilder.ToString();
+            S.Append(LastUnderGridText);
 
             string currGrid = S.ToString();
             if (currGrid != LastGrid) //Rewrites grid if there was a change
             {
                 Console.SetCursorPosition(0, 0);
+
                 Console.Write(S);
 
                 LastGrid = currGrid;
