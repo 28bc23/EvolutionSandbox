@@ -1,6 +1,7 @@
 ﻿using EvolutionSandbox;
 using EvolutionSandbox.NeuralNetwork;
 using EvolutionSandbox.Utils;
+using static EvolutionSandbox.Utils.Configuration;
 
 namespace EvolutionSandbox.GameObjects
 {
@@ -11,9 +12,9 @@ namespace EvolutionSandbox.GameObjects
 
         public int FoodEaten { get; private set; }
 
-        double MaxEnergy = Configuration.Config.AgentMaxEnergy;
+        double MaxEnergy = Config.AgentMaxEnergy;
 
-        public Agent(Vector2Int spawnPos, Guid id, EvolutionManager manager) : base(spawnPos, id, '*', GameObjectType.Agent, energy: Configuration.Config.AgentMaxEnergy)
+        public Agent(Vector2Int spawnPos, Guid id, EvolutionManager manager) : base(spawnPos, id, '*', GameObjectType.Agent, energy: Config.AgentMaxEnergy)
         {
             nn = new NN(7, 13);
             Manager = manager;
@@ -22,7 +23,7 @@ namespace EvolutionSandbox.GameObjects
         public override void Update()
         {
             //Decrease energy
-            Energy -= Configuration.Config.AgentEnergyDecreaseRate * Program.FixedDeltaTime;
+            Energy -= Config.AgentEnergyDecreaseRate * Program.FixedDeltaTime;
             if (Energy <= 0)
             {
                 Program.DestroyGameObject(this);
@@ -48,7 +49,7 @@ namespace EvolutionSandbox.GameObjects
         {
             if(collision == CollisionType.CollisionWall)
             {
-                Energy -= Configuration.Config.AgentWallCollisionEnergyPenalty;
+                Energy -= Config.AgentWallCollisionEnergyPenalty;
             }
 
             if (collision == CollisionType.CollisionGameObject)
@@ -70,13 +71,25 @@ namespace EvolutionSandbox.GameObjects
 
         public float GetScore()
         {
-            return FoodEaten;
+            float energyBonus = (float)Energy / (float)MaxEnergy;
+
+            Vector2Int closestFoodPos = Manager.GetPosOfClosestFood(Pos);
+            float x = MathF.Pow(Pos.X - closestFoodPos.X,2);
+            float y = MathF.Pow(Pos.Y - closestFoodPos.Y, 2);
+            float diagonal = MathF.Sqrt(MathF.Pow(Grid.GridSize.X, 2) + MathF.Pow(Grid.GridSize.Y, 2));
+            float closeToFoodBonus = (diagonal - MathF.Sqrt(x + y))/diagonal;
+
+            x = Pos.X / (float)Grid.GridSize.X;
+            y = Pos.Y / (float)Grid.GridSize.Y;
+            float centerBonus = 1 - MathF.Abs(x - 0.5f) - MathF.Abs(y - 0.5f); // next to wall == 0; in center = 1;
+
+            return Config.FoodScoreCoef * FoodEaten + Config.EnergyBonusCoef * energyBonus + Config.CloseToFoodBonusCoef * closeToFoodBonus + Config.CenterBonusCoef * centerBonus;
         }
 
         public Agent DeepCopy(bool mutate = true)
         {
-            Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
-                    Utils.Random.Next((int)Configuration.Config.GridSizeY)),
+            Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Config.GridSizeX),
+                    Utils.Random.Next((int)Config.GridSizeY)),
                     Guid.NewGuid(), Manager);
             agent.nn = nn.Copy(mutate);
             return agent;

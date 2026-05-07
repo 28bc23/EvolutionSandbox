@@ -303,6 +303,64 @@ namespace EvolutionSandbox.Utils
                 }
             }
 
+            // Score Coefs
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter coefficient for FoodScore (ex. 0.6): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.FoodScoreCoef))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter coefficient for energy bonus (ex. 0.2): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.EnergyBonusCoef))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter coefficient for close to food bonus (ex. 0.1): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.CloseToFoodBonusCoef))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter coefficient for center bonus (ex. 0.1): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.CenterBonusCoef))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
             // NN chances
             while (true)
             {
@@ -553,6 +611,11 @@ namespace EvolutionSandbox.Utils
         public float AgentNoActionEnergyCost = 0;
 
         public int GraphRate = 100;
+
+        public float FoodScoreCoef = .6f;
+        public float EnergyBonusCoef = .2f;
+        public float CloseToFoodBonusCoef = .1f;
+        public float CenterBonusCoef = .1f;
 
         public float WeightMutationChance = 0.1f;
         public float BiasMutationChance = 0.05f;
