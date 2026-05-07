@@ -1,4 +1,6 @@
-﻿namespace EvolutionSandbox
+﻿using EvolutionSandbox.GameObjects;
+
+namespace EvolutionSandbox
 {
     internal abstract class Action
     {

@@ -1,4 +1,6 @@
-﻿namespace EvolutionSandbox
+﻿using EvolutionSandbox;
+
+namespace EvolutionSandbox.GameObjects
 {
     internal abstract class GameObject
     {
@@ -45,6 +47,11 @@
         public virtual void OnCollisionEnter(CollisionType collision, GameObject collidedGameObject)
         {
             return;
+        }
+
+        public virtual void OnDestroy()
+        {
+
         }
 
         public Queue<Action> GetCopyOfActions()

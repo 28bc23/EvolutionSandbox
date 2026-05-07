@@ -1,3 +1,7 @@
+using EvolutionSandbox.GameObjects;
+using System.Globalization;
+using System.Text;
+
 namespace EvolutionSandbox
 {
     internal static class Grid
@@ -5,12 +9,12 @@ namespace EvolutionSandbox
         static bool bInitialized = false;
         public static Vector2Int GridSize { get; private set; }
         static List<GameObject>[,] Cells = new List<GameObject>[0, 0];
-
+        static StringBuilder S = new StringBuilder();
         static string LastGrid = "";
+        static string UnderGridText = "";
 
-        static bool DrawIndicator = false;
-
-        public static void Init(Vector2Int gridSize){
+        public static void Init(Vector2Int gridSize)
+        {
             Console.Clear();
             GridSize = gridSize;
             Cells = new List<GameObject>[GridSize.Y, GridSize.X];
@@ -19,47 +23,57 @@ namespace EvolutionSandbox
             DrawGrid();
         }
 
-        public static void ClearGrid(){
-            if(!bInitialized)
+        public static void ClearGrid()
+        {
+            if (!bInitialized)
                 return;
 
-            for(int i = 0; i < GridSize.Y; i++){
-                for (int j = 0; j < GridSize.X; j++){
-                    Cells[i,j] = new List<GameObject>();
+            for (int i = 0; i < GridSize.Y; i++)
+            {
+                for (int j = 0; j < GridSize.X; j++)
+                {
+                    Cells[i, j] = new List<GameObject>();
                 }
             }
         }
 
-        public static void DrawGrid(){
-            if(!bInitialized)
+        public static void DrawGrid()
+        {
+            if (!bInitialized)
                 return;
 
-            string grid = "";
+            S.Clear();
 
-            for(int i = 0; i < GridSize.Y; i++){
-                for (int j = 0; j < GridSize.X; j++){
+            for (int i = 0; i < GridSize.Y; i++)
+            {
+                for (int j = 0; j < GridSize.X; j++)
+                {
                     if (Cells[i, j].Count == 0)
-                        grid += "[ ]";
+                        S.Append("[ ]");
                     else
-                        grid += $"[{Cells[i, j][0].Character}]";
+                        S.AppendFormat("[{0}]", Cells[i, j][0].Character);
                 }
-                grid += '\n';
+                S.Append('\n');
             }
 
-            if (!grid.Equals(LastGrid)) //Rewrites grid if there was a change
+            S.AppendLine(UnderGridText);
+            string command = Utils.Commands.GetCurrCommand;
+            if (command != "")
+                S.AppendLine(command);
+
+            string currGrid = S.ToString();
+            if (currGrid != LastGrid) //Rewrites grid if there was a change
             {
                 Console.SetCursorPosition(0, 0);
-                Console.Write(grid);
+                Console.Write(S);
 
-                if (DrawIndicator)
-                {
-                    Console.WriteLine("0");
-                    DrawIndicator = false;
-                }else
-                    DrawIndicator = true;
-
-                LastGrid = grid;
+                LastGrid = currGrid;
             }
+        }
+
+        public static void SetUnderGridText(string text)
+        {
+            UnderGridText = text;
         }
 
         public static bool SpawnGameObject(GameObject gameObject, bool doNotSpawnWhenColliding = true, bool ignoreCollisions = false)
@@ -69,13 +83,13 @@ namespace EvolutionSandbox
             Vector2Int pos = gameObject.Pos;
             if (pos.Y < 0 || pos.Y >= GridSize.Y || pos.X < 0 || pos.X >= GridSize.X)
                 return false;
-            if(!doNotSpawnWhenColliding)
+            if (!doNotSpawnWhenColliding)
             {
                 if (!ignoreCollisions)
                 {
                     if (Cells[pos.Y, pos.X].Count > 0)
                     {
-                        foreach (GameObject go in Cells[pos.Y, pos.X])
+                        foreach (GameObject go in Cells[pos.Y, pos.X].ToArray())
                         {
                             go.OnCollisionEnter(CollisionType.CollisionGameObject, gameObject); // Notify already spawned go
                             gameObject.OnCollisionEnter(CollisionType.CollisionGameObject, go); // Notify new go
@@ -125,33 +139,37 @@ namespace EvolutionSandbox
                     {
                         case MovementType.Up:
                             newY = pos.Y + 1;
-                            if (newY >= GridSize.Y){
+                            if (newY >= GridSize.Y)
+                            {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newY = GridSize.Y - 1;
                             }
                             break;
 
                         case MovementType.Down:
                             newY = pos.Y - 1;
-                            if (newY < 0){
+                            if (newY < 0)
+                            {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newY = 0;
                             }
                             break;
 
                         case MovementType.Right:
                             newX = pos.X + 1;
-                            if (newX >= GridSize.X){
+                            if (newX >= GridSize.X)
+                            {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newX = GridSize.X - 1;
                             }
                             break;
 
                         case MovementType.Left:
                             newX = pos.X - 1;
-                            if (newX < 0){
+                            if (newX < 0)
+                            {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newX = 0;
                             }
                             break;
 
@@ -178,7 +196,7 @@ namespace EvolutionSandbox
                             if (newX >= GridSize.X)
                             {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                newX = GridSize.X-1;
+                                newX = GridSize.X - 1;
                             }
                             break;
 
@@ -194,36 +212,44 @@ namespace EvolutionSandbox
                         case MovementType.UpRight:
                             newY = pos.Y + 1;
                             newX = pos.X + 1;
-                            if (newX >= GridSize.X || newY >= GridSize.Y){
+                            if (newX >= GridSize.X || newY >= GridSize.Y)
+                            {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newY = GridSize.Y - 1;
+                                newX = GridSize.X - 1;
                             }
                             break;
 
                         case MovementType.DownRight:
                             newY = pos.Y - 1;
                             newX = pos.X + 1;
-                            if (newX >= GridSize.X || newY < 0){
+                            if (newX >= GridSize.X || newY < 0)
+                            {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newX = GridSize.X - 1;
+                                newY = 0;
                             }
                             break;
 
                         case MovementType.DownLeft:
                             newY = pos.Y - 1;
                             newX = pos.X - 1;
-                            if (newX < 0 || newY < 0){
+                            if (newX < 0 || newY < 0)
+                            {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newX = 0;
+                                newY = 0;
                             }
                             break;
 
                         case MovementType.UpLeft:
                             newY = pos.Y + 1;
                             newX = pos.X - 1;
-                            if (newX < 0 || newY >= GridSize.Y){
+                            if (newX < 0 || newY >= GridSize.Y)
+                            {
                                 moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionWall);
-                                continue;
+                                newX = 0;
+                                newY = GridSize.Y - 1;
                             }
                             break;
                         case MovementType.NoMove:
@@ -237,7 +263,7 @@ namespace EvolutionSandbox
 
                     if (Cells[newY, newX].Count > 0)
                     {
-                        foreach(GameObject go in Cells[newY, newX].ToArray())
+                        foreach (GameObject go in Cells[newY, newX].ToArray())
                         {
                             moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionGameObject, go);
                             go.OnCollisionEnter(CollisionType.CollisionGameObject, moveAction.Initiator);
@@ -245,7 +271,7 @@ namespace EvolutionSandbox
                     }
                     Cells[newY, newX].Add(moveAction.Initiator);
 
-                    
+
 
                     if (goMoveActions[key].Count == 0)
                         goMoveActions.Remove(key);

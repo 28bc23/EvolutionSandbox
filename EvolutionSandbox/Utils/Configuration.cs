@@ -1,7 +1,5 @@
-using System;
-using System.IO;
 using System.Text.Json;
-namespace EvolutionSandbox
+namespace EvolutionSandbox.Utils
 {
     internal static class Configuration
     {
@@ -11,7 +9,7 @@ namespace EvolutionSandbox
         static string FloatWarnMsg = "Please enter a float";
         public static void GenerateConfigForEnv()
         {
-            EnvironmentConfig config = new EnvironmentConfig();
+            Config = new EnvironmentConfig();
 
             #region Get User Input
             string? temp;
@@ -26,8 +24,8 @@ namespace EvolutionSandbox
                 {
                     if (!Directory.Exists($"./{temp}"))
                     {
-                        config.EnvName = temp;
-                        Directory.CreateDirectory($"./{config.EnvName}");
+                        Config.EnvName = temp;
+                        Directory.CreateDirectory($"./{Config.EnvName}");
                         break;
                     }
                     else
@@ -45,9 +43,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter X size of grid for the {config.EnvName}: ");
+                Console.Write($"Enter X size of grid for the {Config.EnvName}: ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out config.GridSizeX))
+                if (!uint.TryParse(temp, out Config.GridSizeX))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -59,9 +57,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter Y size of grid for the {config.EnvName} (X: {config.GridSizeX},Y: ?): ");
+                Console.Write($"Enter Y size of grid for the {Config.EnvName} (X: {Config.GridSizeX},Y: ?): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out config.GridSizeY))
+                if (!uint.TryParse(temp, out Config.GridSizeY))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -75,9 +73,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter seed for the {config.EnvName} (X: {config.GridSizeX},Y: ?): ");
+                Console.Write($"Enter seed for the {Config.EnvName} (X: {Config.GridSizeX},Y: ?): ");
                 temp = Console.ReadLine();
-                if (!ulong.TryParse(temp, out config.Seed))
+                if (!ulong.TryParse(temp, out Config.Seed))
                 {
                     WaitForPress("Please enter an integer");
                 }
@@ -89,9 +87,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter fps cap for the {config.EnvName} (X: {config.GridSizeX},Y: {config.GridSizeX}): ");
+                Console.Write($"Enter fps cap for the {Config.EnvName} (X: {Config.GridSizeX},Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out config.FpsCap))
+                if (!uint.TryParse(temp, out Config.FpsCap))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -103,9 +101,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter ticks per second for the {config.EnvName} (X: {config.GridSizeX},Y: {config.GridSizeX}): ");
+                Console.Write($"Enter ticks per second for the {Config.EnvName} (X: {Config.GridSizeX},Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out config.TPS))
+                if (!uint.TryParse(temp, out Config.TPS))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -119,9 +117,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"With how many agents do you want to start the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"With how many agents do you want to train in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out config.NumAgentsToStartWith))
+                if (!uint.TryParse(temp, out Config.NumAgents))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -135,9 +133,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter Maximum of food that can be spawned in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter Maximum of food that can be spawned in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!uint.TryParse(temp, out config.MaxFoodInEnv))
+                if (!uint.TryParse(temp, out Config.MaxFoodInEnv))
                 {
                     WaitForPress(UintWarnMsg);
                 }
@@ -149,9 +147,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter spawn rate of Food (food/second) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter spawn rate of Food (food/second) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.FoodSpawnRate))
+                if (!float.TryParse(temp, out Config.FoodSpawnRate))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -163,9 +161,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter energy of Food in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter energy of Food in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.FoodEnergy))
+                if (!float.TryParse(temp, out Config.FoodEnergy))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -179,9 +177,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter energy decrease rate of Agent (-energy/second) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter energy decrease rate of Agent (-energy/second) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.AgentEnergyDecreaseRate))
+                if (!float.TryParse(temp, out Config.AgentEnergyDecreaseRate))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -193,9 +191,38 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter max energy of Agent in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter max energy of Agent in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.AgentMaxEnergy))
+                if (!float.TryParse(temp, out Config.AgentMaxEnergy))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter energy penalty for colliding with wall for agent in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}) (ex. 10): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.AgentWallCollisionEnergyPenalty))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Graph save interval in generations (0 = disable): ");
+                temp = Console.ReadLine();
+                if (!uint.TryParse(temp, out Config.GraphRate))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -209,9 +236,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter chance for weight mutation (0-1) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter chance for weight mutation (0-1) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.WeightMutationChance))
+                if (!float.TryParse(temp, out Config.WeightMutationChance))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -223,9 +250,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter chance for bias mutation (0-1) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter chance for bias mutation (0-1) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.BiasMutationChance))
+                if (!float.TryParse(temp, out Config.BiasMutationChance))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -237,9 +264,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter chance for connection split mutation (0-1) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter chance for connection split mutation (0-1) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.SplitMutationChance))
+                if (!float.TryParse(temp, out Config.SplitMutationChance))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -251,9 +278,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter chance for new node mutation (0-1) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter chance for new node mutation (0-1) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.NewNodeMutationChance))
+                if (!float.TryParse(temp, out Config.NewNodeMutationChance))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -265,9 +292,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter chance for new connection mutation (0-1) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter chance for new connection mutation (0-1) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.NewConnectionMutationChance))
+                if (!float.TryParse(temp, out Config.NewConnectionMutationChance))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -281,9 +308,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter min size for weight mutation (ex.: -1) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter min size for weight mutation (ex.: -1) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.WeightMutationSizeMin))
+                if (!float.TryParse(temp, out Config.WeightMutationSizeMin))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -295,9 +322,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter max size for weight mutation (ex.: 1) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter max size for weight mutation (ex.: 1) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.WeightMutationSizeMax))
+                if (!float.TryParse(temp, out Config.WeightMutationSizeMax))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -309,9 +336,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter min size for bias mutation (ex.: -1) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter min size for bias mutation (ex.: -1) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.BiasMutationSizeMin))
+                if (!float.TryParse(temp, out Config.BiasMutationSizeMin))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -323,9 +350,9 @@ namespace EvolutionSandbox
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter max size for bias mutation (ex.: 1) in the {config.EnvName} (X: {config.GridSizeX}, Y: {config.GridSizeX}): ");
+                Console.Write($"Enter max size for bias mutation (ex.: 1) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
                 temp = Console.ReadLine();
-                if (!float.TryParse(temp, out config.BiasMutationSizeMax))
+                if (!float.TryParse(temp, out Config.BiasMutationSizeMax))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -336,14 +363,7 @@ namespace EvolutionSandbox
             }
             #endregion
 
-            var options = new JsonSerializerOptions { WriteIndented = true, IncludeFields = true };
-            string fileName = $"./{config.EnvName}/{config.EnvName}.conf";
-            string jsonString = JsonSerializer.Serialize(config, options);
-            File.WriteAllText(fileName, jsonString);
-
-            Console.WriteLine($"Config saved to {fileName}");
-
-            LoadEnvFromConfig(config.EnvName);
+            SaveConfig();
         }
 
         public static void GetConfigFromUser()
@@ -399,6 +419,27 @@ namespace EvolutionSandbox
             }
         }
 
+        public static bool SaveConfig()
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true, IncludeFields = true };
+            string fileName = $"./{Config.EnvName}/{Config.EnvName}.conf";
+            string jsonString = JsonSerializer.Serialize(Config, options);
+
+            try
+            {
+                File.WriteAllText(fileName, jsonString);
+            }catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to save config: {ex.Message}");
+                return false;
+            }
+            
+
+            Console.WriteLine($"Config saved to {fileName}");
+
+            return LoadEnvFromConfig(Config.EnvName);
+        }
+
         static void WaitForPress(string msg)
         {
             Console.WriteLine(msg);
@@ -416,8 +457,9 @@ namespace EvolutionSandbox
 
         public uint FpsCap;
         public uint TPS;
+        public double MaxTicksPerFrame = 3;
 
-        public uint NumAgentsToStartWith;
+        public uint NumAgents;
 
         public uint MaxFoodInEnv;
         public float FoodSpawnRate;
@@ -425,6 +467,9 @@ namespace EvolutionSandbox
 
         public float AgentMaxEnergy;
         public float AgentEnergyDecreaseRate;
+        public float AgentWallCollisionEnergyPenalty;
+
+        public uint GraphRate;
 
         public float WeightMutationChance;
         public float BiasMutationChance;
