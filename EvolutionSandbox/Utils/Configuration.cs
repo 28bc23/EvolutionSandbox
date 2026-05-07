@@ -177,7 +177,7 @@ namespace EvolutionSandbox.Utils
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Enter energy decrease rate of Agent (-energy/second) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}): ");
+                Console.Write($"Enter energy decrease rate of Agent (energy/second) in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}) (ex. 1): ");
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out Config.AgentEnergyDecreaseRate))
                 {
@@ -208,6 +208,48 @@ namespace EvolutionSandbox.Utils
                 Console.Write($"Enter energy penalty for colliding with wall for agent in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}) (ex. 10): ");
                 temp = Console.ReadLine();
                 if (!float.TryParse(temp, out Config.AgentWallCollisionEnergyPenalty))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter energy cost for step movement action of agent in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}) (ex. 5): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.AgentStepActionEnergyCost))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter energy cost for jump movement action of agent in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}) (ex. 10): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.AgentJumpActionEnergyCost))
+                {
+                    WaitForPress(FloatWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Enter energy cost for no-move movement action of agent in the {Config.EnvName} (X: {Config.GridSizeX}, Y: {Config.GridSizeX}) (ex. 0): ");
+                temp = Console.ReadLine();
+                if (!float.TryParse(temp, out Config.AgentNoActionEnergyCost))
                 {
                     WaitForPress(FloatWarnMsg);
                 }
@@ -450,36 +492,39 @@ namespace EvolutionSandbox.Utils
 
     public class EnvironmentConfig
     {
-        public string EnvName;
-        public uint GridSizeX;
-        public uint GridSizeY;
-        public ulong Seed;
+        public string EnvName = "no-name";
+        public uint GridSizeX = 30;
+        public uint GridSizeY = 30;
+        public ulong Seed = 24150;
 
-        public uint FpsCap;
-        public uint TPS;
+        public uint FpsCap = 30;
+        public uint TPS = 30;
         public double MaxTicksPerFrame = 3;
 
-        public uint NumAgents;
+        public uint NumAgents = 50;
 
-        public uint MaxFoodInEnv;
-        public float FoodSpawnRate;
-        public float FoodEnergy;
+        public uint MaxFoodInEnv = 100;
+        public float FoodSpawnRate = 25;
+        public float FoodEnergy = 50;
 
-        public float AgentMaxEnergy;
-        public float AgentEnergyDecreaseRate;
-        public float AgentWallCollisionEnergyPenalty;
+        public float AgentMaxEnergy = 500;
+        public float AgentEnergyDecreaseRate = 1;
+        public float AgentWallCollisionEnergyPenalty = 5;
+        public float AgentStepActionEnergyCost = 5;
+        public float AgentJumpActionEnergyCost = 10;
+        public float AgentNoActionEnergyCost = 0;
 
-        public uint GraphRate;
+        public uint GraphRate = 100;
 
-        public float WeightMutationChance;
-        public float BiasMutationChance;
-        public float SplitMutationChance;
-        public float NewConnectionMutationChance;
-        public float NewNodeMutationChance;
+        public float WeightMutationChance = 0.1f;
+        public float BiasMutationChance = 0.05f;
+        public float SplitMutationChance = 0.01f;
+        public float NewConnectionMutationChance = 0.02f;
+        public float NewNodeMutationChance = 0.01f;
 
-        public float WeightMutationSizeMin;
-        public float WeightMutationSizeMax;
-        public float BiasMutationSizeMin;
-        public float BiasMutationSizeMax;
+        public float WeightMutationSizeMin = -0.2f;
+        public float WeightMutationSizeMax = 0.2f;
+        public float BiasMutationSizeMin = -0.1f;
+        public float BiasMutationSizeMax = 0.1;
     }
 }
