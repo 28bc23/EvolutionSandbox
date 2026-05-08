@@ -81,6 +81,10 @@ namespace EvolutionSandbox.GameObjects
                     HigherHalf = currGen.GetRange(mid, currGen.Count - mid);
                     PRGStateCheckpoint = Utils.Random.State;
 
+                    foreach (Agent a in AliveAgents.ToArray())
+                    {
+                        Program.DestroyGameObject(a);
+                    }
                     currGen.Clear();
                     AliveAgents.Clear();
                     FoodMan.Clear();

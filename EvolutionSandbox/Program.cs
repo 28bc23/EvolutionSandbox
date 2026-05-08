@@ -83,6 +83,9 @@ namespace EvolutionSandbox
                         {
                             Action gmAction = goActionsKVP.Value.Dequeue();
 
+                            if (!GameObjects.Contains(gmAction.Initiator))
+                                continue;
+
                             switch (gmAction)
                             {
                                 case MoveAction moveAction:
