@@ -71,7 +71,7 @@ namespace EvolutionSandbox.GameObjects
 
         public float GetScore()
         {
-            float energyBonus = (float)Energy / (float)MaxEnergy;
+            float energyBonus = (float)(Energy - MaxEnergy) / (float)MaxEnergy;
 
             Vector2Int closestFoodPos = Manager.GetPosOfClosestFood(Pos);
             float x = MathF.Pow(Pos.X - closestFoodPos.X,2);
