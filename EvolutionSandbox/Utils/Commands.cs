@@ -96,10 +96,10 @@ namespace EvolutionSandbox.Utils
                             case ":energy-bonus-coef":
                                 if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float energyBonusCoef)) Config.EnergyBonusCoef = energyBonusCoef;
                                 break;
-                            case ":ctf-bonus-cost":
+                            case ":ctf-bonus-coef":
                                 if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float closeBonusCoef)) Config.CloseToFoodBonusCoef = closeBonusCoef;
                                 break;
-                            case ":center-bonus-cost":
+                            case ":center-bonus-coef":
                                 if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float centerBonusCoef)) Config.CenterBonusCoef = centerBonusCoef;
                                 break;
                             case ":weight-mutation-chance":
