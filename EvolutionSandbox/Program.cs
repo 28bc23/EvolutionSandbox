@@ -75,6 +75,7 @@ namespace EvolutionSandbox
                     }
 
 
+                    // Run actions
                     Dictionary<Guid, Queue<MoveAction>> goMoveActions = new Dictionary<Guid, Queue<MoveAction>>();
 
                     foreach (KeyValuePair<Guid, Queue<Action>> goActionsKVP in ActionsQueue)
@@ -82,6 +83,9 @@ namespace EvolutionSandbox
                         while (goActionsKVP.Value.Count > 0)
                         {
                             Action gmAction = goActionsKVP.Value.Dequeue();
+
+                            if (!GameObjects.Contains(gmAction.Initiator))
+                                continue;
 
                             switch (gmAction)
                             {

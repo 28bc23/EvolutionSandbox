@@ -81,6 +81,10 @@ namespace EvolutionSandbox.GameObjects
                     HigherHalf = currGen.GetRange(mid, currGen.Count - mid);
                     PRGStateCheckpoint = Utils.Random.State;
 
+                    foreach (Agent a in AliveAgents.ToArray())
+                    {
+                        Program.DestroyGameObject(a);
+                    }
                     currGen.Clear();
                     AliveAgents.Clear();
                     FoodMan.Clear();
@@ -118,6 +122,58 @@ namespace EvolutionSandbox.GameObjects
             Commands.OnCreateCheckpoint += CreateCheckpoint;
             #endregion
 
+            DirectoryInfo di = new DirectoryInfo(CheckpointsDir);
+            FileInfo[] checkpointsFi = di.GetFiles("*.json");
+            if (checkpointsFi.Length > 0)
+            {
+                Console.WriteLine("Checkpoints founded:");
+                int latest = 0;
+                foreach (FileInfo cpFi in checkpointsFi)
+                {
+                    int genNum;
+                    if(int.TryParse(cpFi.Name.Split("-")[0], out genNum))
+                    {
+                        Console.Write($"{genNum} ");
+                        if(genNum > latest)
+                            latest = genNum;
+                    }
+                }
+                while (true)
+                {
+                    Console.Write($"\nSelect checkpoint generation (default: {latest}; none to skip): ");
+                    string? input = Console.ReadLine();
+                    string genStr = "";
+                    if (input != null)
+                        genStr = input;
+                    if (genStr.ToLower() != "none")
+                    {
+                        int gen;
+                        if (!int.TryParse(genStr, out gen))
+                            gen = latest;
+
+                        string checkpointPath = $"{CheckpointsDir}{gen}-GenCheckpoint.json";
+
+                        if (!File.Exists(checkpointPath))
+                        {
+                            Console.WriteLine("Checkpoint of this generation doesn't exist.\nPress any key to repeat . . .");
+                            Console.ReadKey(intercept: true);
+                            continue;
+                        }
+
+                        string jsonString = File.ReadAllText(checkpointPath);
+                        JsonSerializerOptions options = new JsonSerializerOptions { MaxDepth = 256, WriteIndented = true };
+                        Checkpoint? checkpoint = JsonSerializer.Deserialize<Checkpoint>(jsonString, options);
+                        if( checkpoint != null )
+                        {
+                            Console.Write("checkpoint loaded");
+                            Environment.Exit(0);
+                        }
+                    }
+                    else
+                        break;
+                }                   
+            }
+
             Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Initialize size of grid
 
             UpdateStats();
@@ -154,15 +210,8 @@ namespace EvolutionSandbox.GameObjects
             Directory.CreateDirectory(CheckpointsDir);
             string checkpointName = $"{GenCount.ToString()}-GenCheckpoint.json";
 
-            var checkpoint = new
-            {
-                PRGState = PRGStateCheckpoint,
-                Layers = from Agent in HigherHalf select Agent.GetNNCopy().GetLayersCopy(),
-                Connections = from Agent in HigherHalf select Agent.GetNNCopy().GetConnectionsCopy(),
-                Medians = Medians,
-                AverageScores = AverageScores,
-                HigherHalf = HigherHalf,
-            };
+            Checkpoint checkpoint = new Checkpoint(PRGStateCheckpoint, from Agent in HigherHalf select Agent.GetNNCopy().GetLayersCopy(), 
+                from Agent in HigherHalf select Agent.GetNNCopy().GetConnectionsCopy(), Medians, AverageScores, HighestScores, HigherHalf);
 
             string jsonString = JsonSerializer.Serialize(checkpoint, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, MaxDepth = 256, WriteIndented = true });
             File.WriteAllText($"{CheckpointsDir}{checkpointName}", jsonString);
@@ -216,6 +265,28 @@ namespace EvolutionSandbox.GameObjects
             Average of last gen scores: {AverageScoreLastGen}
             Highest score of last gen: {HighestScoreLastGen}
             """);
+        }
+    }
+
+    internal class Checkpoint
+    {
+        public ulong PRGState {  get; set; }
+        public IEnumerable<NNNode[][]> Layers {  get; set; }
+        public IEnumerable<NNConnection[]> Connections {  get; set; }
+        public List<float> Medians {  get; set; }
+        public List<float> AverageScores {  get; set; }
+        public List<float> HighestScores {  get; set; }
+        public List<Agent> HigherHalf {  get; set; }
+
+        public Checkpoint(ulong pRGState, IEnumerable<NNNode[][]> layers, IEnumerable<NNConnection[]> connections, List<float> medians, List<float> averageScores, List<float> highestScores, List<Agent> higherHalf)
+        {
+            PRGState = pRGState;
+            Layers = layers;
+            Connections = connections;
+            Medians = medians;
+            AverageScores = averageScores;
+            HighestScores = highestScores;
+            HigherHalf = higherHalf;
         }
     }
 }
