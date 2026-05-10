@@ -25,9 +25,15 @@ $energyBonus = \frac{Energy - MaxEnergy}{MaxEnergy}$
 
 $closeToFoodBonus = \frac{\sqrt{GridSize.X^2 + GridSize.Y^2} - \sqrt{(Pos.X - closestFoodPos.X)^2 + (Pos.Y - closestFoodPos.Y)^2}}{\sqrt{GridSize.X^2 + GridSize.Y^2}}$
 
-## Installation and execution
-1. Download .NET 10
-2. use dotnet run or Visual Studio to compile and run sandbox
+## Installation and Execution
+
+1. Download and install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0).
+2. Use `dotnet run` or Visual Studio to compile and run the sandbox.
+
+### Windows
+
+You can download the pre-compiled executable for Windows from the [Releases](../../releases) section.
+
 
 ## Configuration
 **The same configuration should always result in the same training.**
@@ -53,6 +59,7 @@ $closeToFoodBonus = \frac{\sqrt{GridSize.X^2 + GridSize.Y^2} - \sqrt{(Pos.X - cl
 |AgentJumpActionEnergyCost|Determines how much energy it costs an agent to jump (movement of 2 spaces). (float)|3.0|
 |AgentNoActionEnergyCost|Determines how much energy it costs an agent to remain stationary. (float)|0.0|
 |GraphRate|Specifies how often the graph will be saved. (A value of 2 will save the graph every 2 generations). (int)|100|
+|CheckpointRate|Specifies how often the checkpoint will be saved. (works same as GraphRate). (int)|100|
 |FoodScoreCoef|Sets the weight of the amount of food consumed when calculating the agent's score. (float)|2.0|
 |EnergyBonusCoef|Sets the weight of the energy bonus when calculating an agent's score. (float)|1.0|
 |CloseToFoodBonusCoef|Sets the weight of the bonus for closeness to food when calculating the agent's score. (float)|1.5|
@@ -84,6 +91,7 @@ All commands must start with a colon `:`.
 | `:quit!` | Exit without saving | ✓ |
 | `:fps-cap [val]` | Frame rate limit | ✓ |
 | `:graph-rate [val]` | Auto-graph frequency | ✓ |
+| `:checkpoint-rate [val]` | Auto-checkpoint frequency| ✓ |
 | `:time-scale [val]` | Simulation speed multiplier | !! |
 | `:max-ticks-per-frame [val]` | Max logic steps per frame | !! |
 | `:num-agents [val]` | Agent count for next generation | !! |
