@@ -122,6 +122,11 @@ namespace EvolutionSandbox.GameObjects
             Commands.OnCreateCheckpoint += CreateCheckpoint;
             #endregion
 
+            if (!Directory.Exists(CheckpointsDir))
+            {
+                Directory.CreateDirectory(CheckpointsDir);
+            }
+
             DirectoryInfo di = new DirectoryInfo(CheckpointsDir);
             FileInfo[] checkpointsFi = di.GetFiles("*.json");
             if (checkpointsFi.Length > 0)
@@ -161,7 +166,7 @@ namespace EvolutionSandbox.GameObjects
                         }
 
                         string jsonString = File.ReadAllText(checkpointPath);
-                        JsonSerializerOptions options = new JsonSerializerOptions { MaxDepth = 256, WriteIndented = true };
+                        JsonSerializerOptions options = new JsonSerializerOptions {ReferenceHandler = ReferenceHandler.Preserve, MaxDepth = 256, WriteIndented = true, IncludeFields = true };
                         Checkpoint? checkpoint = JsonSerializer.Deserialize<Checkpoint>(jsonString, options);
                         if( checkpoint != null )
                         {
@@ -210,10 +215,10 @@ namespace EvolutionSandbox.GameObjects
             Directory.CreateDirectory(CheckpointsDir);
             string checkpointName = $"{GenCount.ToString()}-GenCheckpoint.json";
 
-            Checkpoint checkpoint = new Checkpoint(PRGStateCheckpoint, from Agent in HigherHalf select Agent.GetNNCopy().GetLayersCopy(), 
-                from Agent in HigherHalf select Agent.GetNNCopy().GetConnectionsCopy(), Medians, AverageScores, HighestScores, HigherHalf);
+            Checkpoint checkpoint = new Checkpoint(PRGStateCheckpoint, (from Agent in HigherHalf select Agent.GetNNCopy().GetLayersCopy()).ToList(), 
+                (from Agent in HigherHalf select Agent.GetNNCopy().GetConnectionsCopy()).ToList(), Medians, AverageScores, HighestScores);
 
-            string jsonString = JsonSerializer.Serialize(checkpoint, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, MaxDepth = 256, WriteIndented = true });
+            string jsonString = JsonSerializer.Serialize(checkpoint, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, MaxDepth = 256, WriteIndented = true, IncludeFields = true });
             File.WriteAllText($"{CheckpointsDir}{checkpointName}", jsonString);
 
         }
@@ -271,14 +276,15 @@ namespace EvolutionSandbox.GameObjects
     internal class Checkpoint
     {
         public ulong PRGState {  get; set; }
-        public IEnumerable<NNNode[][]> Layers {  get; set; }
-        public IEnumerable<NNConnection[]> Connections {  get; set; }
+        public List<List<NNConnection>> Connections { get; set; }
+        public List<List<NNNode[]>> Layers { get; set; }
         public List<float> Medians {  get; set; }
         public List<float> AverageScores {  get; set; }
         public List<float> HighestScores {  get; set; }
-        public List<Agent> HigherHalf {  get; set; }
 
-        public Checkpoint(ulong pRGState, IEnumerable<NNNode[][]> layers, IEnumerable<NNConnection[]> connections, List<float> medians, List<float> averageScores, List<float> highestScores, List<Agent> higherHalf)
+        public Checkpoint() { }
+
+        public Checkpoint(ulong pRGState, List<List<NNNode[]>> layers, List<List<NNConnection>> connections, List<float> medians, List<float> averageScores, List<float> highestScores)
         {
             PRGState = pRGState;
             Layers = layers;
@@ -286,7 +292,6 @@ namespace EvolutionSandbox.GameObjects
             Medians = medians;
             AverageScores = averageScores;
             HighestScores = highestScores;
-            HigherHalf = higherHalf;
         }
     }
 }

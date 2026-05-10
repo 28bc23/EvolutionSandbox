@@ -1,11 +1,15 @@
-﻿namespace EvolutionSandbox.NeuralNetwork
+﻿using System.Text.Json.Serialization;
+
+namespace EvolutionSandbox.NeuralNetwork
 {
     internal class NNConnection
     {
-        public NNNode FromNode { get; private set; }
-        public NNNode ToNode { get; private set; }
+        [JsonIgnore]
+        public NNNode FromNode { get; set; }
+        public NNNode ToNode { get; set; }
         public double Weight { get; set; }
 
+        public NNConnection() { }
         public NNConnection(NNNode fromNode, NNNode toNode, double weight)
         {
             FromNode = fromNode;

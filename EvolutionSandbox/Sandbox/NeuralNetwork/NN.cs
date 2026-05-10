@@ -233,14 +233,14 @@ namespace EvolutionSandbox.NeuralNetwork
             get { return Layers[Layers.Count - 1].Length; }
         }
 
-        public NNNode[][] GetLayersCopy()
+        public List<NNNode[]> GetLayersCopy()
         {
-            return Layers.ToArray();
+            return new List<NNNode[]>(Layers);
         }
 
-        public NNConnection[] GetConnectionsCopy()
+        public List<NNConnection> GetConnectionsCopy()
         {
-            return Connections.ToArray();
+            return new List<NNConnection>(Connections);
         }
 
         public NN Copy(bool mutate)
