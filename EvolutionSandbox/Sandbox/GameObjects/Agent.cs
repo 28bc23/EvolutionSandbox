@@ -90,7 +90,7 @@ namespace EvolutionSandbox.GameObjects
         {
             Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Config.GridSizeX),
                     Utils.Random.Next((int)Config.GridSizeY)),
-                    Guid.NewGuid(), Manager, false);
+                    Utils.Random.NextGuid(), Manager, false);
             agent.nn = nn.Copy(mutate);
             return agent;
         }

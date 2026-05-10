@@ -14,7 +14,6 @@ namespace EvolutionSandbox
         static string LastGrid = "";
         static string UnderGridText = "";
         static string LastUnderGridText = "";
-        static int sdasds = 0;
 
         public static void Init(Vector2Int gridSize)
         {

@@ -130,7 +130,7 @@ namespace EvolutionSandbox.GameObjects
             UpdateStats();
             if (checkpoint == null)
             {
-                FoodManager foodManager = new FoodManager(Guid.NewGuid());
+                FoodManager foodManager = new FoodManager(Utils.Random.NextGuid());
                 Program.SpawnGameObject(foodManager);
                 FoodMan = foodManager;
 
@@ -138,7 +138,7 @@ namespace EvolutionSandbox.GameObjects
                 {
                     Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
                         Utils.Random.Next((int)Configuration.Config.GridSizeY)),
-                        Guid.NewGuid(), this);
+                        Utils.Random.NextGuid(), this);
                     currGen.Add(agent);
                     AliveAgents.Add(agent);
                     Program.SpawnGameObject(agent, false, false);
@@ -148,7 +148,7 @@ namespace EvolutionSandbox.GameObjects
             {
                 Utils.Random.Init(checkpoint.PRGState, false);
 
-                FoodManager foodManager = new FoodManager(Guid.NewGuid());
+                FoodManager foodManager = new FoodManager(Utils.Random.NextGuid());
                 Program.SpawnGameObject(foodManager);
                 FoodMan = foodManager;
 
@@ -156,7 +156,7 @@ namespace EvolutionSandbox.GameObjects
                 {
                     Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
                         Utils.Random.Next((int)Configuration.Config.GridSizeY)),
-                        Guid.NewGuid(), this, false);
+                        Utils.Random.NextGuid(), this, false);
 
                     NN tempNN = new NN(0, 0, false);
                     tempNN.SetLayers(checkpoint.Layers[i % checkpoint.Layers.Count]);
@@ -254,8 +254,16 @@ namespace EvolutionSandbox.GameObjects
             Directory.CreateDirectory(CheckpointsDir);
             string checkpointName = $"{GenCount.ToString()}-GenCheckpoint.json";
 
-            Checkpoint checkpoint = new Checkpoint(PRGStateCheckpoint, (from Agent in HigherHalf select Agent.GetNNCopy().GetLayersCopy()).ToList(), 
-                (from Agent in HigherHalf select Agent.GetNNCopy().GetConnectionsCopy()).ToList(), Medians, AverageScores, HighestScores);
+            List<List<NNNode[]>> layers = new List<List<NNNode[]>>();
+            List<List<NNConnection>> connections = new List<List<NNConnection>>();
+            foreach (Agent a in HigherHalf)
+            {
+                NN nn = a.GetNNCopy();
+                layers.Add(nn.GetLayersCopy());
+                connections.Add(nn.GetConnectionsCopy());
+            }
+
+            Checkpoint checkpoint = new Checkpoint(PRGStateCheckpoint, layers, connections, Medians, AverageScores, HighestScores);
 
             string jsonString = JsonSerializer.Serialize(checkpoint, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, MaxDepth = 256, WriteIndented = true, IncludeFields = true });
             File.WriteAllText($"{CheckpointsDir}{checkpointName}", jsonString);

@@ -33,7 +33,7 @@ namespace EvolutionSandbox
 
             FixedDeltaTime = 1.0 / Configuration.Config.TPS;
 
-            EvolutionManager evolutionManager = new EvolutionManager(Guid.NewGuid());
+            EvolutionManager evolutionManager = new EvolutionManager(Utils.Random.NextGuid());
             SpawnGameObject(evolutionManager);
 
             GameLoop(); // Start Gmae loop
@@ -120,12 +120,14 @@ namespace EvolutionSandbox
             if (gameObject.GameObjectType == GameObjectType.Manager)
             {
                 GameObjects.Add(gameObject);
+                GameObjects.Sort();
                 return true;
             }
 
             if (Grid.SpawnGameObject(gameObject, doNotSpawnWhenColliding, ignoreCollisions))
             {
                 GameObjects.Add(gameObject);
+                GameObjects.Sort();
                 return true;
             }
 
