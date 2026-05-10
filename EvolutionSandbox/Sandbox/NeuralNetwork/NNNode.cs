@@ -6,7 +6,7 @@
         public double Bias { get; set; }
 
         public int Layer { get; set; }
-        public int Index { get; private set; }
+        public int Index { get; set; }
 
         public List<NNConnection> OutConns { get; set; } = new List<NNConnection>();
 

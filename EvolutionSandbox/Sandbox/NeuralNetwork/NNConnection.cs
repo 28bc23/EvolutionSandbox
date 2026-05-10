@@ -4,7 +4,6 @@ namespace EvolutionSandbox.NeuralNetwork
 {
     internal class NNConnection
     {
-        [JsonIgnore]
         public NNNode FromNode { get; set; }
         public NNNode ToNode { get; set; }
         public double Weight { get; set; }

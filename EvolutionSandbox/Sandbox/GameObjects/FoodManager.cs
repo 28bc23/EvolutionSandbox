@@ -27,7 +27,7 @@ namespace EvolutionSandbox.GameObjects
             {
                 Vector2Int gridSize = Grid.GridSize;
                 Vector2Int pos = new Vector2Int(Utils.Random.Next(gridSize.X), Utils.Random.Next(gridSize.Y));
-                Food temp = new Food(pos, Guid.NewGuid(), this);
+                Food temp = new Food(pos, Utils.Random.NextGuid(), this);
                 if (Program.SpawnGameObject(temp))
                 {
                     Foods.Add(temp);
@@ -64,6 +64,7 @@ namespace EvolutionSandbox.GameObjects
             {
                 Program.DestroyGameObject(food);
             }
+            SpawnAccumulator = 0;
         }
     }
 }

@@ -14,9 +14,9 @@ namespace EvolutionSandbox.NeuralNetwork
 
 
 
-        public NN(int inputLayerSize, int outputLayerSize, bool inicialize = true)
+        public NN(int inputLayerSize, int outputLayerSize, bool initialize = true)
         {
-            if (!inicialize)
+            if (!initialize)
                 return;
 
             Layers.Add(new NNNode[inputLayerSize]);
@@ -238,9 +238,19 @@ namespace EvolutionSandbox.NeuralNetwork
             return new List<NNNode[]>(Layers);
         }
 
+        public void SetLayers(List<NNNode[]> layers)
+        {
+            Layers = layers;
+        }
+
         public List<NNConnection> GetConnectionsCopy()
         {
             return new List<NNConnection>(Connections);
+        }
+
+        public void SetConnections(List<NNConnection> connections)
+        {
+            Connections = connections;
         }
 
         public NN Copy(bool mutate)

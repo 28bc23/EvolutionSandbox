@@ -2,13 +2,13 @@
 
 namespace EvolutionSandbox.GameObjects
 {
-    internal abstract class GameObject
+    internal abstract class GameObject : IComparable<GameObject>
     {
         public Vector2Int Pos { get; set; }
 
         Queue<Action> actions = new Queue<Action>();
 
-        public Guid ID { get; private set; }
+        public Guid ID { get; set; }
 
         public char Character { get; private set; }
 
@@ -57,6 +57,18 @@ namespace EvolutionSandbox.GameObjects
         public Queue<Action> GetCopyOfActions()
         {
             return new Queue<Action>(actions);
+        }
+
+        public int CompareTo(GameObject? compareGO)
+        {
+            if (compareGO == null)
+                return 1;
+
+            int typeCompare = this.GameObjectType.CompareTo(compareGO.GameObjectType);
+            if (typeCompare != 0)
+                return typeCompare;
+
+            return this.ID.CompareTo(compareGO.ID);
         }
     }
 

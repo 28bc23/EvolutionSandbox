@@ -14,9 +14,9 @@ namespace EvolutionSandbox.GameObjects
 
         double MaxEnergy = Config.AgentMaxEnergy;
 
-        public Agent(Vector2Int spawnPos, Guid id, EvolutionManager manager) : base(spawnPos, id, '*', GameObjectType.Agent, energy: Config.AgentMaxEnergy)
+        public Agent(Vector2Int spawnPos, Guid id, EvolutionManager manager, bool initializeNN = true) : base(spawnPos, id, '*', GameObjectType.Agent, energy: Config.AgentMaxEnergy)
         {
-            nn = new NN(7, 13);
+            nn = new NN(7, 13, initializeNN);
             Manager = manager;
         }
 
@@ -90,7 +90,7 @@ namespace EvolutionSandbox.GameObjects
         {
             Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Config.GridSizeX),
                     Utils.Random.Next((int)Config.GridSizeY)),
-                    Guid.NewGuid(), Manager);
+                    Utils.Random.NextGuid(), Manager, false);
             agent.nn = nn.Copy(mutate);
             return agent;
         }
@@ -106,6 +106,11 @@ namespace EvolutionSandbox.GameObjects
         public NN GetNNCopy()
         {
             return nn.Copy(false);
+        }
+
+        public void SetNN(NN nn, bool mutate)
+        {
+            this.nn = nn.Copy(mutate);
         }
     }
 }

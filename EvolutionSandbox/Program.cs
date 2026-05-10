@@ -11,7 +11,7 @@ namespace EvolutionSandbox
         static Dictionary<Guid, Queue<Action>> ActionsQueue = new Dictionary<Guid, Queue<Action>>();
 
         public static double FixedDeltaTime { get; private set; }
-        static double accumulator = 0.0;
+        public static double Accumulator { get; private set; } = 0.0;
         static int TargetFrameTime = 1000 / (int)Configuration.Config.FpsCap; // How often should be showed new frame in ms
 
         //Game Start
@@ -33,7 +33,7 @@ namespace EvolutionSandbox
 
             FixedDeltaTime = 1.0 / Configuration.Config.TPS;
 
-            EvolutionManager evolutionManager = new EvolutionManager(Guid.NewGuid());
+            EvolutionManager evolutionManager = new EvolutionManager(Utils.Random.NextGuid());
             SpawnGameObject(evolutionManager);
 
             GameLoop(); // Start Gmae loop
@@ -61,9 +61,9 @@ namespace EvolutionSandbox
 
                 frameTime *= Configuration.Config.TimeScale;
 
-                accumulator += frameTime;
+                Accumulator += frameTime;
 
-                while (accumulator >= FixedDeltaTime)
+                while (Accumulator >= FixedDeltaTime)
                 {
                     // Update and get actions from gameobjects
                     GameObject[] gameObjects = GameObjects.ToArray();
@@ -104,7 +104,7 @@ namespace EvolutionSandbox
 
                     ActionsQueue.Clear();
 
-                    accumulator -= FixedDeltaTime;
+                    Accumulator -= FixedDeltaTime;
                 }
 
                 if ((DateTime.Now - lastTimeFPS).TotalMilliseconds >= TargetFrameTime)
@@ -120,12 +120,14 @@ namespace EvolutionSandbox
             if (gameObject.GameObjectType == GameObjectType.Manager)
             {
                 GameObjects.Add(gameObject);
+                GameObjects.Sort();
                 return true;
             }
 
             if (Grid.SpawnGameObject(gameObject, doNotSpawnWhenColliding, ignoreCollisions))
             {
                 GameObjects.Add(gameObject);
+                GameObjects.Sort();
                 return true;
             }
 
@@ -150,6 +152,13 @@ namespace EvolutionSandbox
         public static void RecalculateTargetFrameTime()
         {
             TargetFrameTime = 1000 / (int)Configuration.Config.FpsCap;
+        }
+
+        public static void SetAccumulator(double accumulator)
+        {
+            if(accumulator < 0) return;
+
+            Accumulator = accumulator;
         }
     }
 

@@ -64,6 +64,23 @@
             return (NextDouble() * (max - min)) + min;
         }
 
+        // UUIDv4 (RFC 4122)
+        public static Guid NextGuid()
+        {
+            byte[] guidBytes = new byte[16];
+
+            for (int i = 0; i < 16; i++)
+            {
+                guidBytes[i] = (byte)Next(256);
+            }
+
+            // UUIDv4 modification
+            guidBytes[7] = (byte)((guidBytes[7] & 0x0F) | 0x40); // sets higher half (higher 4 bits) to 4
+            guidBytes[8] = (byte)((guidBytes[8] & 0x3F) | 0x80); // sets higher 2 bits to 2
+
+            return new Guid(guidBytes);
+        }
+
         public static bool Chance(float chance) // returns true or false based on probability (0.0 - 1.0)
         {
             return NextDouble() < chance;
