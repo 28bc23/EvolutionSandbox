@@ -302,6 +302,20 @@ namespace EvolutionSandbox.Utils
                     break;
                 }
             }
+            while (true)
+            {
+                Console.Clear();
+                Console.Write($"Checkpoint save interval in generations (0 = disable): ");
+                temp = Console.ReadLine();
+                if (!int.TryParse(temp, out Config.CheckpointRate))
+                {
+                    WaitForPress(UintWarnMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
 
             // Score Coefs
             while (true)
@@ -611,6 +625,7 @@ namespace EvolutionSandbox.Utils
         public float AgentNoActionEnergyCost = 0;
 
         public int GraphRate = 100;
+        public int CheckpointRate = 100;
 
         public float FoodScoreCoef = .6f;
         public float EnergyBonusCoef = .2f;

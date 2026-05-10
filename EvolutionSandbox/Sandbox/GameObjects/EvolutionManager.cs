@@ -111,6 +111,14 @@ namespace EvolutionSandbox.GameObjects
                         }
                     }
 
+                    if (Configuration.Config.CheckpointRate != 0)
+                    {
+                        if (GenCount % Configuration.Config.CheckpointRate == 0)
+                        {
+                            CreateCheckpoint();
+                        }
+                    }
+
                     GenCount++;
                     UpdateStats();
                     CurrentGenTime = Configuration.Config.GenerationTime;

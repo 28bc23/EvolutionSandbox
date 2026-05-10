@@ -90,6 +90,9 @@ namespace EvolutionSandbox.Utils
                             case ":graph-rate":
                                 if (command.Length > 1 && int.TryParse(command[1], out int graphRate)) Config.GraphRate = graphRate;
                                 break;
+                            case ":checkpoint-rate":
+                                if (command.Length > 1 && int.TryParse(command[1], out int checkpointRate)) Config.CheckpointRate = checkpointRate;
+                                break;
                             case ":food-score-coef":
                                 if (command.Length > 1 && float.TryParse(command[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float foodScoreCoef)) Config.FoodScoreCoef = foodScoreCoef;
                                 break;
