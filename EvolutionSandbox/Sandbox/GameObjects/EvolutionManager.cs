@@ -122,6 +122,55 @@ namespace EvolutionSandbox.GameObjects
             Commands.OnCreateCheckpoint += CreateCheckpoint;
             #endregion
 
+            Checkpoint? checkpoint = LoadCheckpoint();
+
+            Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Initialize size of grid
+
+            UpdateStats();
+            if (checkpoint == null)
+            {
+                for (int i = 0; i < Configuration.Config.NumAgents; i++)
+                {
+                    Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
+                        Utils.Random.Next((int)Configuration.Config.GridSizeY)),
+                        Guid.NewGuid(), this);
+                    currGen.Add(agent);
+                    AliveAgents.Add(agent);
+                    Program.SpawnGameObject(agent, false, false);
+                }
+            }
+            else
+            {
+                Utils.Random.Init(checkpoint.PRGState, false);
+
+                for(int i = 0;i < Configuration.Config.NumAgents;i++)
+                {
+                    Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
+                        Utils.Random.Next((int)Configuration.Config.GridSizeY)),
+                        Guid.NewGuid(), this);
+                    agent.SetNN(checkpoint.Layers[i % checkpoint.Layers.Count], checkpoint.Connections[i % checkpoint.Layers.Count]);
+                    currGen.Add(agent);
+                    AliveAgents.Add(agent);
+                    Program.SpawnGameObject(agent, false, false);
+                }
+
+                Medians = checkpoint.Medians;
+                AverageScores = checkpoint.AverageScores;
+                HighestScores = checkpoint.HighestScores;
+                GenCount = Medians.Count;
+                MedianScoreLastGen = Medians[GenCount - 1];
+                AverageScoreLastGen = AverageScores[GenCount - 1];
+                HighestScoreLastGen = HighestScores[GenCount - 1];
+            }
+
+            FoodManager foodManager = new FoodManager(Guid.NewGuid());
+            Program.SpawnGameObject(foodManager);
+            FoodMan = foodManager;
+            CurrentGenTime = Configuration.Config.GenerationTime;
+        }
+
+        Checkpoint? LoadCheckpoint()
+        {
             if (!Directory.Exists(CheckpointsDir))
             {
                 Directory.CreateDirectory(CheckpointsDir);
@@ -136,10 +185,10 @@ namespace EvolutionSandbox.GameObjects
                 foreach (FileInfo cpFi in checkpointsFi)
                 {
                     int genNum;
-                    if(int.TryParse(cpFi.Name.Split("-")[0], out genNum))
+                    if (int.TryParse(cpFi.Name.Split("-")[0], out genNum))
                     {
                         Console.Write($"{genNum} ");
-                        if(genNum > latest)
+                        if (genNum > latest)
                             latest = genNum;
                     }
                 }
@@ -166,42 +215,20 @@ namespace EvolutionSandbox.GameObjects
                         }
 
                         string jsonString = File.ReadAllText(checkpointPath);
-                        JsonSerializerOptions options = new JsonSerializerOptions {ReferenceHandler = ReferenceHandler.Preserve, MaxDepth = 256, WriteIndented = true, IncludeFields = true };
+                        JsonSerializerOptions options = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, MaxDepth = 256, WriteIndented = true, IncludeFields = true };
                         Checkpoint? checkpoint = JsonSerializer.Deserialize<Checkpoint>(jsonString, options);
-                        if( checkpoint != null )
+                        if (checkpoint != null)
                         {
-                            Console.Write("checkpoint loaded");
-                            Environment.Exit(0);
+                            Console.WriteLine("checkpoint loaded");
+                            return checkpoint;
                         }
                     }
                     else
-                        break;
-                }                   
+                        return null;
+                }
             }
-
-            Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Initialize size of grid
-
-            UpdateStats();
-
-            for (int i = 0; i < Configuration.Config.NumAgents; i++)
-            {
-                Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
-                    Utils.Random.Next((int)Configuration.Config.GridSizeY)),
-                    Guid.NewGuid(), this);
-                currGen.Add(agent);
-                AliveAgents.Add(agent);
-                Program.SpawnGameObject(agent, false, false);
-            }
-
-            FoodManager foodManager = new FoodManager(Guid.NewGuid());
-            Program.SpawnGameObject(foodManager);
-            FoodMan = foodManager;
-            CurrentGenTime = Configuration.Config.GenerationTime;
-        }
-
-        void StartFormCheckpoint() // Starts evolution basaed on checkpoint
-        {
-
+            else
+                return null;
         }
 
         void CreateCheckpoint() // Creates an checkpoint

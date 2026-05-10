@@ -107,5 +107,11 @@ namespace EvolutionSandbox.GameObjects
         {
             return nn.Copy(false);
         }
+
+        public void SetNN(List<NNNode[]> layers, List<NNConnection> connections)
+        {
+            nn.SetConnections(connections);
+            nn.SetLayers(layers);
+        }
     }
 }
