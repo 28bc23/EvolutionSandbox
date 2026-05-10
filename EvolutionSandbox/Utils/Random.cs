@@ -22,7 +22,7 @@
 
         static uint rot(uint x, int r) // rotation of bits to right
         {
-            return x >> r | x << (-r & 31); // first part shifts x to right by r. second part shifts x to left by 32 - r so ve get bits that we lost in first part. By or op. ve combine these parts and get rotation to right.
+            return x >> r | x << (-r & 31); // first part shifts x to right by r. second part shifts x to left by 32 - r so we get bits that we lost in first part. By or op. ve combine these parts and get rotation to right.
         }
 
         static uint Next()

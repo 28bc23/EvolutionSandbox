@@ -33,19 +33,19 @@ namespace EvolutionSandbox.Utils
                             case ":graph":
                                 OnGraphCommand?.Invoke();
                                 break;
-                            case ":grid-size-x": // will take effect after restarting, and **will not be recomended**
+                            case ":grid-size-x": // will take effect after restarting, and **will not be recommended**
                                 if (command.Length > 1 && uint.TryParse(command[1], out uint gridX)) Config.GridSizeX = gridX;
                                 break;
                             case ":grid-size-y":
                                 if (command.Length > 1 && uint.TryParse(command[1], out uint gridY)) Config.GridSizeY = gridY;
                                 break;
-                            case ":seed": // **not recomended changing**
+                            case ":seed": // **not recommended changing**
                                 if (command.Length > 1 && ulong.TryParse(command[1], out ulong seed)) { Config.Seed = seed; Random.Init(seed, true); }
                                 break;
                             case ":fps-cap":
                                 if (command.Length > 1 && int.TryParse(command[1], out int fps)) { Config.FpsCap = fps; Program.RecalculateTargetFrameTime(); }
                                 break;
-                            case ":tps": // Not recomended changing
+                            case ":tps": // Not recommended changing
                                 if (command.Length > 1 && uint.TryParse(command[1], out uint tps)) { Config.TPS = tps; Program.RecalculateFixedDeltaTime(); }
                                 break;
                             case ":time-scale":

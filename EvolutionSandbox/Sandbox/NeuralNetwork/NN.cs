@@ -42,7 +42,7 @@ namespace EvolutionSandbox.NeuralNetwork
 
         public MovementType Forward(double[] input)
         {
-            Debug.Assert(input.Length == Layers[0].Length, "Input to forward pass isn't equal to length of inpput layer");
+            Debug.Assert(input.Length == Layers[0].Length, "Input to forward pass isn't equal to length of input layer");
 
             // Reset NN and apply bias
             for (int l = 1; l < Layers.Count; l++)
@@ -60,7 +60,7 @@ namespace EvolutionSandbox.NeuralNetwork
             }
 
             // Signal propagation
-            for (int l = 0; l < Layers.Count - 1; l++) // Output layer don't have OutConns so we save one iteration
+            for (int l = 0; l < Layers.Count - 1; l++) // Output layer doesn't have OutConns so we save one iteration
             {
                 foreach (NNNode node in Layers[l])
                 {
@@ -102,7 +102,7 @@ namespace EvolutionSandbox.NeuralNetwork
 
         public void Mutate()
         {
-            // First add bias so there is chance that nex connection will be added
+            // First add bias so there is chance that next connection will be added
             if (Utils.Random.Chance(Config.NewNodeMutationChance))
             {
                 if (Layers.Count == 2) // if there is only input layer we must create new layer bc we don't want to change input or output size
@@ -119,10 +119,10 @@ namespace EvolutionSandbox.NeuralNetwork
                 }
             }
 
-            // Second so there is chance for it to get splited
+            // Second so there is chance for it to get split
             if (Utils.Random.Chance(Config.NewConnectionMutationChance))
             {
-                int randomSourceLayerIdx = Utils.Random.Next(Layers.Count - 1); // except output bc there won't be next layer if output l got chousen
+                int randomSourceLayerIdx = Utils.Random.Next(Layers.Count - 1); // except output bc there won't be next layer if output l got chosen
                 int randomTargetLayerIdx = Utils.Random.Next(randomSourceLayerIdx + 1, Layers.Count); // random layer from randomSourceLayerIdx to output layer
 
                 int randomSourceNodeIdx = Utils.Random.Next(Layers[randomSourceLayerIdx].Length);

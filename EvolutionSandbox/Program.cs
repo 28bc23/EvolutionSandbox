@@ -12,7 +12,7 @@ namespace EvolutionSandbox
 
         public static double FixedDeltaTime { get; private set; }
         public static double Accumulator { get; private set; } = 0.0;
-        static int TargetFrameTime = 1000 / (int)Configuration.Config.FpsCap; // How often should be showed new frame in ms
+        static int TargetFrameTime = 1000 / (int)Configuration.Config.FpsCap; // How often should new frame be shown in ms
 
         //Game Start
         static void Main(string[] args)
@@ -36,7 +36,7 @@ namespace EvolutionSandbox
             EvolutionManager evolutionManager = new EvolutionManager(Utils.Random.NextGuid());
             SpawnGameObject(evolutionManager);
 
-            GameLoop(); // Start Gmae loop
+            GameLoop(); // Start Game loop
         }
 
         static void GameLoop()
@@ -53,11 +53,11 @@ namespace EvolutionSandbox
 
                 Utils.Commands.ReadCommand();
 
-                frameTime = Math.Clamp(frameTime, 0, FixedDeltaTime * Configuration.Config.MaxTicksPerFrame); /* clamping frameTime to disacoiate it from real time when the game takes much longer than fixedDeltaTime, 
+                frameTime = Math.Clamp(frameTime, 0, FixedDeltaTime * Configuration.Config.MaxTicksPerFrame); /* clamping frameTime to disassociate it from real time when the game takes much longer than fixedDeltaTime, 
                                                                                 so we avoid spiral of death (situation where most of the time game frame takes much longer than fixedDeltaTime,
-                                                                                so acumulator grows larger and it will never be lower than fixed delta time, so the game "freezes"/will not render any frames).
-                                                                                By clamping the frameTime we tell the program that it taked for ex. 0.1 sec. insted of 2 sec. of real time.
-                                                                                This way we artificialy delay game time from realtime and make it run in "slow motion"(bc. in game will pass 0.1 in 2 sec. of real time)*/
+                                                                                so accumulator grows larger and it will never be lower than fixed delta time, so the game "freezes"/will not render any frames).
+                                                                                By clamping the frameTime we tell the program that it took for ex. 0.1 sec. instead 2 sec. of real time.
+                                                                                This way we artificially delay game time from realtime and make it run in "slow motion"(bc. in game will pass 0.1 in 2 sec. of real time)*/
 
                 frameTime *= Configuration.Config.TimeScale;
 

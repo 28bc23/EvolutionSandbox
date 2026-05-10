@@ -535,7 +535,7 @@ namespace EvolutionSandbox.Utils
             string configPath = $"{envName}/{envName}.conf";
             if (!File.Exists(configPath))
             {
-                Console.WriteLine("environment doesn't exists.");
+                Console.WriteLine("environment doesn't exist.");
                 return false;
             }
 

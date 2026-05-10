@@ -204,7 +204,7 @@ namespace EvolutionSandbox.GameObjects
             FileInfo[] checkpointsFi = di.GetFiles("*.json");
             if (checkpointsFi.Length > 0)
             {
-                Console.WriteLine("Checkpoints founded:");
+                Console.WriteLine("Checkpoints found:");
                 int latest = 0;
                 foreach (FileInfo cpFi in checkpointsFi)
                 {
@@ -255,15 +255,15 @@ namespace EvolutionSandbox.GameObjects
                 return null;
         }
 
-        void CreateCheckpoint() // Creates an checkpoint
+        void CreateCheckpoint() // Creates a checkpoint
         {
             /*Things to save
-                * Random generetor State
+                * Random generator State
                 * HigherHalf of agents (NNs)
                 * stats (medians, averages, highests)
                 * UUID of evolution manager
                 * UUID of food manager
-                * Acumulator form Program.cs
+                * Accumulator from Program.cs
              */
 
             Directory.CreateDirectory(CheckpointsDir);
