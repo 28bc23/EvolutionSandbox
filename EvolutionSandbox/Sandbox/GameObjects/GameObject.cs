@@ -8,7 +8,7 @@ namespace EvolutionSandbox.GameObjects
 
         Queue<Action> actions = new Queue<Action>();
 
-        public Guid ID { get; private set; }
+        public Guid ID { get; set; }
 
         public char Character { get; private set; }
 

@@ -17,6 +17,7 @@ namespace EvolutionSandbox.GameObjects
         float MedianScoreLastGen = 0;
         float AverageScoreLastGen = 0;
         float HighestScoreLastGen = 0;
+        double StartGenAccumulator = 0.0;
 
         List<float> Medians = new List<float>();
         List<float> AverageScores = new List<float>();
@@ -80,6 +81,7 @@ namespace EvolutionSandbox.GameObjects
                     HigherHalf.Clear();
                     HigherHalf = currGen.GetRange(mid, currGen.Count - mid);
                     PRGStateCheckpoint = Utils.Random.State;
+                    StartGenAccumulator = Program.Accumulator;
 
                     foreach (Agent a in AliveAgents.ToArray())
                     {
@@ -146,9 +148,11 @@ namespace EvolutionSandbox.GameObjects
             }
             else
             {
+                ID = checkpoint.EvolutionManagerID;
                 Utils.Random.Init(checkpoint.PRGState, false);
+                Program.SetAccumulator(checkpoint.Accumulator);
 
-                FoodManager foodManager = new FoodManager(Utils.Random.NextGuid());
+                FoodManager foodManager = new FoodManager(checkpoint.FoodManagerID);
                 Program.SpawnGameObject(foodManager);
                 FoodMan = foodManager;
 
@@ -249,6 +253,9 @@ namespace EvolutionSandbox.GameObjects
                 * Random generetor State
                 * HigherHalf of agents (NNs)
                 * stats (medians, averages, highests)
+                * UUID of evolution manager
+                * UUID of food manager
+                * Acumulator form Program.cs
              */
 
             Directory.CreateDirectory(CheckpointsDir);
@@ -263,7 +270,7 @@ namespace EvolutionSandbox.GameObjects
                 connections.Add(nn.GetConnectionsCopy());
             }
 
-            Checkpoint checkpoint = new Checkpoint(PRGStateCheckpoint, layers, connections, Medians, AverageScores, HighestScores);
+            Checkpoint checkpoint = new Checkpoint(PRGStateCheckpoint, layers, connections, Medians, AverageScores, HighestScores, ID, FoodMan.ID, StartGenAccumulator);
 
             string jsonString = JsonSerializer.Serialize(checkpoint, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, MaxDepth = 256, WriteIndented = true, IncludeFields = true });
             File.WriteAllText($"{CheckpointsDir}{checkpointName}", jsonString);
@@ -328,10 +335,13 @@ namespace EvolutionSandbox.GameObjects
         public List<float> Medians {  get; set; }
         public List<float> AverageScores {  get; set; }
         public List<float> HighestScores {  get; set; }
+        public Guid EvolutionManagerID {  get; set; }
+        public Guid FoodManagerID {  get; set; }
+        public double Accumulator {  get; set; }
 
         public Checkpoint() { }
 
-        public Checkpoint(ulong pRGState, List<List<NNNode[]>> layers, List<List<NNConnection>> connections, List<float> medians, List<float> averageScores, List<float> highestScores)
+        public Checkpoint(ulong pRGState, List<List<NNNode[]>> layers, List<List<NNConnection>> connections, List<float> medians, List<float> averageScores, List<float> highestScores, Guid evolutionManagerID, Guid foodManagerID, double accumulator)
         {
             PRGState = pRGState;
             Layers = layers;
@@ -339,6 +349,9 @@ namespace EvolutionSandbox.GameObjects
             Medians = medians;
             AverageScores = averageScores;
             HighestScores = highestScores;
+            EvolutionManagerID = evolutionManagerID;
+            FoodManagerID = foodManagerID;
+            Accumulator = accumulator;
         }
     }
 }
