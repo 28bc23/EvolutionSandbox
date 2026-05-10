@@ -95,7 +95,8 @@ namespace EvolutionSandbox.GameObjects
                         currGen.Add(newAgent);
                         AliveAgents.Add(newAgent);
                         Program.SpawnGameObject(newAgent, false, false);
-                    }
+                    }                    
+
                     Medians.Add(MedianScoreLastGen);
                     AverageScores.Add(AverageScoreLastGen);
                     HighestScores.Add(HighestScoreLastGen);
@@ -129,6 +130,10 @@ namespace EvolutionSandbox.GameObjects
             UpdateStats();
             if (checkpoint == null)
             {
+                FoodManager foodManager = new FoodManager(Guid.NewGuid());
+                Program.SpawnGameObject(foodManager);
+                FoodMan = foodManager;
+
                 for (int i = 0; i < Configuration.Config.NumAgents; i++)
                 {
                     Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
@@ -143,12 +148,22 @@ namespace EvolutionSandbox.GameObjects
             {
                 Utils.Random.Init(checkpoint.PRGState, false);
 
-                for(int i = 0;i < Configuration.Config.NumAgents;i++)
+                FoodManager foodManager = new FoodManager(Guid.NewGuid());
+                Program.SpawnGameObject(foodManager);
+                FoodMan = foodManager;
+
+                for (int i = 0;i < Configuration.Config.NumAgents;i++)
                 {
                     Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
                         Utils.Random.Next((int)Configuration.Config.GridSizeY)),
-                        Guid.NewGuid(), this);
-                    agent.SetNN(checkpoint.Layers[i % checkpoint.Layers.Count], checkpoint.Connections[i % checkpoint.Layers.Count]);
+                        Guid.NewGuid(), this, false);
+
+                    NN tempNN = new NN(0, 0, false);
+                    tempNN.SetLayers(checkpoint.Layers[i % checkpoint.Layers.Count]);
+                    tempNN.SetConnections(checkpoint.Connections[i % checkpoint.Layers.Count]);
+
+                    agent.SetNN(tempNN, true);
+
                     currGen.Add(agent);
                     AliveAgents.Add(agent);
                     Program.SpawnGameObject(agent, false, false);
@@ -163,9 +178,6 @@ namespace EvolutionSandbox.GameObjects
                 HighestScoreLastGen = HighestScores[GenCount - 1];
             }
 
-            FoodManager foodManager = new FoodManager(Guid.NewGuid());
-            Program.SpawnGameObject(foodManager);
-            FoodMan = foodManager;
             CurrentGenTime = Configuration.Config.GenerationTime;
         }
 

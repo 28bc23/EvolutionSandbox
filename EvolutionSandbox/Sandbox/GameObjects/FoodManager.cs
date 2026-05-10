@@ -64,6 +64,7 @@ namespace EvolutionSandbox.GameObjects
             {
                 Program.DestroyGameObject(food);
             }
+            SpawnAccumulator = 0;
         }
     }
 }

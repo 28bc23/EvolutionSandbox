@@ -14,9 +14,9 @@ namespace EvolutionSandbox.NeuralNetwork
 
 
 
-        public NN(int inputLayerSize, int outputLayerSize, bool inicialize = true)
+        public NN(int inputLayerSize, int outputLayerSize, bool initialize = true)
         {
-            if (!inicialize)
+            if (!initialize)
                 return;
 
             Layers.Add(new NNNode[inputLayerSize]);
