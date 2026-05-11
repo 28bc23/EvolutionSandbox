@@ -32,7 +32,7 @@ $closeToFoodBonus = \frac{\sqrt{GridSize.X^2 + GridSize.Y^2} - \sqrt{(Pos.X - cl
 
 ### Windows
 
-You can download the pre-compiled executable for Windows from the [Releases](../../releases) section.
+You can download the pre-compiled executable for Windows from the [Releases](../../releases) section. (you still need to install .NET 10.0)
 
 
 ## Configuration
