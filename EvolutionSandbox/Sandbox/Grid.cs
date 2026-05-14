@@ -1,6 +1,5 @@
 using EvolutionSandbox.GameObjects;
 using EvolutionSandbox.Utils;
-using System.Globalization;
 using System.Text;
 
 namespace EvolutionSandbox
@@ -20,6 +19,7 @@ namespace EvolutionSandbox
 
         public static void Init(Vector2Int gridSize)
         {
+            Console.OutputEncoding = Encoding.UTF8;
             Console.Clear();
             GridSize = gridSize;
             Cells = new List<GameObject>[GridSize.Y, GridSize.X];
@@ -65,7 +65,7 @@ namespace EvolutionSandbox
                             last = Configuration.Config.GrassCharacter;
                             gridColor.Add(Configuration.Config.GrassColor);
                         }
-                        S.Append($" {Configuration.Config.GrassCharacter} ");
+                        S.Append($"{Configuration.Config.GrassCharacter} ");
                     }
                     else
                     {
@@ -76,7 +76,7 @@ namespace EvolutionSandbox
                             gridColor.Add(Cells[i, j][0].Color);
                         }
 
-                        S.AppendFormat(" {0} ", last);
+                        S.AppendFormat("{0} ", last);
                     }
                 }
                 S.Append('\n');
