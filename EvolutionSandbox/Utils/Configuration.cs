@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.Json;
+using System.Runtime.InteropServices;
 namespace EvolutionSandbox.Utils
 {
     internal static class Configuration
@@ -511,11 +512,34 @@ namespace EvolutionSandbox.Utils
 
             Console.Clear();
             Console.Write("Would you like to adjust your configuration manually? [y/N]: ");
-            if(Console.ReadLine().ToLower() == "y")
+            if (Console.ReadLine().ToLower() == "y")
             {
-                Console.WriteLine("Press any key to continue until you're done");
-                Process.Start("notepad.exe", $"./{Config.EnvName}/{Config.EnvName}.conf");
-                Console.ReadKey();
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    try
+                    {
+                        Process process = Process.Start("notepad.exe", $"./{Config.EnvName}/{Config.EnvName}.conf");
+                        process?.WaitForExit();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"The Notepad program was not found.\nIf you still want to edit your configuration, it is located at ./{Config.EnvName}/{Config.EnvName}.conf\nWhen you are finished, press any key to continue . . .");
+                        Console.ReadKey();
+                    }
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    try
+                    {
+                        Process process = Process.Start("vim", $"./{Config.EnvName}/{Config.EnvName}.conf");
+                        process?.WaitForExit();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"The vim program was not found.\nIf you still want to edit your configuration, it is located at ./{Config.EnvName}/{Config.EnvName}.conf\nWhen you are finished, press any key to continue . . .");
+                        Console.ReadKey();
+                    }
+                }
                 LoadEnvFromConfig(Config.EnvName);
             }
         }
@@ -566,7 +590,7 @@ namespace EvolutionSandbox.Utils
                         SaveConfig();
                     }
 
-                    if(Config.EnvName != envName)
+                    if (Config.EnvName != envName)
                     {
                         Config.EnvName = envName;
                         SaveConfig();
