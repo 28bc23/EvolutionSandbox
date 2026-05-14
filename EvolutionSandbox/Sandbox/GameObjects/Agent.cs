@@ -14,7 +14,7 @@ namespace EvolutionSandbox.GameObjects
 
         double MaxEnergy = Config.AgentMaxEnergy;
 
-        public Agent(Vector2Int spawnPos, Guid id, EvolutionManager manager, bool initializeNN = true) : base(spawnPos, id, '*', GameObjectType.Agent, ConsoleColor.Gray, energy: Config.AgentMaxEnergy)
+        public Agent(Vector2Int spawnPos, Guid id, EvolutionManager manager, bool initializeNN = true) : base(spawnPos, id, Config.AgentCharacter, GameObjectType.Agent, Config.AgentColor, energy: Config.AgentMaxEnergy)
         {
             nn = new NN(7, 13, initializeNN);
             Manager = manager;

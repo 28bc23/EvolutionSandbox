@@ -1,4 +1,5 @@
 using EvolutionSandbox.GameObjects;
+using EvolutionSandbox.Utils;
 using System.Globalization;
 using System.Text;
 
@@ -13,12 +14,9 @@ namespace EvolutionSandbox
         static StringBuilder UnderGridTextBuilder = new StringBuilder();
         static List<ConsoleColor> gridColor = new List<ConsoleColor>();
         static string LastGrid = "";
-        static char GrassCharacter = '•';
         static string UnderGridText = "";
         static string LastUnderGridText = "";
-
-        static ConsoleColor GrassColor = ConsoleColor.Green;
-        static ConsoleColor UnderGridTextColor = ConsoleColor.Gray;
+        static char GridColorSplitter = '\b';
 
         public static void Init(Vector2Int gridSize)
         {
@@ -54,7 +52,6 @@ namespace EvolutionSandbox
             gridColor.Add(ConsoleColor.Blue);
 
             char last = ' ';
-            char colorSplitter = '\b';
 
             for (int i = 0; i < GridSize.Y; i++)
             {
@@ -62,19 +59,19 @@ namespace EvolutionSandbox
                 {
                     if (Cells[i, j].Count == 0)
                     {
-                        if (last != GrassCharacter)
+                        if (last != Configuration.Config.GrassCharacter)
                         {
-                            S.Append(colorSplitter);
-                            last = GrassCharacter;
-                            gridColor.Add(GrassColor);
+                            S.Append(GridColorSplitter);
+                            last = Configuration.Config.GrassCharacter;
+                            gridColor.Add(Configuration.Config.GrassColor);
                         }
-                        S.Append($" {GrassCharacter} ");
+                        S.Append($" {Configuration.Config.GrassCharacter} ");
                     }
                     else
                     {
                         if (last != Cells[i, j][0].Character)
                         {
-                            S.Append(colorSplitter);
+                            S.Append(GridColorSplitter);
                             last = Cells[i, j][0].Character;
                             gridColor.Add(Cells[i, j][0].Color);
                         }
@@ -113,16 +110,16 @@ namespace EvolutionSandbox
             }
 
             LastUnderGridText = UnderGridTextBuilder.ToString();
-            S.Append(colorSplitter);
+            S.Append(GridColorSplitter);
             S.Append(LastUnderGridText);
-            gridColor.Add(UnderGridTextColor);
+            gridColor.Add(Configuration.Config.UnderGridTextColor);
 
             string currGrid = S.ToString();
             if (currGrid != LastGrid) //Rewrites grid if there was a change
             {
                 Console.SetCursorPosition(0, 0);
 
-                string[] gridSplit = currGrid.Split(colorSplitter);
+                string[] gridSplit = currGrid.Split(GridColorSplitter);
 
                 for (int i = 0; i < gridSplit.Length; i++)
                 {
