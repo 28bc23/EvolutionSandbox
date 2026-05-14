@@ -137,6 +137,8 @@ namespace EvolutionSandbox.GameObjects
 
             Grid.Init(new Vector2Int((int)Configuration.Config.GridSizeX, (int)Configuration.Config.GridSizeY)); // Initialize size of grid
 
+            CreateLakes();
+
             UpdateStats();
             if (checkpoint == null)
             {
@@ -191,6 +193,18 @@ namespace EvolutionSandbox.GameObjects
             }
 
             CurrentGenTime = Configuration.Config.GenerationTime;
+        }
+
+        void CreateLakes()
+        {
+            int lakes = 1;
+            for (int i = 0; i < lakes; i++)
+            {
+                Vector2Int pos = new Vector2Int(Utils.Random.Next(Grid.GridSize.X),
+                Utils.Random.Next(Grid.GridSize.Y));
+                Water water = new Water(pos, Utils.Random.NextGuid());
+                Program.SpawnGameObject(water, false, true);
+            }
         }
 
         Checkpoint? LoadCheckpoint()

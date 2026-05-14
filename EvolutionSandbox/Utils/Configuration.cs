@@ -628,11 +628,13 @@ namespace EvolutionSandbox.Utils
         public char GrassCharacter = '•';
         public char AgentCharacter = '*';
         public char FoodCharacter = 'X';
+        public char WaterCharacter = 'W';
 
         public ConsoleColor GrassColor = ConsoleColor.Green;
         public ConsoleColor AgentColor = ConsoleColor.White;
         public ConsoleColor FoodColor = ConsoleColor.Yellow;
         public ConsoleColor UnderGridTextColor = ConsoleColor.Gray;
+        public ConsoleColor WaterColor = ConsoleColor.Blue;
 
         public int GraphRate = 100;
         public int CheckpointRate = 100;
