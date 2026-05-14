@@ -1,8 +1,8 @@
 using EvolutionSandbox.NeuralNetwork;
 using EvolutionSandbox.Utils;
+using System.Numerics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EvolutionSandbox.GameObjects
 {
@@ -197,14 +197,60 @@ namespace EvolutionSandbox.GameObjects
 
         void CreateLakes()
         {
-            int lakes = 1;
+            int lakes = 10;
+            int widthMax = 10;
+            int widthMin = 2;
+            int heightMax = 10;
+            int heightMin = 2;
             for (int i = 0; i < lakes; i++)
             {
-                Vector2Int pos = new Vector2Int(Utils.Random.Next(Grid.GridSize.X),
-                Utils.Random.Next(Grid.GridSize.Y));
-                Water water = new Water(pos, Utils.Random.NextGuid());
-                Program.SpawnGameObject(water, false, true);
+                List<Vector2Int> positions = new List<Vector2Int>();
+
+                Vector2Int centerPos = new Vector2Int(Utils.Random.Next(Grid.GridSize.X), Utils.Random.Next(Grid.GridSize.Y));
+                positions.Add(centerPos);
+
+                int width = Utils.Random.Next(widthMin, widthMax);
+                int height = Utils.Random.Next(heightMin, heightMax);
+
+                Vector2 halfSize = new Vector2(width / 2.0f, height / 2.0f);
+
+                for(int j = (int)(centerPos.X - halfSize.X); j <= (centerPos.X + halfSize.X); j++)
+                {
+                    if (j < 0)
+                        continue;
+                    if (j >= Grid.GridSize.X)
+                        break;
+
+                    for (int k = (int)(centerPos.Y - halfSize.Y); k <= (centerPos.Y + halfSize.Y) ; k++)
+                    {
+                        if (k < 0)
+                            continue;
+                        if (k >= Grid.GridSize.Y)
+                            break;
+
+                        Vector2Int pos = new Vector2Int(j, k);
+                        if (InsideOfLake(centerPos, pos, halfSize))
+                        {
+                            positions.Add(pos);
+                        }
+                    }
+                }
+
+                foreach (Vector2Int pos in positions)
+                {
+                    Water water = new Water(pos, Utils.Random.NextGuid());
+                    Program.SpawnGameObject(water, false, true);
+                }
             }
+        }
+
+        public bool InsideOfLake(Vector2Int centerPos, Vector2Int pos, Vector2 halfSize)
+        {
+            halfSize.X = (halfSize.X == 0) ? 1 : halfSize.X;
+            halfSize.Y = (halfSize.Y == 0) ? 1 : halfSize.Y;
+
+            double p = Math.Pow(pos.X - centerPos.X, 2)/(double)Math.Pow(halfSize.X, 2) + Math.Pow(pos.Y - centerPos.Y, 2) / (double)Math.Pow(halfSize.Y, 2);
+            return (p <= 1) ? true : false;
         }
 
         Checkpoint? LoadCheckpoint()
