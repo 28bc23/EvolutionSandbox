@@ -27,7 +27,10 @@ namespace EvolutionSandbox.GameObjects
             Color = color;
             Energy = energy;
         }
-        public abstract void Update();
+        public virtual void Update()
+        {
+
+        }
 
         public virtual void MakeAction(Action action)
         {
@@ -79,6 +82,7 @@ namespace EvolutionSandbox.GameObjects
     {
         Agent,
         Food,
+        Water,
         Manager
     }
 }

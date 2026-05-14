@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 namespace EvolutionSandbox.Utils
 {
@@ -507,6 +508,16 @@ namespace EvolutionSandbox.Utils
             #endregion
 
             SaveConfig();
+
+            Console.Clear();
+            Console.Write("Would you like to adjust your configuration manually? [y/N]: ");
+            if(Console.ReadLine().ToLower() == "y")
+            {
+                Console.WriteLine("Press any key to continue until you're done");
+                Process.Start("notepad.exe", $"./{Config.EnvName}/{Config.EnvName}.conf");
+                Console.ReadKey();
+                LoadEnvFromConfig(Config.EnvName);
+            }
         }
 
         public static void GetConfigFromUser()
@@ -552,6 +563,12 @@ namespace EvolutionSandbox.Utils
                     if (Config.MaxTicksPerFrame < 1)
                     {
                         Config.MaxTicksPerFrame = 1;
+                        SaveConfig();
+                    }
+
+                    if(Config.EnvName != envName)
+                    {
+                        Config.EnvName = envName;
                         SaveConfig();
                     }
 
@@ -628,11 +645,13 @@ namespace EvolutionSandbox.Utils
         public char GrassCharacter = '•';
         public char AgentCharacter = '*';
         public char FoodCharacter = 'X';
+        public char WaterCharacter = 'W';
 
         public ConsoleColor GrassColor = ConsoleColor.Green;
         public ConsoleColor AgentColor = ConsoleColor.White;
         public ConsoleColor FoodColor = ConsoleColor.Yellow;
         public ConsoleColor UnderGridTextColor = ConsoleColor.Gray;
+        public ConsoleColor WaterColor = ConsoleColor.Blue;
 
         public int GraphRate = 100;
         public int CheckpointRate = 100;
