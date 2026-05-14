@@ -31,7 +31,7 @@ namespace EvolutionSandbox.GameObjects
         double CurrentGenTime;
 
 
-        public EvolutionManager(Guid id) : base(new Vector2Int(0, 0), id, 'M', GameObjectType.Manager)
+        public EvolutionManager(Guid id) : base(new Vector2Int(0, 0), id, 'M', GameObjectType.Manager, ConsoleColor.DarkRed)
         {
             StartNew();
         }
@@ -97,7 +97,7 @@ namespace EvolutionSandbox.GameObjects
                         currGen.Add(newAgent);
                         AliveAgents.Add(newAgent);
                         Program.SpawnGameObject(newAgent, false, false);
-                    }                    
+                    }
 
                     Medians.Add(MedianScoreLastGen);
                     AverageScores.Add(AverageScoreLastGen);
@@ -164,7 +164,7 @@ namespace EvolutionSandbox.GameObjects
                 Program.SpawnGameObject(foodManager);
                 FoodMan = foodManager;
 
-                for (int i = 0;i < Configuration.Config.NumAgents;i++)
+                for (int i = 0; i < Configuration.Config.NumAgents; i++)
                 {
                     Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
                         Utils.Random.Next((int)Configuration.Config.GridSizeY)),
@@ -337,15 +337,15 @@ namespace EvolutionSandbox.GameObjects
 
     internal class Checkpoint
     {
-        public ulong PRGState {  get; set; }
+        public ulong PRGState { get; set; }
         public List<List<NNConnection>> Connections { get; set; }
         public List<List<NNNode[]>> Layers { get; set; }
-        public List<float> Medians {  get; set; }
-        public List<float> AverageScores {  get; set; }
-        public List<float> HighestScores {  get; set; }
-        public Guid EvolutionManagerID {  get; set; }
-        public Guid FoodManagerID {  get; set; }
-        public double Accumulator {  get; set; }
+        public List<float> Medians { get; set; }
+        public List<float> AverageScores { get; set; }
+        public List<float> HighestScores { get; set; }
+        public Guid EvolutionManagerID { get; set; }
+        public Guid FoodManagerID { get; set; }
+        public double Accumulator { get; set; }
 
         public Checkpoint() { }
 

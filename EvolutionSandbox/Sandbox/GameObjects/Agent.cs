@@ -14,7 +14,7 @@ namespace EvolutionSandbox.GameObjects
 
         double MaxEnergy = Config.AgentMaxEnergy;
 
-        public Agent(Vector2Int spawnPos, Guid id, EvolutionManager manager, bool initializeNN = true) : base(spawnPos, id, '*', GameObjectType.Agent, energy: Config.AgentMaxEnergy)
+        public Agent(Vector2Int spawnPos, Guid id, EvolutionManager manager, bool initializeNN = true) : base(spawnPos, id, '*', GameObjectType.Agent, ConsoleColor.Gray, energy: Config.AgentMaxEnergy)
         {
             nn = new NN(7, 13, initializeNN);
             Manager = manager;
@@ -47,7 +47,7 @@ namespace EvolutionSandbox.GameObjects
 
         public override void OnCollisionEnter(CollisionType collision, GameObject collidedGameObject)
         {
-            if(collision == CollisionType.CollisionWall)
+            if (collision == CollisionType.CollisionWall)
             {
                 Energy -= Config.AgentWallCollisionEnergyPenalty;
             }
@@ -74,10 +74,10 @@ namespace EvolutionSandbox.GameObjects
             float energyBonus = (float)(Energy - MaxEnergy) / (float)MaxEnergy;
 
             Vector2Int closestFoodPos = Manager.GetPosOfClosestFood(Pos);
-            float x = MathF.Pow(Pos.X - closestFoodPos.X,2);
+            float x = MathF.Pow(Pos.X - closestFoodPos.X, 2);
             float y = MathF.Pow(Pos.Y - closestFoodPos.Y, 2);
             float diagonal = MathF.Sqrt(MathF.Pow(Grid.GridSize.X, 2) + MathF.Pow(Grid.GridSize.Y, 2));
-            float closeToFoodBonus = (diagonal - MathF.Sqrt(x + y))/diagonal;
+            float closeToFoodBonus = (diagonal - MathF.Sqrt(x + y)) / diagonal;
 
             x = Pos.X / (float)Grid.GridSize.X;
             y = Pos.Y / (float)Grid.GridSize.Y;

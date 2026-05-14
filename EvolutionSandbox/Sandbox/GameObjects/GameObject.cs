@@ -16,12 +16,15 @@ namespace EvolutionSandbox.GameObjects
 
         public double Energy { get; protected set; }
 
-        public GameObject(Vector2Int spawnPos, Guid id, char character, GameObjectType gameObjectType, float energy = 0)
+        public ConsoleColor Color { get; protected set; }
+
+        public GameObject(Vector2Int spawnPos, Guid id, char character, GameObjectType gameObjectType, ConsoleColor color, float energy = 0)
         {
             Pos = spawnPos;
             ID = id;
             Character = character;
             GameObjectType = gameObjectType;
+            Color = color;
             Energy = energy;
         }
         public abstract void Update();
