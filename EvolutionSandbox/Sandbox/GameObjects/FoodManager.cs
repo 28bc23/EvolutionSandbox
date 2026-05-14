@@ -9,7 +9,7 @@ namespace EvolutionSandbox.GameObjects
 
         List<Food> Foods = new List<Food>();
 
-        public FoodManager(Guid id) : base(new Vector2Int(0, 0), id, 'M', GameObjectType.Manager)
+        public FoodManager(Guid id) : base(new Vector2Int(0, 0), id, 'M', GameObjectType.Manager, ConsoleColor.DarkRed)
         {
         }
 

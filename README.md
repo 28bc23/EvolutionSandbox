@@ -1,6 +1,9 @@
 # EvolutionSandbox
 
 > [!Warning]
+> The project presentation covered [10687f5](https://github.com/28bc23/EvolutionSandbox/tree/10687f55663d8d2acdfc021367ea87463f667fef)
+
+> [!Warning]
 > Checkpoint readme is on commit [8aa675b](https://github.com/28bc23/EvolutionSandbox/tree/8aa675b31020e78a21333210794c0a2313a27425)
 
 A console application in C# (.NET 10) simulating the evolution of agents in a 2D grid. Agents survive by finding and consuming food, which replenishes their energy. If an agent's energy drops to zero, it dies. The goal is to evolve agents capable of efficient survival using evolutionary algorithms and neural networks.

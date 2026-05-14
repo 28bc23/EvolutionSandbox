@@ -549,7 +549,7 @@ namespace EvolutionSandbox.Utils
                 {
                     Config = configN;
 
-                    if(Config.MaxTicksPerFrame < 1)
+                    if (Config.MaxTicksPerFrame < 1)
                     {
                         Config.MaxTicksPerFrame = 1;
                         SaveConfig();
@@ -578,12 +578,13 @@ namespace EvolutionSandbox.Utils
             try
             {
                 File.WriteAllText(fileName, jsonString);
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine($"Failed to save config: {ex.Message}");
                 return false;
             }
-            
+
 
             Console.WriteLine($"Config saved to {fileName}");
 
@@ -623,6 +624,15 @@ namespace EvolutionSandbox.Utils
         public float AgentStepActionEnergyCost = 5;
         public float AgentJumpActionEnergyCost = 10;
         public float AgentNoActionEnergyCost = 0;
+
+        public char GrassCharacter = '•';
+        public char AgentCharacter = '*';
+        public char FoodCharacter = 'X';
+
+        public ConsoleColor GrassColor = ConsoleColor.Green;
+        public ConsoleColor AgentColor = ConsoleColor.White;
+        public ConsoleColor FoodColor = ConsoleColor.Yellow;
+        public ConsoleColor UnderGridTextColor = ConsoleColor.Gray;
 
         public int GraphRate = 100;
         public int CheckpointRate = 100;

@@ -1,4 +1,5 @@
 using EvolutionSandbox.GameObjects;
+using EvolutionSandbox.Utils;
 using System.Globalization;
 using System.Text;
 
@@ -11,9 +12,11 @@ namespace EvolutionSandbox
         static List<GameObject>[,] Cells = new List<GameObject>[0, 0];
         static StringBuilder S = new StringBuilder();
         static StringBuilder UnderGridTextBuilder = new StringBuilder();
+        static List<ConsoleColor> gridColor = new List<ConsoleColor>();
         static string LastGrid = "";
         static string UnderGridText = "";
         static string LastUnderGridText = "";
+        static char GridColorSplitter = '\b';
 
         public static void Init(Vector2Int gridSize)
         {
@@ -45,15 +48,36 @@ namespace EvolutionSandbox
                 return;
 
             S.Clear();
+            gridColor.Clear();
+            gridColor.Add(ConsoleColor.Blue);
+
+            char last = ' ';
 
             for (int i = 0; i < GridSize.Y; i++)
             {
                 for (int j = 0; j < GridSize.X; j++)
                 {
                     if (Cells[i, j].Count == 0)
-                        S.Append("[ ]");
+                    {
+                        if (last != Configuration.Config.GrassCharacter)
+                        {
+                            S.Append(GridColorSplitter);
+                            last = Configuration.Config.GrassCharacter;
+                            gridColor.Add(Configuration.Config.GrassColor);
+                        }
+                        S.Append($" {Configuration.Config.GrassCharacter} ");
+                    }
                     else
-                        S.AppendFormat("[{0}]", Cells[i, j][0].Character);
+                    {
+                        if (last != Cells[i, j][0].Character)
+                        {
+                            S.Append(GridColorSplitter);
+                            last = Cells[i, j][0].Character;
+                            gridColor.Add(Cells[i, j][0].Color);
+                        }
+
+                        S.AppendFormat(" {0} ", last);
+                    }
                 }
                 S.Append('\n');
             }
@@ -86,14 +110,24 @@ namespace EvolutionSandbox
             }
 
             LastUnderGridText = UnderGridTextBuilder.ToString();
+            S.Append(GridColorSplitter);
             S.Append(LastUnderGridText);
+            gridColor.Add(Configuration.Config.UnderGridTextColor);
 
             string currGrid = S.ToString();
             if (currGrid != LastGrid) //Rewrites grid if there was a change
             {
                 Console.SetCursorPosition(0, 0);
 
-                Console.Write(S);
+                string[] gridSplit = currGrid.Split(GridColorSplitter);
+
+                for (int i = 0; i < gridSplit.Length; i++)
+                {
+                    Console.ForegroundColor = gridColor[i];
+                    Console.Write(gridSplit[i]);
+                }
+
+                Console.ResetColor();
 
                 LastGrid = currGrid;
             }
@@ -233,12 +267,12 @@ namespace EvolutionSandbox
                         case MovementType.UpRight:
                             newY = pos.Y + 1;
                             newX = pos.X + 1;
-                            if(newX >= GridSize.X)
+                            if (newX >= GridSize.X)
                             {
                                 newX = GridSize.X - 1;
                                 wallCollision = true;
                             }
-                            if(newY >= GridSize.Y)
+                            if (newY >= GridSize.Y)
                             {
                                 newY = GridSize.Y - 1;
                                 wallCollision = true;
@@ -249,12 +283,12 @@ namespace EvolutionSandbox
                             newY = pos.Y - 1;
                             newX = pos.X + 1;
 
-                            if( newX >= GridSize.X)
+                            if (newX >= GridSize.X)
                             {
                                 newX = GridSize.X - 1;
                                 wallCollision = true;
                             }
-                            if(newY < 0)
+                            if (newY < 0)
                             {
                                 newY = 0; wallCollision = true;
                             }
@@ -264,13 +298,13 @@ namespace EvolutionSandbox
                             newY = pos.Y - 1;
                             newX = pos.X - 1;
 
-                            if(newX < 0)
+                            if (newX < 0)
                             {
                                 newX = 0; wallCollision = true;
                             }
-                            if(newY < 0)
+                            if (newY < 0)
                             {
-                                newY = 0; wallCollision=true;
+                                newY = 0; wallCollision = true;
                             }
                             break;
 
@@ -278,11 +312,11 @@ namespace EvolutionSandbox
                             newY = pos.Y + 1;
                             newX = pos.X - 1;
 
-                            if(newX < 0)
+                            if (newX < 0)
                             {
                                 newX = 0; wallCollision = true;
                             }
-                            if(newY >= GridSize.Y)
+                            if (newY >= GridSize.Y)
                             {
                                 newY = GridSize.Y - 1; wallCollision = true;
                             }
