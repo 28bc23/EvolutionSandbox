@@ -60,12 +60,14 @@ namespace EvolutionSandbox.GameObjects
         {
             if (collidedGameObject != null)
                 CollidingObjects.Add(collidedGameObject);
+            OnCollisionEnter(collision);
             return;
         }
 
         public virtual void OnCollisionExit(CollisionType collision, GameObject collidedGameObject)
         {
             CollidingObjects.Remove(collidedGameObject);
+            OnCollisionExit(collision);
             return;
         }
 

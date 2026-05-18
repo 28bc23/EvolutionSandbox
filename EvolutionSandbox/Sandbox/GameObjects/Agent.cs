@@ -48,10 +48,6 @@ namespace EvolutionSandbox.GameObjects
 
         public override void OnCollisionEnter(CollisionType collision, GameObject collidedGameObject)
         {
-            if (collision == CollisionType.CollisionWall)
-            {
-                Energy -= Config.AgentWallCollisionEnergyPenalty;
-            }
 
             if (collision == CollisionType.CollisionGameObject)
             {
@@ -64,11 +60,19 @@ namespace EvolutionSandbox.GameObjects
                 }
                 else if (collidedGameObject.GameObjectType == GameObjectType.Water)
                 {
-                    Console.Write("WaterEnter");
                 }
             }
 
             base.OnCollisionEnter(collision, collidedGameObject);
+        }
+
+        public override void OnCollisionEnter(CollisionType collision)
+        {
+            if (collision == CollisionType.CollisionWall)
+            {
+                Energy -= Config.AgentWallCollisionEnergyPenalty;
+            }
+            base.OnCollisionEnter(collision);
         }
 
         public override void OnCollisionExit(CollisionType collision, GameObject collidedGameObject)
@@ -77,7 +81,6 @@ namespace EvolutionSandbox.GameObjects
             {
                 if (collidedGameObject.GameObjectType == GameObjectType.Water)
                 {
-                    Console.Write("WaterExit");
                 }
             }
 
@@ -109,8 +112,8 @@ namespace EvolutionSandbox.GameObjects
         public Agent DeepCopy(bool mutate = true)
         {
             Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Config.GridSizeX),
-                    Utils.Random.Next((int)Config.GridSizeY)),
-                    Utils.Random.NextGuid(), Manager, false);
+                  Utils.Random.Next((int)Config.GridSizeY)),
+                Utils.Random.NextGuid(), Manager, false);
             agent.nn = nn.Copy(mutate);
             return agent;
         }
