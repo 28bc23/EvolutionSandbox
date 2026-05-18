@@ -156,7 +156,7 @@ namespace EvolutionSandbox
 
         public static void SetAccumulator(double accumulator)
         {
-            if(accumulator < 0) return;
+            if (accumulator < 0) return;
 
             Accumulator = accumulator;
         }

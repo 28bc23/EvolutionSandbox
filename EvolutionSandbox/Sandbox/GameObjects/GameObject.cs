@@ -17,6 +17,7 @@ namespace EvolutionSandbox.GameObjects
         public double Energy { get; protected set; }
 
         public ConsoleColor Color { get; protected set; }
+        public List<GameObject> CollidingObjects { get; private set; } = new List<GameObject>();
 
         public GameObject(Vector2Int spawnPos, Guid id, char character, GameObjectType gameObjectType, ConsoleColor color, float energy = 0)
         {
@@ -50,8 +51,23 @@ namespace EvolutionSandbox.GameObjects
             return;
         }
 
+        public virtual void OnCollisionExit(CollisionType collision)
+        {
+            return;
+        }
+
         public virtual void OnCollisionEnter(CollisionType collision, GameObject collidedGameObject)
         {
+            if (collidedGameObject != null)
+                CollidingObjects.Add(collidedGameObject);
+            OnCollisionEnter(collision);
+            return;
+        }
+
+        public virtual void OnCollisionExit(CollisionType collision, GameObject collidedGameObject)
+        {
+            CollidingObjects.Remove(collidedGameObject);
+            OnCollisionExit(collision);
             return;
         }
 

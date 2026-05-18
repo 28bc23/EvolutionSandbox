@@ -201,18 +201,20 @@ namespace EvolutionSandbox
                     switch (moveAction.ActionType)
                     {
                         case MovementType.Up:
-                            newY = pos.Y + 1;
-                            if (newY >= GridSize.Y)
+                            newY = pos.Y - 1;
+                            if (newY < 0)
                             {
-                                newY = GridSize.Y - 1; wallCollision = true;
+                                newY = 0;
+                                wallCollision = true;
                             }
                             break;
 
                         case MovementType.Down:
-                            newY = pos.Y - 1;
-                            if (newY < 0)
+                            newY = pos.Y + 1;
+                            if (newY >= GridSize.Y)
                             {
-                                newY = 0; wallCollision = true;
+                                newY = GridSize.Y - 1;
+                                wallCollision = true;
                             }
                             break;
 
@@ -233,18 +235,18 @@ namespace EvolutionSandbox
                             break;
 
                         case MovementType.JumpUp:
-                            newY = pos.Y + 2;
-                            if (newY >= GridSize.Y)
-                            {
-                                newY = GridSize.Y - 1; wallCollision = true;
-                            }
-                            break;
-
-                        case MovementType.JumpDown:
                             newY = pos.Y - 2;
                             if (newY < 0)
                             {
                                 newY = 0; wallCollision = true;
+                            }
+                            break;
+
+                        case MovementType.JumpDown:
+                            newY = pos.Y + 2;
+                            if (newY >= GridSize.Y)
+                            {
+                                newY = GridSize.Y - 1; wallCollision = true;
                             }
                             break;
 
@@ -265,8 +267,24 @@ namespace EvolutionSandbox
                             break;
 
                         case MovementType.UpRight:
+                            newY = pos.Y - 1;
+                            newX = pos.X + 1;
+                            if (newX >= GridSize.X)
+                            {
+                                newX = GridSize.X - 1;
+                                wallCollision = true;
+                            }
+                            if (newY < 0)
+                            {
+                                newY = 0;
+                                wallCollision = true;
+                            }
+                            break;
+
+                        case MovementType.DownRight:
                             newY = pos.Y + 1;
                             newX = pos.X + 1;
+
                             if (newX >= GridSize.X)
                             {
                                 newX = GridSize.X - 1;
@@ -274,41 +292,11 @@ namespace EvolutionSandbox
                             }
                             if (newY >= GridSize.Y)
                             {
-                                newY = GridSize.Y - 1;
-                                wallCollision = true;
-                            }
-                            break;
-
-                        case MovementType.DownRight:
-                            newY = pos.Y - 1;
-                            newX = pos.X + 1;
-
-                            if (newX >= GridSize.X)
-                            {
-                                newX = GridSize.X - 1;
-                                wallCollision = true;
-                            }
-                            if (newY < 0)
-                            {
-                                newY = 0; wallCollision = true;
+                                newY = GridSize.Y - 1; wallCollision = true;
                             }
                             break;
 
                         case MovementType.DownLeft:
-                            newY = pos.Y - 1;
-                            newX = pos.X - 1;
-
-                            if (newX < 0)
-                            {
-                                newX = 0; wallCollision = true;
-                            }
-                            if (newY < 0)
-                            {
-                                newY = 0; wallCollision = true;
-                            }
-                            break;
-
-                        case MovementType.UpLeft:
                             newY = pos.Y + 1;
                             newX = pos.X - 1;
 
@@ -319,6 +307,20 @@ namespace EvolutionSandbox
                             if (newY >= GridSize.Y)
                             {
                                 newY = GridSize.Y - 1; wallCollision = true;
+                            }
+                            break;
+
+                        case MovementType.UpLeft:
+                            newY = pos.Y - 1;
+                            newX = pos.X - 1;
+
+                            if (newX < 0)
+                            {
+                                newX = 0; wallCollision = true;
+                            }
+                            if (newY < 0)
+                            {
+                                newY = 0; wallCollision = true;
                             }
                             break;
                         case MovementType.NoMove:
@@ -335,10 +337,17 @@ namespace EvolutionSandbox
                     Cells[pos.Y, pos.X].Remove(moveAction.Initiator);
 
                     moveAction.Initiator.Pos = new Vector2Int(newX, newY);
-
-                    if (Cells[newY, newX].Count > 0)
+                    foreach (GameObject go in moveAction.Initiator.CollidingObjects.ToArray())
                     {
-                        foreach (GameObject go in Cells[newY, newX].ToArray())
+                        if (!Cells[newY, newX].Contains(go))
+                        {
+                            go.OnCollisionExit(CollisionType.CollisionGameObject, moveAction.Initiator);
+                            moveAction.Initiator.OnCollisionExit(CollisionType.CollisionGameObject, go);
+                        }
+                    }
+                    foreach (GameObject go in Cells[newY, newX].ToArray())
+                    {
+                        if (!moveAction.Initiator.CollidingObjects.Contains(go))
                         {
                             moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionGameObject, go);
                             go.OnCollisionEnter(CollisionType.CollisionGameObject, moveAction.Initiator);

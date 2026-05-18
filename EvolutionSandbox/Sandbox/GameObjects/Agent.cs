@@ -1,4 +1,5 @@
-﻿using EvolutionSandbox;
+﻿using System.Diagnostics;
+using EvolutionSandbox;
 using EvolutionSandbox.NeuralNetwork;
 using EvolutionSandbox.Utils;
 using static EvolutionSandbox.Utils.Configuration;
@@ -47,10 +48,6 @@ namespace EvolutionSandbox.GameObjects
 
         public override void OnCollisionEnter(CollisionType collision, GameObject collidedGameObject)
         {
-            if (collision == CollisionType.CollisionWall)
-            {
-                Energy -= Config.AgentWallCollisionEnergyPenalty;
-            }
 
             if (collision == CollisionType.CollisionGameObject)
             {
@@ -61,7 +58,33 @@ namespace EvolutionSandbox.GameObjects
 
                     Program.DestroyGameObject(collidedGameObject);
                 }
+                else if (collidedGameObject.GameObjectType == GameObjectType.Water)
+                {
+                }
             }
+
+            base.OnCollisionEnter(collision, collidedGameObject);
+        }
+
+        public override void OnCollisionEnter(CollisionType collision)
+        {
+            if (collision == CollisionType.CollisionWall)
+            {
+                Energy -= Config.AgentWallCollisionEnergyPenalty;
+            }
+            base.OnCollisionEnter(collision);
+        }
+
+        public override void OnCollisionExit(CollisionType collision, GameObject collidedGameObject)
+        {
+            if (collision == CollisionType.CollisionGameObject)
+            {
+                if (collidedGameObject.GameObjectType == GameObjectType.Water)
+                {
+                }
+            }
+
+            base.OnCollisionExit(collision, collidedGameObject);
         }
 
         public override void OnDestroy()
@@ -89,8 +112,8 @@ namespace EvolutionSandbox.GameObjects
         public Agent DeepCopy(bool mutate = true)
         {
             Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Config.GridSizeX),
-                    Utils.Random.Next((int)Config.GridSizeY)),
-                    Utils.Random.NextGuid(), Manager, false);
+                  Utils.Random.Next((int)Config.GridSizeY)),
+                Utils.Random.NextGuid(), Manager, false);
             agent.nn = nn.Copy(mutate);
             return agent;
         }

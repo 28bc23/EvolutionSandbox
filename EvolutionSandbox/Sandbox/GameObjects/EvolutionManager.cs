@@ -149,8 +149,8 @@ namespace EvolutionSandbox.GameObjects
                 for (int i = 0; i < Configuration.Config.NumAgents; i++)
                 {
                     Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
-                        Utils.Random.Next((int)Configuration.Config.GridSizeY)),
-                        Utils.Random.NextGuid(), this);
+                      Utils.Random.Next((int)Configuration.Config.GridSizeY)),
+                     Utils.Random.NextGuid(), this);
                     currGen.Add(agent);
                     AliveAgents.Add(agent);
                     Program.SpawnGameObject(agent, false, false);
@@ -169,8 +169,8 @@ namespace EvolutionSandbox.GameObjects
                 for (int i = 0; i < Configuration.Config.NumAgents; i++)
                 {
                     Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
-                        Utils.Random.Next((int)Configuration.Config.GridSizeY)),
-                        Utils.Random.NextGuid(), this, false);
+                      Utils.Random.Next((int)Configuration.Config.GridSizeY)),
+                    Utils.Random.NextGuid(), this, false);
 
                     NN tempNN = new NN(0, 0, false);
                     tempNN.SetLayers(checkpoint.Layers[i % checkpoint.Layers.Count]);
@@ -214,14 +214,14 @@ namespace EvolutionSandbox.GameObjects
 
                 Vector2 halfSize = new Vector2(width / 2.0f, height / 2.0f);
 
-                for(int j = (int)(centerPos.X - halfSize.X); j <= (centerPos.X + halfSize.X); j++)
+                for (int j = (int)(centerPos.X - halfSize.X); j <= (centerPos.X + halfSize.X); j++)
                 {
                     if (j < 0)
                         continue;
                     if (j >= Grid.GridSize.X)
                         break;
 
-                    for (int k = (int)(centerPos.Y - halfSize.Y); k <= (centerPos.Y + halfSize.Y) ; k++)
+                    for (int k = (int)(centerPos.Y - halfSize.Y); k <= (centerPos.Y + halfSize.Y); k++)
                     {
                         if (k < 0)
                             continue;
@@ -249,7 +249,7 @@ namespace EvolutionSandbox.GameObjects
             halfSize.X = (halfSize.X == 0) ? 1 : halfSize.X;
             halfSize.Y = (halfSize.Y == 0) ? 1 : halfSize.Y;
 
-            double p = Math.Pow(pos.X - centerPos.X, 2)/(double)Math.Pow(halfSize.X, 2) + Math.Pow(pos.Y - centerPos.Y, 2) / (double)Math.Pow(halfSize.Y, 2);
+            double p = Math.Pow(pos.X - centerPos.X, 2) / (double)Math.Pow(halfSize.X, 2) + Math.Pow(pos.Y - centerPos.Y, 2) / (double)Math.Pow(halfSize.Y, 2);
             return (p <= 1) ? true : false;
         }
 
