@@ -1,4 +1,5 @@
-﻿using EvolutionSandbox;
+﻿using System.Diagnostics;
+using EvolutionSandbox;
 using EvolutionSandbox.NeuralNetwork;
 using EvolutionSandbox.Utils;
 using static EvolutionSandbox.Utils.Configuration;
@@ -61,7 +62,26 @@ namespace EvolutionSandbox.GameObjects
 
                     Program.DestroyGameObject(collidedGameObject);
                 }
+                else if (collidedGameObject.GameObjectType == GameObjectType.Water)
+                {
+                    Console.Write("WaterEnter");
+                }
             }
+
+            base.OnCollisionEnter(collision, collidedGameObject);
+        }
+
+        public override void OnCollisionExit(CollisionType collision, GameObject collidedGameObject)
+        {
+            if (collision == CollisionType.CollisionGameObject)
+            {
+                if (collidedGameObject.GameObjectType == GameObjectType.Water)
+                {
+                    Console.Write("WaterExit");
+                }
+            }
+
+            base.OnCollisionExit(collision, collidedGameObject);
         }
 
         public override void OnDestroy()

@@ -335,10 +335,17 @@ namespace EvolutionSandbox
                     Cells[pos.Y, pos.X].Remove(moveAction.Initiator);
 
                     moveAction.Initiator.Pos = new Vector2Int(newX, newY);
-
-                    if (Cells[newY, newX].Count > 0)
+                    foreach (GameObject go in moveAction.Initiator.CollidingObjects.ToArray())
                     {
-                        foreach (GameObject go in Cells[newY, newX].ToArray())
+                        if (!Cells[newY, newX].Contains(go))
+                        {
+                            go.OnCollisionExit(CollisionType.CollisionGameObject, moveAction.Initiator);
+                            moveAction.Initiator.OnCollisionExit(CollisionType.CollisionGameObject, go);
+                        }
+                    }
+                    foreach (GameObject go in Cells[newY, newX].ToArray())
+                    {
+                        if (!moveAction.Initiator.CollidingObjects.Contains(go))
                         {
                             moveAction.Initiator.OnCollisionEnter(CollisionType.CollisionGameObject, go);
                             go.OnCollisionEnter(CollisionType.CollisionGameObject, moveAction.Initiator);
