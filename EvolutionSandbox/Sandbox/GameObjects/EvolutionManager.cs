@@ -149,8 +149,8 @@ namespace EvolutionSandbox.GameObjects
                 for (int i = 0; i < Configuration.Config.NumAgents; i++)
                 {
                     Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
-                        Utils.Random.Next((int)Configuration.Config.GridSizeY)),
-                        Utils.Random.NextGuid(), this);
+                      Utils.Random.Next((int)Configuration.Config.GridSizeY)),
+                     Utils.Random.NextGuid(), this);
                     currGen.Add(agent);
                     AliveAgents.Add(agent);
                     Program.SpawnGameObject(agent, false, false);
@@ -169,8 +169,8 @@ namespace EvolutionSandbox.GameObjects
                 for (int i = 0; i < Configuration.Config.NumAgents; i++)
                 {
                     Agent agent = new Agent(new Vector2Int(Utils.Random.Next((int)Configuration.Config.GridSizeX),
-                        Utils.Random.Next((int)Configuration.Config.GridSizeY)),
-                        Utils.Random.NextGuid(), this, false);
+                      Utils.Random.Next((int)Configuration.Config.GridSizeY)),
+                    Utils.Random.NextGuid(), this, false);
 
                     NN tempNN = new NN(0, 0, false);
                     tempNN.SetLayers(checkpoint.Layers[i % checkpoint.Layers.Count]);
