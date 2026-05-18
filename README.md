@@ -1,7 +1,7 @@
 # EvolutionSandbox
 
 > [!Warning]
-> The project presentation covered [10687f5](https://github.com/28bc23/EvolutionSandbox/tree/10687f55663d8d2acdfc021367ea87463f667fef)
+> The project presentation covered [10687f5](https://github.com/28bc23/EvolutionSandbox/tree/10687f55663d8d2acdfc021367ea87463f667fef), [release 1.1.0D](https://github.com/28bc23/EvolutionSandbox/releases/tag/1.1.0D) (tag: [1.1.0D](https://github.com/28bc23/EvolutionSandbox/tree/1.1.0D))
 
 > [!Warning]
 > Checkpoint readme is on commit [8aa675b](https://github.com/28bc23/EvolutionSandbox/tree/8aa675b31020e78a21333210794c0a2313a27425)
